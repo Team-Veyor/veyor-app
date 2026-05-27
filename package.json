@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "pnpm -r --parallel --stream dev",
+    "dev:client": "pnpm --filter @veyor/client dev",
+    "dev:server": "pnpm --filter @veyor/server dev",
     "build": "pnpm -r build",
+    "build:client": "pnpm --filter @veyor/client build",
+    "build:server": "pnpm --filter @veyor/server build",
+    "typecheck": "pnpm -r typecheck",
     "lint": "biome lint .",
     "format": "biome format --write .",
-    "check": "biome check --write .",
-    "typecheck": "pnpm -r typecheck",
-    "dev:web": "pnpm --filter @veyor/web dev",
-    "dev:server": "pnpm --filter @veyor/server dev"
+    "check": "biome check --write ."
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.16",

@@ -1,11 +1,10 @@
 {
-  "name": "@veyor/web",
+  "name": "@veyor/client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
-    "start": "next start --port 3000",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
