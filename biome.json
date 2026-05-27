@@ -58,5 +58,23 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["apps/server/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useImportType": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "warn"
+          },
+          "complexity": {
+            "noUselessConstructor": "off"
+          }
+        }
+      }
+    }
+  ]
 }
