@@ -78,7 +78,7 @@
 }
 
 @utility body-medium {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
   line-height: 135%;
   letter-spacing: 0px;
@@ -135,7 +135,7 @@
 
 @utility label-large-strong {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 135%;
   letter-spacing: 0px;
 }
@@ -164,6 +164,13 @@
 @utility label-medium {
   font-size: 16px;
   font-weight: 600;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-medium-weak {
+  font-size: 16px;
+  font-weight: 500;
   line-height: 135%;
   letter-spacing: 0px;
 }
