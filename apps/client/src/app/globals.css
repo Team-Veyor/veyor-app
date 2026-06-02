@@ -1,1 +1,258 @@
 @import "tailwindcss";
+
+@theme {
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e8e8e8;
+  --color-gray-300: #d4d4d4;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-800: #262626;
+  --color-gray-900: #171717;
+  --color-gray-950: #0a0a0a;
+
+  --color-gray-30-alpha: rgba(0, 0, 0, 0.3);
+}
+
+@theme {
+  --font-sans: var(--font-suit), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+    /* TODO: 색상 변경 */
+    background: var(--color-gray-50);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    margin: 0;
+    /* TODO: 색상 변경 */
+    background: var(--color-gray-50);
+    color: var(--color-gray-950);
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+@utility display-large {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility display-medium {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility display-small {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility title-large {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility title-medium {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility title-small {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility title-xsmall {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility title-xsmall-weak {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility body-xlarge {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+@utility body-large {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility body-large-strong {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility body-medium {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility body-small {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility subtext-large {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility subtext-medium {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility subtext-medium-strong {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility subtext-small {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-xlarge {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-large-strong {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-large {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-large-weak {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-medium-strong {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-medium {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-medium-weak {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-small {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-small-weak {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
+
+@utility label-xsmall {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 135%;
+  letter-spacing: 0px;
+}
