@@ -1,11 +1,11 @@
 ---
 name: fill-pr-template
-description: Fill this project's GitHub PR template from the current git diff, including issue number, summary, changes, checklist, and screenshots only when needed. Use when the user asks to write/fill/create a PR body, PR description, pull request template, or diff-based PR content.
+description: Fill this project's GitHub PR template from the current git diff and optionally connect it to GitHub by updating the current branch PR or creating one if missing. Use when the user asks to write/fill/create/link/update a PR body, PR description, pull request template, or diff-based PR content.
 ---
 
-# Fill PR Template From Diff
+# Fill and Connect PR Template From Diff
 
-Use this skill to generate a pull request description that matches this repository's PR template and is grounded in the actual diff.
+Use this skill to generate a pull request description that matches this repository's PR template, grounded in the actual diff. When requested, also connect it to GitHub by updating the current branch PR or creating one if no PR exists.
 
 ## Required template
 
@@ -31,6 +31,7 @@ Use this skill to generate a pull request description that matches this reposito
    - Run `git branch --show-current`.
    - Run `git diff --stat`.
    - Run `git diff --cached --stat` if staged changes exist.
+   - For branch-level PR content, compare against the base branch, e.g. `git diff main...HEAD --stat` and inspect relevant hunks.
    - Run `git diff` for unstaged changes and `git diff --cached` for staged changes as needed.
    - If the diff is huge, summarize by files and inspect relevant hunks with narrower commands.
 
@@ -53,9 +54,18 @@ Use this skill to generate a pull request description that matches this reposito
 
 5. Do not include unverified claims. Do not mention implementation attempts that were reverted unless they are present in the final diff.
 
+6. If the user asks to connect, apply, update, create, or link the PR body to GitHub:
+   - Write the completed PR body to a temporary file, e.g. `/tmp/veyor-pr-body.md`.
+   - Run `gh pr view --json number,title,body,headRefName,baseRefName,url` to find an existing PR for the current branch.
+   - If a PR exists, run `gh pr edit <number> --body-file /tmp/veyor-pr-body.md`.
+   - If no PR exists, create one with `gh pr create --base main --head "$(git branch --show-current)" --title "<clear title>" --body-file /tmp/veyor-pr-body.md`.
+   - Choose a concise title that describes the whole branch-level unit of work, not implementation attempts.
+   - After applying, verify with `gh pr view --json number,title,body,url` and return the PR URL plus a short confirmation.
+
 ## Output format
 
-Return only the completed PR body in markdown unless the user asks for explanation.
+- If only generating content: return only the completed PR body in markdown unless the user asks for explanation.
+- If connecting to GitHub: return the PR URL and a short confirmation after verifying the body was applied.
 
 ## Example output
 
