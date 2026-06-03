@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
+import Providers from './providers';
 import './globals.css';
 
 const suit = localFont({
@@ -43,7 +44,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko' className={`${suit.variable} h-full antialiased`}>
-      <body className='min-h-full flex flex-col font-sans'>{children}</body>
+      <body className='min-h-full flex flex-col font-sans'>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
