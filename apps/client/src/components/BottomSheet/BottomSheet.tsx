@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface BottomSheetProps {
@@ -19,12 +19,20 @@ export interface BottomSheetProps {
  * 본문은 `children`, 하단 액션 영역은 `footer`로 자유롭게 구성할 수 있습니다.
  */
 const BottomSheet = ({ children, footer, className }: BottomSheetProps) => {
+  const [isVisible, setIsVisible] = useState(false);
+
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     if (!dialogRef.current?.open) {
       dialogRef.current?.showModal();
     }
+
+    const frame = requestAnimationFrame(() => {
+      setIsVisible(true);
+    });
+
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   return (
@@ -32,7 +40,8 @@ const BottomSheet = ({ children, footer, className }: BottomSheetProps) => {
       ref={dialogRef}
       aria-modal='true'
       className={cn(
-        'fixed left-[10px] right-[10px] top-auto bottom-[10px] m-0 w-auto max-w-none rounded-[28px] border-none bg-gray-50 pt-[16px] pb-[22px] shadow-[0_-12px_48px_0_rgba(0,0,0,0.16)] outline-none backdrop:bg-gray-30-alpha',
+        'fixed left-[10px] right-[10px] top-auto bottom-[10px] m-0 w-auto max-w-none translate-y-full rounded-[28px] border-none bg-gray-50 pt-[16px] pb-[22px] shadow-[0_-12px_48px_0_rgba(0,0,0,0.16)] outline-none transition-transform duration-300 ease-out backdrop:bg-gray-30-alpha backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300',
+        isVisible && 'translate-y-0 backdrop:opacity-100',
         className,
       )}
       onCancel={(event) => event.preventDefault()}
@@ -41,7 +50,9 @@ const BottomSheet = ({ children, footer, className }: BottomSheetProps) => {
         <div className='flex justify-center pb-[20px]'>
           <span aria-hidden='true' className='h-1 w-10 rounded-full bg-gray-200' />
         </div>
+
         <div className='px-5'>{children}</div>
+
         {footer && <footer className='px-5 pt-[34px]'>{footer}</footer>}
       </div>
     </dialog>
