@@ -7,7 +7,18 @@ import { z } from 'zod';
 export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().positive().default(4000),
-  CLIENT_ORIGIN: z.url().default('http://localhost:3000'),
+  // 허용할 프론트 origin 목록. 콤마(,)로 여러 개 지정 가능.
+  // 예: "http://localhost:3000,https://www.bgs.io.kr"
+  CLIENT_ORIGIN: z
+    .string()
+    .default('http://localhost:3000')
+    .transform((v) =>
+      v
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.url()).min(1)),
 
   // Supabase (신규 API 키 포맷)
   SUPABASE_URL: z.url(),
