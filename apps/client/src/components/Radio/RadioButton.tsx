@@ -2,9 +2,9 @@ import type { InputHTMLAttributes, ReactNode } from 'react';
 import CheckIcon from '@/assets/icons/CheckIcon';
 import { cn } from '@/lib/utils';
 
-type RadioButtonVariant = 'outlined' | 'filled';
+export type RadioButtonVariant = 'outlined' | 'filled';
 
-interface RadioButtonProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+export interface RadioButtonProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: ReactNode;
   hasLeftIcon?: boolean;
   hasRightIcon?: boolean;
@@ -27,25 +27,20 @@ const RadioButton = ({
   disabled,
   ...props
 }: RadioButtonProps) => {
-  const iconSpace = <div className='size-6' />;
-
-  const leftIcon = hasLeftIcon ? <CheckIcon /> : iconSpace;
-  const rightIcon = hasRightIcon ? <CheckIcon /> : iconSpace;
-
   return (
     <label className={cn('inline-flex cursor-pointer', disabled && 'cursor-not-allowed')}>
       <input type='radio' className='peer sr-only' disabled={disabled} {...props} />
       <span
         className={cn(
           // TODO: Primary Color 변경
-          'label-large flex min-w-[148px] items-center justify-center gap-3 rounded-2xl p-4 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#2F9BFF]',
+          'label-large flex min-w-full items-center justify-center gap-3 rounded-2xl p-4 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#2F9BFF]',
           VARIANT_CLASSES[variant],
           className,
         )}
       >
-        {leftIcon}
+        {hasLeftIcon && <CheckIcon />}
         <span>{label}</span>
-        {rightIcon}
+        {hasRightIcon && <CheckIcon />}
       </span>
     </label>
   );
