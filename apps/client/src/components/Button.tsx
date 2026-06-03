@@ -30,9 +30,9 @@ const Button = ({
 }: ButtonProps) => {
   const baseClasses =
     'flex items-center justify-center w-full rounded-[20px] transition-colors shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] disabled:opacity-50 disabled:cursor-not-allowed';
-  const buttonClasses = [baseClasses, VARIANT_CLASSES[variant], SIZE_CLASSES[size], className]
-    .filter(Boolean)
-    .join(' ');
+  const buttonClasses = [baseClasses, VARIANT_CLASSES[variant], SIZE_CLASSES[size], className].join(
+    ' ',
+  );
 
   return (
     <button type='button' className={buttonClasses} {...props}>
