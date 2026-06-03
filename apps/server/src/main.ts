@@ -1,11 +1,17 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import type { Env } from './core/config/env.validation';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({ origin: 'http://localhost:3000', credentials: true });
+  const config = app.get<ConfigService<Env, true>>(ConfigService);
 
-  const port = Number(process.env.PORT) || 4000;
+  app.enableCors({ origin: config.get('CLIENT_ORIGIN', { infer: true }), credentials: true });
+  app.useGlobalFilters(new AllExceptionsFilter());
+
+  const port = config.get('PORT', { infer: true });
   await app.listen(port);
   // biome-ignore lint/suspicious/noConsole: bootstrap log
   console.log(`Server running on http://localhost:${port}`);
