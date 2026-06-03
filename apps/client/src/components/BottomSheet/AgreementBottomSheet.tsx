@@ -71,7 +71,7 @@ const AgreementBottomSheet = ({
       onClose={onClose}
       footer={
         <Button
-          variant='primary'
+          theme='brand'
           size='large'
           disabled={!canSubmit}
           onClick={() => onSubmit(Array.from(agreedIds))}
