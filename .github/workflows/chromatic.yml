@@ -83,4 +83,3 @@ jobs:
             | --- | --- |
             | 🔗 Storybook | ${{ steps.chromatic.outputs.storybookUrl }} |
             | 🧪 Build | ${{ steps.chromatic.outputs.buildUrl }} |
-            | 🧩 Components | ${{ steps.chromatic.outputs.componentCount }} |
