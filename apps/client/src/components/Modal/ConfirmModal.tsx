@@ -15,9 +15,10 @@ const ConfirmModal = ({
   rightButtonText,
   onLeftButtonClick,
   onRightButtonClick,
+  ...modalProps
 }: ConfirmModalProps) => {
   return (
-    <Modal title={title} description={description}>
+    <Modal title={title} description={description} {...modalProps}>
       <Button variant='secondary' size='large' onClick={onLeftButtonClick}>
         {leftButtonText}
       </Button>
