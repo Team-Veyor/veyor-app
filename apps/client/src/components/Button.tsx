@@ -33,7 +33,7 @@ const Button = ({
     <button
       type='button'
       className={cn(
-        'flex w-full items-center justify-center rounded-[20px] shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+        'flex w-full items-center justify-center rounded-[20px] shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
         VARIANT_CLASSES[variant],
         SIZE_CLASSES[size],
         className,
