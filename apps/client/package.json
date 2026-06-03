@@ -7,7 +7,8 @@
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "storybook:build": "storybook build",
+    "chromatic": "chromatic"
   },
   "dependencies": {
     "@veyor/shared": "workspace:*",
@@ -24,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chromatic": "^17.2.0",
     "storybook": "^10.4.2",
     "tailwindcss": "^4",
     "typescript": "^5"
