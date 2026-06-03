@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
-import './globals.css';
+import '@/styles/globals.css';
 
 const suit = localFont({
   src: [
@@ -33,7 +33,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#111827',
+  themeColor: '#09ba8e',
 };
 
 export default function RootLayout({
