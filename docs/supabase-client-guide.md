@@ -130,11 +130,14 @@ const survey = await apiFetch('/surveys/today');
 // 설문 복귀 후 완료 인증
 await apiFetch(`/surveys/${survey.id}/complete`, { method: 'POST' });
 
-// 계좌 등록
+// 은행 드롭다운 목록 (화이트리스트 — 서버와 동일)
+const banks = await apiFetch('/accounts/banks'); // string[]
+// 계좌 등록 (bank는 위 목록 값, accountNo 숫자 10~16자리)
 await apiFetch('/accounts', {
   method: 'POST',
   body: JSON.stringify({ bank: 'KB국민은행', accountNo: '33330000001234', holderName: '김가온' }),
 });
+// 중복(같은 은행+번호) → 409 / 미지원 은행·형식 오류 → 400
 
 // 참여 내역
 await apiFetch('/participations?from=2025-10-01&to=2025-10-31');
