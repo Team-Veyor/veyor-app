@@ -12,7 +12,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ['소개', 'Components'],
+        order: ['소개', 'Foundation', 'Components'],
       },
     },
   },
