@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
+import Button from '@/components/Button';
 import ConfirmModal from './ConfirmModal';
 import WarningModal from './WarningModal';
 
@@ -21,7 +23,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div className='min-h-[360px] bg-gray-100'>
+      <div className='flex min-h-[360px] items-center justify-center bg-gray-100'>
         <Story />
       </div>
     ),
@@ -31,14 +33,62 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Confirm: Story = {};
+export const Confirm: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+    const close = () => setOpen(false);
+    return (
+      <>
+        <Button variant='primary' size='large' className='w-[120px]' onClick={() => setOpen(true)}>
+          모달 열기
+        </Button>
+        {open && (
+          <ConfirmModal
+            {...args}
+            onLeftButtonClick={() => {
+              args.onLeftButtonClick?.();
+              close();
+            }}
+            onRightButtonClick={() => {
+              args.onRightButtonClick?.();
+              close();
+            }}
+          />
+        )}
+      </>
+    );
+  },
+};
 
 export const Warning: Story = {
-  render: (args) => <WarningModal {...args} />,
   args: {
     title: '정말 탈퇴하시겠어요?',
     description: '탈퇴하면 계정 정보와 활동 내역이 삭제되며 복구할 수 없습니다.',
     leftButtonText: '취소',
     rightButtonText: '탈퇴하기',
+  },
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+    const close = () => setOpen(false);
+    return (
+      <>
+        <Button variant='danger' size='large' className='w-[120px]' onClick={() => setOpen(true)}>
+          모달 열기
+        </Button>
+        {open && (
+          <WarningModal
+            {...args}
+            onLeftButtonClick={() => {
+              args.onLeftButtonClick?.();
+              close();
+            }}
+            onRightButtonClick={() => {
+              args.onRightButtonClick?.();
+              close();
+            }}
+          />
+        )}
+      </>
+    );
   },
 };

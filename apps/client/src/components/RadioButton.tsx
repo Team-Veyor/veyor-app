@@ -5,9 +5,13 @@ import { cn } from '@/lib/utils';
 type RadioButtonVariant = 'outlined' | 'filled';
 
 interface RadioButtonProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  /** 라디오 버튼에 표시할 라벨 */
   label: ReactNode;
+  /** 왼쪽에 체크 아이콘을 표시할지 여부 */
   hasLeftIcon?: boolean;
+  /** 오른쪽에 체크 아이콘을 표시할지 여부 */
   hasRightIcon?: boolean;
+  /** 라디오 버튼의 시각적 스타일. `filled`는 배경 채움, `outlined`는 테두리만 표시합니다. */
   variant?: RadioButtonVariant;
 }
 
@@ -18,6 +22,10 @@ const VARIANT_CLASSES = {
     'border-transparent bg-gray-50 text-gray-600 peer-checked:text-gray-950 peer-checked:[&_.radio-icon]:text-[#00C896]',
 };
 
+/**
+ * 라벨과 체크 아이콘을 포함한 라디오 버튼 컴포넌트.
+ * 같은 `name`을 가진 RadioButton끼리 그룹으로 동작합니다.
+ */
 const RadioButton = ({
   label,
   className,

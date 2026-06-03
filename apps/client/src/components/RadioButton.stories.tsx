@@ -9,10 +9,37 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
+    label: {
+      control: 'text',
+      description: '라디오 버튼에 표시할 라벨',
+    },
     variant: {
       control: 'radio',
       options: ['filled', 'outlined'],
+      description: '라디오 버튼의 시각적 스타일',
+      table: { defaultValue: { summary: 'filled' } },
     },
+    hasLeftIcon: {
+      control: 'boolean',
+      description: '왼쪽 체크 아이콘 표시 여부',
+    },
+    hasRightIcon: {
+      control: 'boolean',
+      description: '오른쪽 체크 아이콘 표시 여부',
+    },
+    disabled: {
+      control: 'boolean',
+      description: '비활성화 상태',
+    },
+    defaultChecked: {
+      control: 'boolean',
+      description: '초기 선택 상태 (비제어 모드)',
+    },
+    name: {
+      control: 'text',
+      description: '같은 name끼리 라디오 그룹으로 동작',
+    },
+    onChange: { action: 'changed' },
   },
   args: {
     label: '선택지',
@@ -21,6 +48,7 @@ const meta = {
     hasLeftIcon: true,
     hasRightIcon: false,
     defaultChecked: true,
+    disabled: false,
   },
 } satisfies Meta<typeof RadioButton>;
 
