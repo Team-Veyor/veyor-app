@@ -45,7 +45,6 @@ const RadioButton = ({
       <input type='radio' className='peer sr-only' disabled={disabled} {...props} />
       <span
         className={cn(
-          // TODO: Primary Color 변경
           'label-large flex min-w-[148px] items-center justify-center gap-3 rounded-2xl p-4 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#2F9BFF]',
           VARIANT_CLASSES[variant],
           className,

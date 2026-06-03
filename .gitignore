@@ -26,6 +26,12 @@ storybook-static/
 .next/
 out/
 
+# cloudflare / opennext
+.open-next/
+.wrangler/
+.dev.vars
+cloudflare-env.d.ts
+
 # nest.js / build output
 dist/
 build/
