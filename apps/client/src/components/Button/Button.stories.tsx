@@ -81,6 +81,12 @@ export const Medium: Story = {
   },
 };
 
+export const Large: Story = {
+  args: {
+    size: 'large',
+  },
+};
+
 export const Disabled: Story = {
   args: {
     disabled: true,
