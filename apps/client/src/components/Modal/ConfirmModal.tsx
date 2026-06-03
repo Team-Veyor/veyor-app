@@ -14,7 +14,7 @@ interface ConfirmModalProps extends ModalProps {
 
 /**
  * 사용자에게 확인을 요청하는 모달.
- * 좌측은 보조(secondary) 버튼, 우측은 주요(primary) 버튼으로 구성됩니다.
+ * 좌측은 gray 버튼, 우측은 brand 버튼으로 구성됩니다.
  */
 const ConfirmModal = ({
   title,
@@ -27,10 +27,10 @@ const ConfirmModal = ({
 }: ConfirmModalProps) => {
   return (
     <Modal title={title} description={description} {...modalProps}>
-      <Button variant='secondary' size='large' onClick={onLeftButtonClick}>
+      <Button theme='gray' size='large' onClick={onLeftButtonClick}>
         {leftButtonText}
       </Button>
-      <Button variant='primary' size='large' onClick={onRightButtonClick}>
+      <Button theme='brand' size='large' onClick={onRightButtonClick}>
         {rightButtonText}
       </Button>
     </Modal>

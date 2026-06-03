@@ -39,7 +39,7 @@ export const Confirm: Story = {
     const close = () => setOpen(false);
     return (
       <>
-        <Button variant='primary' size='large' className='w-[120px]' onClick={() => setOpen(true)}>
+        <Button theme='brand' size='large' className='w-[120px]' onClick={() => setOpen(true)}>
           모달 열기
         </Button>
         {open && (
@@ -72,7 +72,7 @@ export const Warning: Story = {
     const close = () => setOpen(false);
     return (
       <>
-        <Button variant='danger' size='large' className='w-[120px]' onClick={() => setOpen(true)}>
+        <Button theme='dark' size='large' className='w-[120px]' onClick={() => setOpen(true)}>
           모달 열기
         </Button>
         {open && (

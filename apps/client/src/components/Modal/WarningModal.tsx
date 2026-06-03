@@ -16,7 +16,7 @@ interface WarningModalProps extends ModalProps {
 
 /**
  * 경고(되돌릴 수 없는) 액션을 확인받는 경고 모달.
- * 우측 버튼은 danger 스타일로 표시되어 위험을 시각적으로 알립니다.
+ * 우측 버튼은 dark 스타일로 표시되어 위험 액션을 강조합니다.
  */
 const WarningModal = ({
   title,
@@ -29,10 +29,10 @@ const WarningModal = ({
 }: WarningModalProps) => {
   return (
     <Modal title={title} description={description} {...modalProps}>
-      <Button variant='secondary' size='large' onClick={onLeftButtonClick}>
+      <Button theme='gray' size='large' onClick={onLeftButtonClick}>
         {leftButtonText}
       </Button>
-      <Button variant='danger' size='large' onClick={onRightButtonClick}>
+      <Button theme='dark' size='large' onClick={onRightButtonClick}>
         {rightButtonText}
       </Button>
     </Modal>

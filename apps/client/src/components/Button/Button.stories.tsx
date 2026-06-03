@@ -9,11 +9,11 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    variant: {
+    theme: {
       control: 'radio',
-      options: ['primary', 'secondary', 'danger'],
+      options: ['dark', 'brand', 'light', 'gray'],
       description: '버튼의 시각적 스타일',
-      table: { defaultValue: { summary: 'primary' } },
+      table: { defaultValue: { summary: 'dark' } },
     },
     size: {
       control: 'radio',
@@ -32,8 +32,8 @@ const meta = {
     onClick: { action: 'clicked' },
   },
   args: {
-    children: '버튼',
-    variant: 'primary',
+    children: 'Button',
+    theme: 'dark',
     size: 'large',
     disabled: false,
   },
@@ -49,17 +49,41 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {};
+export const Dark: Story = {};
 
-export const Secondary: Story = {
+export const Brand: Story = {
   args: {
-    variant: 'secondary',
+    theme: 'brand',
   },
 };
 
-export const Danger: Story = {
+export const Light: Story = {
   args: {
-    variant: 'danger',
+    theme: 'light',
+  },
+};
+
+export const Gray: Story = {
+  args: {
+    theme: 'gray',
+  },
+};
+
+export const Small: Story = {
+  args: {
+    size: 'small',
+  },
+};
+
+export const Medium: Story = {
+  args: {
+    size: 'medium',
+  },
+};
+
+export const Large: Story = {
+  args: {
+    size: 'large',
   },
 };
 
