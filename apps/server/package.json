@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nest start --watch",
     "build": "nest build",
+    "start": "node dist/main.js",
     "typecheck": "tsc --noEmit",
     "test:e2e": "node test/e2e.mjs"
   },
