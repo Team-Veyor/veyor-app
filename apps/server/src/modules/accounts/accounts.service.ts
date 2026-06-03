@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { decrypt, encrypt, maskAccountNo } from '../../common/utils/account-crypto';
 import type { Env } from '../../core/config/env.validation';
 import { type AccountRow, AccountsRepository } from './accounts.repository';
+import { BANKS, normalizeAccountNo } from './banks';
 import type { CreateAccountDto, UpdateAccountDto } from './dto/account.dto';
 
 export interface AccountView {
@@ -43,8 +44,23 @@ export class AccountsService {
     return (await this.repo.countByUser(userId)) > 0;
   }
 
+  /** 등록 가능한 은행 목록 (프론트 드롭다운용). */
+  listBanks(): readonly string[] {
+    return BANKS;
+  }
+
   async create(userId: string, dto: CreateAccountDto): Promise<AccountView> {
-    const isFirst = (await this.repo.countByUser(userId)) === 0;
+    const existing = await this.repo.listByUser(userId);
+    // 같은 은행 + 같은 계좌번호 중복 등록 방지 (account_no는 암호화 저장이라 복호화 후 비교)
+    const incoming = normalizeAccountNo(dto.accountNo);
+    const dup = existing.some(
+      (r) => r.bank === dto.bank && normalizeAccountNo(decrypt(r.account_no, this.encKey)) === incoming,
+    );
+    if (dup) {
+      throw new ConflictException('이미 등록된 계좌입니다.');
+    }
+
+    const isFirst = existing.length === 0;
     const row = await this.repo.insert(userId, {
       bank: dto.bank,
       account_no: encrypt(dto.accountNo, this.encKey),

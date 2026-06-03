@@ -216,6 +216,12 @@
 
 ## 6. 계좌 관리 (Accounts)
 
+### `GET /accounts/banks`
+등록 가능한 은행 목록(프론트 드롭다운). 형식 검증의 화이트리스트와 동일.
+```json
+200 ["NH농협은행", "KB국민은행", "신한은행", "우리은행", "하나은행", "..."]
+```
+
 ### `GET /accounts`
 ```json
 200
@@ -234,7 +240,13 @@
 ```json
 201 { "id": "uuid", "bank": "KB국민은행", "accountNoMasked": "3333****1234", "holderName": "김가온", "isPrimary": true }
 ```
-- 필수값 누락 → `400`
+**검증 (무료 형식 검증)**
+- 필수값 누락 → `400` "은행·계좌번호·예금주명은 필수입니다."
+- `bank`이 화이트리스트(`GET /accounts/banks`)에 없음 → `400` "지원하지 않는 은행입니다."
+- `accountNo` 숫자 10~16자리 아님 → `400` "계좌번호는 숫자 10~16자리여야 합니다."
+- 같은 은행+계좌번호 중복 등록 → `409` "이미 등록된 계좌입니다."
+
+> ⚠️ 실제 계좌 존재/예금주 일치 검증은 하지 않음(형식 검증만). 실명 확인은 추후 외부 인증(예: 포트원) 연동 필요.
 
 ### `PATCH /accounts/:id`
 계좌 수정.
@@ -290,6 +302,7 @@
 | GET | `/surveys/today` | ✓ | HOME-1, SURVEY-1 |
 | POST | `/surveys/:id/complete` | ✓ | SURVEY-2~3 |
 | GET | `/participations` | ✓ | REWARD-4 |
+| GET | `/accounts/banks` | ✓ | ACCOUNT-1 |
 | GET | `/accounts` | ✓ | ACCOUNT-3 |
 | POST | `/accounts` | ✓ | ACCOUNT-1 |
 | PATCH | `/accounts/:id` | ✓ | ACCOUNT-4 |
