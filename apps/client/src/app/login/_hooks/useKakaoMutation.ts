@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { loginWithKakao } from '@/app/login/apis/auth';
+import { loginWithKakao } from '@/app/login/_apis/auth';
 
 const useKakaoMutation = () => {
   return useMutation({

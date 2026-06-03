@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getUser } from '@/app/login/apis/users';
+import { getUser } from '@/app/login/_apis/users';
 import { supabase } from '@/lib/supabase';
 
 export default function AuthCallbackPage() {

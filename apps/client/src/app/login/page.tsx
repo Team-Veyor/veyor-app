@@ -1,6 +1,6 @@
 'use client';
 
-import useKakaoMutation from '@/app/login/hooks/useKakaoMutation';
+import useKakaoMutation from '@/app/login/_hooks/useKakaoMutation';
 import KakaoIcon from '@/assets/icons/KakaoIcon';
 import LogoIcon from '@/assets/icons/LogoIcon';
 import Button from '@/components/Button/Button';
