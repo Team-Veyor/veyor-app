@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import Button from '@/components/Button';
+import Button from '@/components/Button/Button';
 import ConfirmModal from './ConfirmModal';
 import WarningModal from './WarningModal';
 
