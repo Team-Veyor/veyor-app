@@ -8,7 +8,9 @@
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "chromatic": "chromatic"
+    "chromatic": "chromatic",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "@veyor/shared": "workspace:*",
@@ -19,6 +21,7 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.19.11",
     "@storybook/addon-docs": "^10.4.2",
     "@storybook/nextjs-vite": "^10.4.2",
     "@tailwindcss/postcss": "^4",
@@ -28,6 +31,7 @@
     "chromatic": "^17.2.0",
     "storybook": "^10.4.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.97.0"
   }
 }

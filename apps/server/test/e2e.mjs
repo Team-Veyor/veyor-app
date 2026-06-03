@@ -226,6 +226,13 @@ async function main() {
 
   // ---------- 4. 계좌 ----------
   console.log('[4] 계좌');
+  r = await api('GET', '/accounts/banks', { token });
+  check(
+    'GET /accounts/banks 은행 목록',
+    r.status === 200 && Array.isArray(r.body) && r.body.includes('KB국민은행'),
+    JSON.stringify(r),
+  );
+
   r = await api('GET', '/accounts', { token });
   check(
     'GET /accounts 초기 []',
@@ -262,6 +269,18 @@ async function main() {
   });
   check('POST /accounts 검증 400', r.status === 400, JSON.stringify(r));
 
+  r = await api('POST', '/accounts', {
+    token,
+    body: { bank: '없는은행', accountNo: '33330000009999', holderName: '김가온' },
+  });
+  check('POST /accounts 지원하지 않는 은행 400', r.status === 400, JSON.stringify(r));
+
+  r = await api('POST', '/accounts', {
+    token,
+    body: { bank: 'KB국민은행', accountNo: '33330000001234', holderName: '김가온' },
+  });
+  check('POST /accounts 중복 계좌 409', r.status === 409, JSON.stringify(r));
+
   r = await api('GET', '/accounts', { token });
   check('GET /accounts 2건', r.status === 200 && r.body.length === 2, JSON.stringify(r));
 
@@ -282,7 +301,7 @@ async function main() {
     JSON.stringify(r),
   );
 
-  r = await api('PATCH', `/accounts/${NONEXISTENT_UUID}`, { token, body: { bank: 'x' } });
+  r = await api('PATCH', `/accounts/${NONEXISTENT_UUID}`, { token, body: { bank: '신한은행' } });
   check('PATCH 없는 계좌 404', r.status === 404, JSON.stringify(r));
 
   r = await api('DELETE', `/accounts/${acc2.id}`, { token }); // 대표 삭제 → 남은 1개 자동 대표
