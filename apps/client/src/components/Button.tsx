@@ -6,7 +6,9 @@ type ButtonVariant = 'primary' | 'secondary' | 'danger';
 type ButtonSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** 버튼의 시각적 스타일. `primary`는 주요 액션, `secondary`는 보조 액션, `danger`는 경고 액션에 사용합니다. */
   variant?: ButtonVariant;
+  /** 버튼 크기 */
   size?: ButtonSize;
 }
 
@@ -22,6 +24,10 @@ const SIZE_CLASSES = {
   large: 'px-6 py-3 label-large',
 };
 
+/**
+ * 공통 버튼 컴포넌트.
+ * 표준 `<button>` 속성을 그대로 받으며, variant와 size로 스타일을 제어합니다.
+ */
 const Button = ({
   variant = 'primary',
   size = 'medium',
@@ -33,7 +39,7 @@ const Button = ({
     <button
       type='button'
       className={cn(
-        'flex w-full items-center justify-center rounded-[20px] shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+        'flex w-full items-center justify-center rounded-[20px] shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
         VARIANT_CLASSES[variant],
         SIZE_CLASSES[size],
         className,

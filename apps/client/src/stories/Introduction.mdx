@@ -1,0 +1,39 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title='소개/시작하기' />
+
+# Veyor Storybook
+
+Veyor 클라이언트 UI 컴포넌트를 확인하고 문서화하기 위한 Storybook입니다.
+
+## 실행 방법
+
+```bash
+pnpm storybook
+```
+
+클라이언트 앱만 직접 실행하려면 아래 명령어를 사용할 수 있습니다.
+
+```bash
+pnpm --filter @veyor/client storybook
+```
+
+## 빌드 확인
+
+```bash
+pnpm storybook:build
+```
+
+## 문서 작성 규칙
+
+- 컴포넌트 스토리는 컴포넌트 파일과 가까운 위치에 `*.stories.tsx`로 작성합니다.
+- 공통 스타일은 앱의 `globals.css`를 그대로 사용합니다.
+- Storybook 전용 폰트 설정은 `.storybook/preview.css`에서 관리합니다.
+- 컴포넌트를 보여주는 영역에는 별도의 Grid 레이아웃을 강제하지 않습니다.
+
+## 현재 등록된 컴포넌트
+
+- Button
+- Input
+- Modal
+- RadioButton
