@@ -8,6 +8,12 @@ import { validateCreate, validateUpdate } from './dto/account.dto';
 export class AccountsController {
   constructor(private readonly service: AccountsService) {}
 
+  /** GET /accounts/banks — 등록 가능한 은행 목록(프론트 드롭다운) */
+  @Get('banks')
+  banks() {
+    return this.service.listBanks();
+  }
+
   @Get()
   list(@CurrentUser() user: AuthUser) {
     return this.service.list(user.id);
