@@ -2,34 +2,35 @@ import type { ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 import type { Size } from '@/types/types';
 
-type ButtonVariant = 'primary' | 'secondary' | 'danger';
+type ButtonTheme = 'dark' | 'brand' | 'light' | 'gray';
 type ButtonSize = Extract<Size, 'small' | 'medium' | 'large'>;
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  /** 버튼의 시각적 스타일. `primary`는 주요 액션, `secondary`는 보조 액션, `danger`는 경고 액션에 사용합니다. */
-  variant?: ButtonVariant;
+  /** 버튼의 시각적 스타일. `dark`는 어두운 배경, `brand`는 브랜드 색상, `light`는 밝은 배경, `gray`는 회색 배경에 사용합니다. */
+  theme?: ButtonTheme;
   /** 버튼 크기 */
   size?: ButtonSize;
 }
 
-const VARIANT_CLASSES = {
-  primary: 'bg-gray-900 text-gray-50 hover:bg-gray-800',
-  secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
-  danger: 'bg-[#F74F4F] text-gray-50 hover:bg-[#F74F4F]/80',
+const THEME_CLASSES = {
+  dark: 'bg-gray-900 text-gray-50 after:bg-gray-30-alpha enabled:hover:after:opacity-100',
+  brand: 'bg-brand text-white after:bg-brand-alpha-30 enabled:hover:after:opacity-100',
+  light: 'bg-brand-light text-brand after:bg-white-alpha-40 enabled:hover:after:opacity-100',
+  gray: 'bg-gray-200 text-gray-600 after:bg-white-alpha-40 enabled:hover:after:opacity-100',
 };
 
 const SIZE_CLASSES = {
-  small: 'px-2',
-  medium: 'px-2',
-  large: 'px-6 py-3 label-large',
+  small: 'py-[12px] label-small rounded-[16px]',
+  medium: 'py-[16px] label-medium rounded-[18px]',
+  large: 'py-[20px] label-large rounded-[20px]',
 };
 
 /**
  * 공통 버튼 컴포넌트.
- * 표준 `<button>` 속성을 그대로 받으며, variant와 size로 스타일을 제어합니다.
+ * 표준 `<button>` 속성을 그대로 받으며, theme와 size로 스타일을 제어합니다.
  */
 const Button = ({
-  variant = 'primary',
+  theme = 'dark',
   size = 'medium',
   className,
   children,
@@ -39,8 +40,8 @@ const Button = ({
     <button
       type='button'
       className={cn(
-        'flex w-full items-center justify-center rounded-[20px] shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
-        VARIANT_CLASSES[variant],
+        'relative flex w-full items-center justify-center gap-[12px] overflow-hidden rounded-[20px] shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors cursor-pointer after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity disabled:cursor-not-allowed disabled:opacity-40',
+        THEME_CLASSES[theme],
         SIZE_CLASSES[size],
         className,
       )}
