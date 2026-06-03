@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@veyor/shared": "workspace:*",
@@ -16,10 +18,13 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
+    "@storybook/addon-docs": "^10.4.2",
+    "@storybook/nextjs-vite": "^10.4.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "storybook": "^10.4.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
