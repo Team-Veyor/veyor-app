@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
-import CheckIcon from '@/assets/icons/CheckIcon';
+import CheckCircleIcon from '@/assets/icons/CheckCircleIcon';
 import { cn } from '@/lib/utils';
 
 type RadioButtonVariant = 'outlined' | 'filled';
@@ -37,8 +37,8 @@ const RadioButton = ({
 }: RadioButtonProps) => {
   const iconSpace = <div className='size-6' />;
 
-  const leftIcon = hasLeftIcon ? <CheckIcon /> : iconSpace;
-  const rightIcon = hasRightIcon ? <CheckIcon /> : iconSpace;
+  const leftIcon = hasLeftIcon ? <CheckCircleIcon /> : iconSpace;
+  const rightIcon = hasRightIcon ? <CheckCircleIcon /> : iconSpace;
 
   return (
     <label className={cn('inline-flex cursor-pointer', disabled && 'cursor-not-allowed')}>
