@@ -38,6 +38,8 @@ apps/client/
 
 > 원칙: 화면은 `app/`, 재사용 UI는 `components/`, 순수 도구는 `lib/`로 분리. 컴포넌트는 자기완결적으로 유지하고 Storybook으로 상태를 확인합니다.
 
+> 라우트·페이지·메타데이터·PWA manifest 같은 App Router 작업은 `src/app/AGENTS.md`를 먼저 읽고 따릅니다.
+
 ---
 
 ## UI 작성 흐름
