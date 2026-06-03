@@ -10,16 +10,17 @@ export default function LoginPage() {
   const { mutate: loginWithKakao, isPending: isLoadingKakao } = useKakaoMutation();
 
   return (
-    <main className='flex min-h-dvh items-center justify-center bg-gray-50 pb-[32px] pt-[84px]'>
-      <section className='flex w-full max-w-sm flex-col gap-10'>
+    <main className='flex h-dvh items-center justify-center bg-gray-50'>
+      <section className='flex w-full max-w-sm flex-col gap-10 h-full pb-[32px] pt-[84px]'>
         <div className='flex flex-col items-center gap-1'>
           <LogoIcon />
           <p className='title-xsmall-weak text-gray-500'>백일 설문 기록</p>
         </div>
 
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col mt-auto'>
           <Button
-            className='gap-2 bg-[#FEE500] text-[#191919] hover:bg-[#FEE500]/90 disabled:hover:bg-[#FEE500]'
+            theme='gray'
+            className='gap-2 bg-[#FEE500] text-[rgba(0, 0, 0, 0.85)'
             disabled={isLoadingKakao}
             size='large'
             onClick={() => loginWithKakao()}
