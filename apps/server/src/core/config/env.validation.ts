@@ -19,6 +19,9 @@ export const envSchema = z.object({
     (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
     z.string().min(1).optional(),
   ),
+
+  // 계좌번호 등 민감정보 암호화 키. 프로덕션에서는 반드시 별도 값으로 설정.
+  ACCOUNT_ENC_KEY: z.string().min(1).default('dev-veyor-account-enc-key-change-me'),
 });
 
 export type Env = z.infer<typeof envSchema>;

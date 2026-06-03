@@ -43,6 +43,9 @@
     }
   },
   "javascript": {
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    },
     "formatter": {
       "quoteStyle": "single",
       "jsxQuoteStyle": "single",
@@ -77,6 +80,16 @@
           },
           "complexity": {
             "noUselessConstructor": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/server/test/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
           }
         }
       }
