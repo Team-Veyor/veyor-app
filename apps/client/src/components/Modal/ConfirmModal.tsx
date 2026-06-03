@@ -18,14 +18,12 @@ const ConfirmModal = ({
 }: ConfirmModalProps) => {
   return (
     <Modal title={title} description={description}>
-      <div className='flex gap-8'>
-        <Button variant='secondary' size='large' onClick={onLeftButtonClick}>
-          {leftButtonText}
-        </Button>
-        <Button variant='primary' size='large' onClick={onRightButtonClick}>
-          {rightButtonText}
-        </Button>
-      </div>
+      <Button variant='secondary' size='large' onClick={onLeftButtonClick}>
+        {leftButtonText}
+      </Button>
+      <Button variant='primary' size='large' onClick={onRightButtonClick}>
+        {rightButtonText}
+      </Button>
     </Modal>
   );
 };

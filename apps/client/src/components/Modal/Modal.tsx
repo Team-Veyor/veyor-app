@@ -39,7 +39,7 @@ const Modal = ({ title, description, children }: ModalProps) => {
             {description}
           </span>
         </div>
-        {children}
+        <div className='flex items-center justify-center gap-2'>{children}</div>
       </div>
     </dialog>
   );
