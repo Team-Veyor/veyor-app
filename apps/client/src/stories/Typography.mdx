@@ -16,6 +16,8 @@ export const TypeToken = ({ name, className, size, weight }) => (
       <span>{size}</span>
       <span>·</span>
       <span>{weight}</span>
+      <span>·</span>
+      <span>line-height 135%</span>
     </div>
     <p className={`${className} m-0 text-gray-950`}>{SAMPLE_TEXT}</p>
   </div>
@@ -76,6 +78,7 @@ export const TypeToken = ({ name, className, size, weight }) => (
   <TypeToken name='title-large' className='title-large' size='24px' weight='700' />
   <TypeToken name='title-medium' className='title-medium' size='22px' weight='700' />
   <TypeToken name='title-small' className='title-small' size='20px' weight='700' />
+  <TypeToken name='title-small-weak' className='title-small-weak' size='20px' weight='600' />
   <TypeToken name='title-xsmall' className='title-xsmall' size='18px' weight='700' />
   <TypeToken name='title-xsmall-weak' className='title-xsmall-weak' size='18px' weight='500' />
 </div>

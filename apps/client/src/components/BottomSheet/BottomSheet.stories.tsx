@@ -37,7 +37,7 @@ export const Agreement: Story = {
     const [open, setOpen] = useState(false);
     return (
       <>
-        <Button variant='primary' size='large' className='w-[160px]' onClick={() => setOpen(true)}>
+        <Button theme='brand' size='large' className='w-[160px]' onClick={() => setOpen(true)}>
           시트 열기
         </Button>
         {open && (

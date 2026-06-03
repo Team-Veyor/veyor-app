@@ -8,6 +8,13 @@ Veyor 클라이언트에서 사용하는 색상 토큰입니다.
 
 <ColorPalette>
   <ColorItem
+    title='base'
+    subtitle='Base colors'
+    colors={{
+      white: '#ffffff',
+    }}
+  />
+  <ColorItem
     title='gray'
     subtitle='Neutral grayscale'
     colors={{
@@ -25,10 +32,23 @@ Veyor 클라이언트에서 사용하는 색상 토큰입니다.
     }}
   />
   <ColorItem
+    title='brand'
+    subtitle='Brand colors'
+    colors={{
+      brand: '#09ba8e',
+      'brand-light': '#daf5ee',
+    }}
+  />
+  <ColorItem
     title='alpha'
     subtitle='Overlay colors'
     colors={{
+      'white-alpha-40': 'rgba(255, 255, 255, 0.4)',
       'gray-30-alpha': 'rgba(0, 0, 0, 0.3)',
+      'gray-20-alpha': 'rgba(0, 0, 0, 0.2)',
+      'gray-10-alpha': 'rgba(0, 0, 0, 0.1)',
+      'brand-alpha-15': 'rgba(9, 186, 142, 0.15)',
+      'brand-alpha-30': 'rgba(9, 186, 142, 0.3)',
     }}
   />
 </ColorPalette>
