@@ -2,9 +2,14 @@ import type { InputHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  /** 입력 필드를 감싸는 외곽 `<div>`에 적용할 Tailwind 클래스 */
   wrapperClassName?: string;
 }
 
+/**
+ * 공통 텍스트 입력 컴포넌트.
+ * 표준 `<input>` 속성을 그대로 받으며, 포커스 시 외곽선이 강조됩니다.
+ */
 const Input = ({
   type = 'text',
   placeholder,

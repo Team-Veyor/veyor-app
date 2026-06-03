@@ -5,12 +5,21 @@ import { useEffect, useId, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface ModalProps {
+  /** 모달 상단에 표시되는 제목 텍스트 */
   title: string;
+  /** 제목 아래에 표시되는 설명 텍스트. 줄바꿈(`\n`)을 포함할 수 있습니다. */
   description: string;
+  /** 모달 하단 액션 영역에 렌더링할 노드 (보통 버튼 그룹) */
   children?: ReactNode;
+  /** `<dialog>` 요소에 추가할 Tailwind 클래스 */
   className?: string;
 }
 
+/**
+ * 네이티브 `<dialog>` 요소 기반의 베이스 모달.
+ * 마운트 시 자동으로 `showModal()`을 호출해 표시되며, ESC로 닫히지 않습니다.
+ * 하단 액션 영역은 `children`으로 자유롭게 구성할 수 있습니다.
+ */
 const Modal = ({ title, description, children, className }: ModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 

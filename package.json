@@ -10,6 +10,8 @@
     "build:client": "pnpm --filter @veyor/client build",
     "build:server": "pnpm --filter @veyor/server build",
     "typecheck": "pnpm -r typecheck",
+    "storybook": "pnpm --filter @veyor/client storybook",
+    "storybook:build": "pnpm --filter @veyor/client storybook:build",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write ."
