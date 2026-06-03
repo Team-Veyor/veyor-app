@@ -114,8 +114,6 @@ components/Modal/
 - boolean은 `is`, `has`, `should`, `can` 접두어로 상태를 드러냅니다 (`isOpen`, `hasError`, `shouldAutoFocus`).
 - 이벤트 핸들러는 prop은 `onAction`, 내부 함수는 `handleAction` (`onClose`, `handleSubmit`).
 - 비동기 함수는 동작을 동사로 시작합니다 (`fetchAccounts`, `loadProfile`). 단순 getter는 `get*` 사용을 피하고 명사로 표현합니다.
-- 약어는 사전적으로 정착된 것만 사용합니다 (`url`, `id`, `api`). 임의 축약(`btn`, `cmp`, `msg`)은 지양합니다.
-- 부정형 boolean은 피합니다 (`isDisabled` O, `isNotEnabled` X).
 
 ### 컴포넌트 props
 
@@ -126,7 +124,9 @@ components/Modal/
 
 ### 가독성
 
-- 이름이 길어지더라도 의미가 드러나는 쪽을 택합니다. 다만 같은 스코프에서 같은 prefix가 3회 이상 반복되면 함수나 변수를 분리합니다.
+- 약어는 사전적으로 정착된 것만 사용합니다 (`url`, `id`, `api`). 임의 축약(`btn`, `cmp`, `msg`)은 지양합니다.
+- 부정형 boolean은 피합니다 (`isDisabled` O, `isNotEnabled` X).
+- 이름이 길어지더라도 의미가 드러나는 쪽을 택합니다. 단, 같은 스코프에서 같은 prefix가 3회 이상 반복되면 함수나 변수를 분리합니다.
 - 분기/매직 넘버는 상수로 끌어올려 이름으로 의도를 설명합니다.
 - 주석은 "왜"를 적습니다. 이름으로 충분히 설명되는 코드에는 주석을 달지 않습니다.
 - 한 함수/컴포넌트가 두 가지 책임을 가지면 이름이 어색해집니다. 이때는 이름을 고치기 전에 분리부터 고려합니다.
