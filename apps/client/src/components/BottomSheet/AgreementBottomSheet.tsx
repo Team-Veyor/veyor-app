@@ -102,7 +102,7 @@ const AgreementBottomSheet = ({
                   type='button'
                   onClick={() => toggleItem(item.id)}
                   aria-pressed={checked}
-                  className='flex flex-1 items-center gap-2 text-left'
+                  className='flex flex-1 items-center gap-2 text-left cursor-pointer'
                 >
                   <CheckIcon
                     className={cn(
@@ -126,7 +126,7 @@ const AgreementBottomSheet = ({
                     type='button'
                     onClick={() => onItemExpand(item.id)}
                     aria-label={`${item.label} 자세히 보기`}
-                    className='flex size-6 items-center justify-center text-gray-400'
+                    className='flex size-6 items-center justify-center text-gray-400 cursor-pointer'
                   >
                     <ChevronDownIcon />
                   </button>
