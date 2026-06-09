@@ -19,11 +19,21 @@
   --color-gray-30-alpha: rgba(0, 0, 0, 0.3);
   --color-gray-20-alpha: rgba(0, 0, 0, 0.2);
   --color-gray-10-alpha: rgba(0, 0, 0, 0.1);
+  --color-gray-5-alpha: rgba(0, 0, 0, 0.05);
 
   --color-brand: #09ba8e;
-  --color-brand-light: #daf5ee;
+  --color-brand-alpha-10: rgba(9, 186, 142, 0.1);
   --color-brand-alpha-15: rgba(9, 186, 142, 0.15);
   --color-brand-alpha-30: rgba(9, 186, 142, 0.3);
+
+  --color-warning: #b86f00;
+  --color-yellow-alpha-10: rgba(255, 204, 0, 0.1);
+
+  --color-danger: #c3324a;
+  --color-red-alpha-10: rgba(252, 76, 87, 0.1);
+
+  --color-success: #07c;
+  --color-blue-alpha-10: rgba(0, 153, 255, 0.1);
 }
 
 @theme {
