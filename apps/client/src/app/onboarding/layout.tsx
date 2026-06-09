@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import Header from '@/app/onboarding/_components/Header';
+import Header from '@/components/Header/Header';
 
 interface OnboardingLayoutProps {
   children: ReactNode;
@@ -8,7 +8,7 @@ interface OnboardingLayoutProps {
 const OnboardingLayout = ({ children }: OnboardingLayoutProps) => {
   return (
     <div className='flex flex-col h-dvh pb-[32px]'>
-      <Header />
+      <Header type='title' />
       {children}
     </div>
   );
