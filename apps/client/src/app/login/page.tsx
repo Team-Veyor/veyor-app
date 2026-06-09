@@ -17,7 +17,7 @@ export default function LoginPage() {
           <p className='title-xsmall-weak text-gray-500'>백일 설문 기록</p>
         </div>
 
-        <div className='flex flex-col mt-auto'>
+        <div className='flex flex-col mt-auto px-[16px]'>
           <Button
             theme='gray'
             className='gap-2 bg-[#FEE500] text-[rgba(0, 0, 0, 0.85)'
