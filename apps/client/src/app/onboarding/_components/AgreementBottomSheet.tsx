@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import type { AgreementId, AgreementItem } from '@/app/onboarding/_types/types';
 import CheckCircleIcon from '@/assets/icons/CheckCircleIcon';
 import CheckIcon from '@/assets/icons/CheckIcon';
 import ChevronDownIcon from '@/assets/icons/ChevronDownIcon';
@@ -12,22 +13,13 @@ const COLOR_CHECKED = 'text-[#00C896]';
 const FOCUS_RING =
   'outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2F9BFF]';
 
-export interface AgreementItem {
-  /** 약관 항목의 고유 식별자 */
-  id: string;
-  /** 약관 항목에 표시할 텍스트 */
-  label: string;
-  /** 필수 약관 여부. 기본값은 `false`(선택). */
-  required?: boolean;
-}
-
 interface AgreementBottomSheetProps {
   /** 약관 항목 리스트 */
-  items: AgreementItem[];
+  items: readonly AgreementItem[];
   /** 하단 버튼 클릭 시 실행되는 콜백. 동의된 약관 id 배열을 전달합니다. */
-  onSubmit: (agreedIds: string[]) => void;
+  onSubmit: (agreedIds: AgreementId[]) => void;
   /** 약관 항목의 펼침 화살표를 눌렀을 때 실행되는 콜백 */
-  onItemExpand?: (id: string) => void;
+  onItemExpand?: (id: AgreementId) => void;
   /** 바깥(backdrop) 클릭으로 시트가 닫힐 때 실행되는 콜백 */
   onClose?: () => void;
 }
@@ -42,7 +34,7 @@ const AgreementBottomSheet = ({
   onItemExpand,
   onClose,
 }: AgreementBottomSheetProps) => {
-  const [agreedIds, setAgreedIds] = useState<Set<string>>(new Set());
+  const [agreedIds, setAgreedIds] = useState<Set<AgreementId>>(new Set());
 
   const allChecked = items.length > 0 && items.every((item) => agreedIds.has(item.id));
   const canSubmit = useMemo(
@@ -54,7 +46,7 @@ const AgreementBottomSheet = ({
     setAgreedIds(allChecked ? new Set() : new Set(items.map((item) => item.id)));
   };
 
-  const toggleItem = (id: string) => {
+  const toggleItem = (id: AgreementId) => {
     setAgreedIds((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -70,12 +62,7 @@ const AgreementBottomSheet = ({
     <BottomSheet
       onClose={onClose}
       footer={
-        <Button
-          theme='brand'
-          size='large'
-          disabled={!canSubmit}
-          onClick={() => onSubmit(Array.from(agreedIds))}
-        >
+        <Button size='large' disabled={!canSubmit} onClick={() => onSubmit(Array.from(agreedIds))}>
           확인
         </Button>
       }
@@ -129,7 +116,7 @@ interface AgreementRowProps {
 }
 
 const AgreementRow = ({ item, checked, onToggle, onExpand }: AgreementRowProps) => (
-  <li className='flex cursor-pointer items-center gap-3 px-2 py-3'>
+  <li className='flex cursor-pointer items-center gap-3 py-[8px]'>
     <button
       type='button'
       onClick={onToggle}
