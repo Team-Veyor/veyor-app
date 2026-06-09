@@ -23,7 +23,7 @@ const dialogClassName = cn(
   'bg-gray-50 pt-[16px] pb-[22px]',
   'shadow-[0_-12px_48px_0_rgba(0,0,0,0.16)]',
   'translate-y-full transition-transform duration-300 ease-out',
-  'backdrop:bg-gray-30-alpha backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300',
+  'backdrop:bg-black-alpha-30 backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300',
 );
 
 /**

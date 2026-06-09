@@ -1,0 +1,163 @@
+{
+  "Colors": {
+    "Gray": {
+      "Scale": {
+        "50": { "$type": "color", "$value": "#fafafa" },
+        "100": { "$type": "color", "$value": "#f5f5f5" },
+        "200": { "$type": "color", "$value": "#e8e8e8" },
+        "300": { "$type": "color", "$value": "#d4d4d4" },
+        "400": { "$type": "color", "$value": "#a3a3a3" },
+        "500": { "$type": "color", "$value": "#737373" },
+        "600": { "$type": "color", "$value": "#525252" },
+        "700": { "$type": "color", "$value": "#404040" },
+        "800": { "$type": "color", "$value": "#262626" },
+        "900": { "$type": "color", "$value": "#171717" },
+        "950": { "$type": "color", "$value": "#0a0a0a" }
+      }
+    },
+    "White": {
+      "DEFAULT": { "$type": "color", "$value": "#ffffff" },
+      "Alpha": {
+        "30": { "$type": "color", "$value": "#ffffff4d" },
+        "40": { "$type": "color", "$value": "#ffffff66" },
+        "60": { "$type": "color", "$value": "#ffffff99" },
+        "90": { "$type": "color", "$value": "#ffffffe6" }
+      }
+    },
+    "Black": {
+      "DEFAULT": { "$type": "color", "$value": "#000000" },
+      "Alpha": {
+        "5": { "$type": "color", "$value": "#0000000d" },
+        "10": { "$type": "color", "$value": "#0000001a" },
+        "20": { "$type": "color", "$value": "#00000033" },
+        "30": { "$type": "color", "$value": "#0000004d" }
+      }
+    },
+    "Blue": {
+      "Scale": {
+        "50": { "$type": "color", "$value": "#f0f8ff" },
+        "100": { "$type": "color", "$value": "#d9eeff" },
+        "200": { "$type": "color", "$value": "#b3ddff" },
+        "300": { "$type": "color", "$value": "#80c7ff" },
+        "400": { "$type": "color", "$value": "#4db1ff" },
+        "500": { "$type": "color", "$value": "#0099ff" },
+        "600": { "$type": "color", "$value": "#008ae6" },
+        "700": { "$type": "color", "$value": "#0077cc" },
+        "800": { "$type": "color", "$value": "#005fa3" },
+        "900": { "$type": "color", "$value": "#00477a" },
+        "950": { "$type": "color", "$value": "#002b4d" }
+      },
+      "Alpha": {
+        "5": { "$type": "color", "$value": "#0099ff0d" },
+        "10": { "$type": "color", "$value": "#0099ff1a" }
+      }
+    },
+    "Brand": {
+      "Scale": {
+        "50": { "$type": "color", "$value": "#f0fcf9" },
+        "100": { "$type": "color", "$value": "#d7f7ee" },
+        "200": { "$type": "color", "$value": "#afefdd" },
+        "300": { "$type": "color", "$value": "#7ee4c7" },
+        "400": { "$type": "color", "$value": "#45d3ac" },
+        "500": { "$type": "color", "$value": "#09ba8e" },
+        "600": { "$type": "color", "$value": "#079f79" },
+        "700": { "$type": "color", "$value": "#078467" },
+        "800": { "$type": "color", "$value": "#066a55" },
+        "900": { "$type": "color", "$value": "#055245" },
+        "950": { "$type": "color", "$value": "#03332b" }
+      },
+      "Alpha": {
+        "5": { "$type": "color", "$value": "#09ba8e0d" },
+        "10": { "$type": "color", "$value": "#09ba8e1a" },
+        "15": { "$type": "color", "$value": "#09ba8e26" },
+        "30": { "$type": "color", "$value": "#09ba8e4d" },
+        "50": { "$type": "color", "$value": "#09ba8e80" }
+      }
+    },
+    "Yellow": {
+      "Scale": {
+        "50": { "$type": "color", "$value": "#fffdf2" },
+        "100": { "$type": "color", "$value": "#fff8d9" },
+        "200": { "$type": "color", "$value": "#fff0b3" },
+        "300": { "$type": "color", "$value": "#ffe680" },
+        "400": { "$type": "color", "$value": "#ffd94d" },
+        "500": { "$type": "color", "$value": "#ffcc00" },
+        "600": { "$type": "color", "$value": "#f0b400" },
+        "700": { "$type": "color", "$value": "#d99400" },
+        "800": { "$type": "color", "$value": "#b86f00" },
+        "900": { "$type": "color", "$value": "#8f5200" },
+        "950": { "$type": "color", "$value": "#5c3300" }
+      },
+      "Alpha": {
+        "5": { "$type": "color", "$value": "#ffcc000d" },
+        "10": { "$type": "color", "$value": "#ffcc001a" },
+        "40": { "$type": "color", "$value": "#ffcc0066" }
+      }
+    },
+    "Red": {
+      "Scale": {
+        "50": { "$type": "color", "$value": "#fff3f5" },
+        "100": { "$type": "color", "$value": "#ffe4e8" },
+        "200": { "$type": "color", "$value": "#ffc8d1" },
+        "300": { "$type": "color", "$value": "#ff9fae" },
+        "400": { "$type": "color", "$value": "#ff6d82" },
+        "500": { "$type": "color", "$value": "#fc4c57" },
+        "600": { "$type": "color", "$value": "#e43e4f" },
+        "700": { "$type": "color", "$value": "#c3324a" },
+        "800": { "$type": "color", "$value": "#a02b44" },
+        "900": { "$type": "color", "$value": "#7c243c" },
+        "950": { "$type": "color", "$value": "#4f1525" }
+      },
+      "Alpha": {
+        "10": { "$type": "color", "$value": "#fc4c571a" },
+        "30": { "$type": "color", "$value": "#fc4c574d" }
+      }
+    }
+  },
+  "Typography": {
+    "fontFamily": {
+      "brand": { "$type": "fontFamily", "$value": "SUIT" }
+    },
+    "fontWeight": {
+      "regular": { "$type": "fontWeight", "$value": 400 },
+      "medium": { "$type": "fontWeight", "$value": 500 },
+      "semibold": { "$type": "fontWeight", "$value": 600 },
+      "bold": { "$type": "fontWeight", "$value": 700 }
+    },
+    "size": {
+      "12": { "$type": "dimension", "$value": "12px" },
+      "14": { "$type": "dimension", "$value": "14px" },
+      "16": { "$type": "dimension", "$value": "16px" },
+      "18": { "$type": "dimension", "$value": "18px" },
+      "20": { "$type": "dimension", "$value": "20px" },
+      "22": { "$type": "dimension", "$value": "22px" },
+      "24": { "$type": "dimension", "$value": "24px" },
+      "26": { "$type": "dimension", "$value": "26px" },
+      "28": { "$type": "dimension", "$value": "28px" },
+      "30": { "$type": "dimension", "$value": "30px" }
+    }
+  },
+  "Radius": {
+    "4": { "$type": "dimension", "$value": "4px" },
+    "8": { "$type": "dimension", "$value": "8px" },
+    "12": { "$type": "dimension", "$value": "12px" },
+    "16": { "$type": "dimension", "$value": "16px" },
+    "20": { "$type": "dimension", "$value": "20px" },
+    "24": { "$type": "dimension", "$value": "24px" },
+    "28": { "$type": "dimension", "$value": "28px" },
+    "32": { "$type": "dimension", "$value": "32px" },
+    "36": { "$type": "dimension", "$value": "36px" },
+    "40": { "$type": "dimension", "$value": "40px" }
+  },
+  "Spacing": {
+    "4": { "$type": "dimension", "$value": "4px" },
+    "8": { "$type": "dimension", "$value": "8px" },
+    "12": { "$type": "dimension", "$value": "12px" },
+    "16": { "$type": "dimension", "$value": "16px" },
+    "20": { "$type": "dimension", "$value": "20px" },
+    "24": { "$type": "dimension", "$value": "24px" },
+    "28": { "$type": "dimension", "$value": "28px" },
+    "32": { "$type": "dimension", "$value": "32px" },
+    "36": { "$type": "dimension", "$value": "36px" }
+  }
+}
