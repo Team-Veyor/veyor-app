@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
+import AgreementBottomSheet from '@/app/onboarding/_components/AgreementBottomSheet';
 import Button from '@/components/Button/Button';
-import AgreementBottomSheet from './AgreementBottomSheet';
 
 const handleSubmit = (_ids: string[]) => undefined;
 
@@ -15,7 +15,7 @@ const meta = {
   args: {
     items: [
       { id: 'privacy', label: '개인정보 수집 및 이용 동의', required: true },
-      { id: 'service', label: '백설기 서비스 이용 약관 동의', required: true },
+      { id: 'terms', label: '백설기 서비스 이용 약관 동의', required: true },
       { id: 'marketing', label: '마케팅 수신 동의', required: false },
     ],
     onSubmit: handleSubmit,
