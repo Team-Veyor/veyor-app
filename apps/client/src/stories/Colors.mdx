@@ -6,99 +6,206 @@ import { ColorItem, ColorPalette, Meta } from '@storybook/addon-docs/blocks';
 
 Veyor 클라이언트에서 사용하는 색상 토큰입니다.
 
-## Solid
+토큰 소스는 `tokens/global.json`(core) · `tokens/semantic.json`(semantic) 이며, `pnpm tokens:build` 결과인 `src/styles/tokens.generated.css` 의 CSS 변수를 참조합니다. 피그마(Tokens Studio)에서 값을 수정해 푸시 → 빌드만 하면 이 문서도 자동으로 반영됩니다.
+
+## Semantic
+
+의미 기반 토큰입니다. 컴포넌트에서는 가능한 한 이 토큰을 사용합니다.
 
 <ColorPalette>
   <ColorItem
-    title='base'
-    subtitle='Base colors'
-    colors={{
-      white: '#ffffff',
-    }}
-  />
-  <ColorItem
-    title='gray'
-    subtitle='Neutral grayscale'
-    colors={{
-      'gray-50': '#fafafa',
-      'gray-100': '#f5f5f5',
-      'gray-200': '#e8e8e8',
-      'gray-300': '#d4d4d4',
-      'gray-400': '#a3a3a3',
-      'gray-500': '#737373',
-      'gray-600': '#525252',
-      'gray-700': '#404040',
-      'gray-800': '#262626',
-      'gray-900': '#171717',
-      'gray-950': '#0a0a0a',
-    }}
-  />
-  <ColorItem
     title='brand'
-    subtitle='Brand colors'
+    subtitle='Brand semantic'
     colors={{
-      brand: '#09ba8e',
+      brand: 'var(--color-brand)',
+      'surface-brand': 'var(--color-surface-brand)',
     }}
   />
   <ColorItem
     title='success'
-    subtitle='Success state colors'
+    subtitle='Success semantic'
     colors={{
-      success: '#07c',
+      success: 'var(--color-success)',
+      'surface-success': 'var(--color-surface-success)',
     }}
   />
   <ColorItem
     title='warning'
-    subtitle='Warning state colors'
+    subtitle='Warning semantic'
     colors={{
-      warning: '#b86f00',
+      warning: 'var(--color-warning)',
+      'surface-warning': 'var(--color-surface-warning)',
     }}
   />
   <ColorItem
     title='danger'
-    subtitle='Danger state colors'
+    subtitle='Danger semantic'
     colors={{
-      danger: '#c3324a',
+      danger: 'var(--color-danger)',
+      'surface-danger': 'var(--color-surface-danger)',
     }}
   />
 </ColorPalette>
 
-## Alpha
+## Core — Scale
+
+원시(primitive) 색상 스케일입니다. semantic 토큰이 없을 때만 직접 사용합니다.
 
 <ColorPalette>
   <ColorItem
-    title='base-alpha'
-    subtitle='Base overlay colors'
+    title='gray'
+    subtitle='Neutral grayscale'
     colors={{
-      'white-alpha-40': 'rgba(255, 255, 255, 0.4)',
+      'gray-50': 'var(--color-gray-50)',
+      'gray-100': 'var(--color-gray-100)',
+      'gray-200': 'var(--color-gray-200)',
+      'gray-300': 'var(--color-gray-300)',
+      'gray-400': 'var(--color-gray-400)',
+      'gray-500': 'var(--color-gray-500)',
+      'gray-600': 'var(--color-gray-600)',
+      'gray-700': 'var(--color-gray-700)',
+      'gray-800': 'var(--color-gray-800)',
+      'gray-900': 'var(--color-gray-900)',
+      'gray-950': 'var(--color-gray-950)',
     }}
   />
   <ColorItem
-    title='gray-alpha'
-    subtitle='Gray overlay colors'
+    title='brand'
+    subtitle='Brand scale'
     colors={{
-      'gray-5-alpha': 'rgba(0, 0, 0, 0.05)',
-      'gray-10-alpha': 'rgba(0, 0, 0, 0.1)',
-      'gray-20-alpha': 'rgba(0, 0, 0, 0.2)',
-      'gray-30-alpha': 'rgba(0, 0, 0, 0.3)',
+      'brand-50': 'var(--color-brand-50)',
+      'brand-100': 'var(--color-brand-100)',
+      'brand-200': 'var(--color-brand-200)',
+      'brand-300': 'var(--color-brand-300)',
+      'brand-400': 'var(--color-brand-400)',
+      'brand-500': 'var(--color-brand-500)',
+      'brand-600': 'var(--color-brand-600)',
+      'brand-700': 'var(--color-brand-700)',
+      'brand-800': 'var(--color-brand-800)',
+      'brand-900': 'var(--color-brand-900)',
+      'brand-950': 'var(--color-brand-950)',
+    }}
+  />
+  <ColorItem
+    title='blue'
+    subtitle='Blue scale'
+    colors={{
+      'blue-50': 'var(--color-blue-50)',
+      'blue-100': 'var(--color-blue-100)',
+      'blue-200': 'var(--color-blue-200)',
+      'blue-300': 'var(--color-blue-300)',
+      'blue-400': 'var(--color-blue-400)',
+      'blue-500': 'var(--color-blue-500)',
+      'blue-600': 'var(--color-blue-600)',
+      'blue-700': 'var(--color-blue-700)',
+      'blue-800': 'var(--color-blue-800)',
+      'blue-900': 'var(--color-blue-900)',
+      'blue-950': 'var(--color-blue-950)',
+    }}
+  />
+  <ColorItem
+    title='yellow'
+    subtitle='Yellow scale'
+    colors={{
+      'yellow-50': 'var(--color-yellow-50)',
+      'yellow-100': 'var(--color-yellow-100)',
+      'yellow-200': 'var(--color-yellow-200)',
+      'yellow-300': 'var(--color-yellow-300)',
+      'yellow-400': 'var(--color-yellow-400)',
+      'yellow-500': 'var(--color-yellow-500)',
+      'yellow-600': 'var(--color-yellow-600)',
+      'yellow-700': 'var(--color-yellow-700)',
+      'yellow-800': 'var(--color-yellow-800)',
+      'yellow-900': 'var(--color-yellow-900)',
+      'yellow-950': 'var(--color-yellow-950)',
+    }}
+  />
+  <ColorItem
+    title='red'
+    subtitle='Red scale'
+    colors={{
+      'red-50': 'var(--color-red-50)',
+      'red-100': 'var(--color-red-100)',
+      'red-200': 'var(--color-red-200)',
+      'red-300': 'var(--color-red-300)',
+      'red-400': 'var(--color-red-400)',
+      'red-500': 'var(--color-red-500)',
+      'red-600': 'var(--color-red-600)',
+      'red-700': 'var(--color-red-700)',
+      'red-800': 'var(--color-red-800)',
+      'red-900': 'var(--color-red-900)',
+      'red-950': 'var(--color-red-950)',
+    }}
+  />
+  <ColorItem
+    title='base'
+    subtitle='Base colors'
+    colors={{
+      white: 'var(--color-white)',
+      black: 'var(--color-black)',
+    }}
+  />
+</ColorPalette>
+
+## Core — Alpha
+
+투명도가 적용된 오버레이 색상입니다.
+
+<ColorPalette>
+  <ColorItem
+    title='white-alpha'
+    subtitle='White overlay'
+    colors={{
+      'white-alpha-30': 'var(--color-white-alpha-30)',
+      'white-alpha-40': 'var(--color-white-alpha-40)',
+      'white-alpha-60': 'var(--color-white-alpha-60)',
+      'white-alpha-90': 'var(--color-white-alpha-90)',
+    }}
+  />
+  <ColorItem
+    title='black-alpha'
+    subtitle='Black overlay'
+    colors={{
+      'black-alpha-5': 'var(--color-black-alpha-5)',
+      'black-alpha-10': 'var(--color-black-alpha-10)',
+      'black-alpha-20': 'var(--color-black-alpha-20)',
+      'black-alpha-30': 'var(--color-black-alpha-30)',
     }}
   />
   <ColorItem
     title='brand-alpha'
-    subtitle='Brand overlay colors'
+    subtitle='Brand overlay'
     colors={{
-      'brand-alpha-10': 'rgba(9, 186, 142, 0.1)',
-      'brand-alpha-15': 'rgba(9, 186, 142, 0.15)',
-      'brand-alpha-30': 'rgba(9, 186, 142, 0.3)',
+      'brand-alpha-5': 'var(--color-brand-alpha-5)',
+      'brand-alpha-10': 'var(--color-brand-alpha-10)',
+      'brand-alpha-15': 'var(--color-brand-alpha-15)',
+      'brand-alpha-30': 'var(--color-brand-alpha-30)',
+      'brand-alpha-50': 'var(--color-brand-alpha-50)',
     }}
   />
   <ColorItem
-    title='state-alpha'
-    subtitle='State overlay colors'
+    title='blue-alpha'
+    subtitle='Blue overlay'
     colors={{
-      'blue-alpha-10': 'rgba(0, 153, 255, 0.1)',
-      'yellow-alpha-10': 'rgba(255, 204, 0, 0.1)',
-      'red-alpha-10': 'rgba(252, 76, 87, 0.1)',
+      'blue-alpha-5': 'var(--color-blue-alpha-5)',
+      'blue-alpha-10': 'var(--color-blue-alpha-10)',
+    }}
+  />
+  <ColorItem
+    title='yellow-alpha'
+    subtitle='Yellow overlay'
+    colors={{
+      'yellow-alpha-5': 'var(--color-yellow-alpha-5)',
+      'yellow-alpha-10': 'var(--color-yellow-alpha-10)',
+      'yellow-alpha-40': 'var(--color-yellow-alpha-40)',
+    }}
+  />
+  <ColorItem
+    title='red-alpha'
+    subtitle='Red overlay'
+    colors={{
+      'red-alpha-10': 'var(--color-red-alpha-10)',
+      'red-alpha-30': 'var(--color-red-alpha-30)',
     }}
   />
 </ColorPalette>

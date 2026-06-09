@@ -1,0 +1,14 @@
+{
+  "color": {
+    "brand": { "$type": "color", "$value": "{Colors.Brand.Scale.500}" },
+    "success": { "$type": "color", "$value": "{Colors.Blue.Scale.700}" },
+    "warning": { "$type": "color", "$value": "{Colors.Yellow.Scale.800}" },
+    "danger": { "$type": "color", "$value": "{Colors.Red.Scale.600}" },
+    "surface": {
+      "brand": { "$type": "color", "$value": "{Colors.Brand.Alpha.5}" },
+      "success": { "$type": "color", "$value": "{Colors.Blue.Alpha.10}" },
+      "warning": { "$type": "color", "$value": "{Colors.Yellow.Alpha.10}" },
+      "danger": { "$type": "color", "$value": "{Colors.Red.Alpha.10}" }
+    }
+  }
+}

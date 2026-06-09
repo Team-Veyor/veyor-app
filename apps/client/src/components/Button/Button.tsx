@@ -13,9 +13,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const THEME_CLASSES = {
-  dark: 'bg-gray-900 text-gray-50 after:bg-gray-30-alpha enabled:hover:after:opacity-100',
-  brand: 'bg-brand text-white after:bg-brand-alpha-30 enabled:hover:after:opacity-100',
-  light: 'bg-brand-light text-brand after:bg-white-alpha-40 enabled:hover:after:opacity-100',
+  dark: 'bg-gray-900 text-gray-50 after:bg-black-alpha-30 enabled:hover:after:opacity-100',
+  brand: 'bg-brand-700 text-white after:bg-brand-alpha-30 enabled:hover:after:opacity-100',
+  light: 'bg-brand-alpha-5 text-brand-500 after:bg-white-alpha-40 enabled:hover:after:opacity-100',
   gray: 'bg-gray-200 text-gray-600 after:bg-white-alpha-40 enabled:hover:after:opacity-100',
 };
 

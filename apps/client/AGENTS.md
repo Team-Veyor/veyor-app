@@ -141,6 +141,7 @@ components/Modal/
 - `@/*` alias는 `apps/client/src/*`를 가리킵니다.
 - `@veyor/shared`는 `next.config.ts`의 `transpilePackages`에 포함되어 있으므로 공유 타입·상수 import에 사용합니다.
 - Tailwind CSS 4 token은 `src/styles/globals.css`의 `@theme` / `@utility`를 우선합니다.
+- 색상 토큰은 루트 `tokens/*.json` → `pnpm tokens:build` → `tokens.generated.css`로 자동 생성됩니다. `globals.css`에 색상 변수를 직접 추가하지 말고, core는 `tokens/global.json`, semantic은 `tokens/semantic.json`에서 관리합니다. 자세한 흐름은 `docs/design-tokens.md` 참고.
 - 서버 비밀값·Supabase secret key는 클라이언트 코드에 노출하지 않습니다.
 - API 요청/응답처럼 서버와 공유해야 하는 타입은 `packages/shared`로 이동합니다.
 - `lib/`로 승격할 때는 최소 2곳 이상에서 실제 재사용되는지 확인합니다.
