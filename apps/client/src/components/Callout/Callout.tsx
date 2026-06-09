@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import InfoCircleIcon from '@/assets/icons/InfoCircleIcon';
 import { cn } from '@/lib/utils';
 import type { Size } from '@/types/types';
@@ -6,6 +7,8 @@ type CalloutType = 'default' | 'brand' | 'warning' | 'success' | 'danger';
 type CalloutSize = Extract<Size, 'small' | 'large'>;
 
 interface CalloutProps {
+  /** Callout의 아이콘. `info`는 정보 아이콘, `brand`는 브랜드 아이콘, `success`는 성공 아이콘, `warning`는 경고 아이콘, `danger`는 위험 아이콘을 사용합니다. */
+  icon?: ReactNode;
   /** Callout의 시각적 톤. `default`는 회색, `brand`는 브랜드 색상, `success`/`warning`/`danger`는 상태 색상을 사용합니다. */
   type?: CalloutType;
   /** Callout 크기. `small`은 패딩과 타이포가 작고, `large`는 더 큰 패딩과 타이포를 사용합니다. */
@@ -19,11 +22,11 @@ interface CalloutProps {
 }
 
 const TYPE_CLASSES: Record<CalloutType, string> = {
-  default: 'bg-gray-5-alpha text-gray-600',
-  brand: 'bg-brand-alpha-10 text-brand',
-  success: 'bg-blue-alpha-10 text-success',
-  warning: 'bg-yellow-alpha-10 text-warning',
-  danger: 'bg-red-alpha-10 text-danger',
+  default: 'bg-black-alpha-5 text-gray-600',
+  brand: 'bg-surface-brand text-brand',
+  success: 'bg-surface-success text-success',
+  warning: 'bg-surface-warning text-warning',
+  danger: 'bg-surface-danger text-danger',
 };
 
 const SIZE_CLASSES: Record<CalloutSize, string> = {
@@ -36,6 +39,7 @@ const SIZE_CLASSES: Record<CalloutSize, string> = {
  * type으로 톤을, size로 패딩·타이포 스케일을 제어합니다.
  */
 const Callout = ({
+  icon = <InfoCircleIcon className='size-4' />,
   type = 'default',
   size = 'large',
   title,
@@ -55,7 +59,7 @@ const Callout = ({
     >
       <div className='flex items-center gap-[6px]'>
         <span className='inline-flex size-[24px] items-center justify-center rounded-[8px] bg-white'>
-          <InfoCircleIcon className='size-4' />
+          {icon}
         </span>
         <span className={titleClass}>{title}</span>
       </div>
