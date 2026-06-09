@@ -6,10 +6,11 @@ import IntroCarousel from '@/app/onboarding/_components/IntroCarousel';
 import { AGREEMENT_ITEMS, GENDER_OPTIONS } from '@/app/onboarding/_constants/constants';
 import useOnboardingMutation from '@/app/onboarding/_hooks/useOnboardingMutation';
 import type { AgreementId, Gender } from '@/app/onboarding/_types/types';
-import { createConsents, parseBirthYear } from '@/app/onboarding/_utils/onboarding';
+import { createConsents } from '@/app/onboarding/_utils/onboarding';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import RadioButton from '@/components/Radio/RadioButton';
+import { toIntegerOrNull } from '@/lib/utils';
 
 type OnboardingStep = 'info' | 'intro';
 
@@ -66,10 +67,7 @@ const Info = () => {
         placeholder='출생연도'
         value={form.birthYear ?? ''}
         onChange={(e) =>
-          setForm((prev) => ({
-            ...prev,
-            birthYear: parseBirthYear(e.target.value),
-          }))
+          setForm((prev) => ({ ...prev, birthYear: toIntegerOrNull(e.target.value) }))
         }
       />
 
