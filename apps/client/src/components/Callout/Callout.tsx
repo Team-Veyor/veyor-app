@@ -39,7 +39,7 @@ const SIZE_CLASSES: Record<CalloutSize, string> = {
  * type으로 톤을, size로 패딩·타이포 스케일을 제어합니다.
  */
 const Callout = ({
-  icon = <InfoCircleIcon className='size-4' />,
+  icon = <InfoCircleIcon className='size-16' />,
   type = 'default',
   size = 'large',
   title,
@@ -51,21 +51,21 @@ const Callout = ({
   return (
     <div
       className={cn(
-        'flex flex-col w-full gap-[4px] rounded-[16px] py-[12px] px-[16px]',
+        'flex flex-col w-full gap-4 rounded-16 py-3 px-4',
         'shadow-[0_0_80px_0_rgba(0,0,0,0.05)]',
         TYPE_CLASSES[type],
         className,
       )}
     >
       <div className='flex items-center gap-[6px]'>
-        <span className='inline-flex size-[24px] items-center justify-center rounded-[8px] bg-white'>
+        <span className='inline-flex size-6 items-center justify-center rounded-8 bg-white'>
           {icon}
         </span>
         <span className={titleClass}>{title}</span>
       </div>
 
       {subTexts && subTexts.length > 0 && (
-        <ul className={cn('flex flex-col list-disc pl-[32px] gap-[4px] subtext-small')}>
+        <ul className={cn('flex flex-col list-disc pl-32 gap-4 subtext-small')}>
           {subTexts.map((text) => (
             <li key={text}>{text}</li>
           ))}
