@@ -35,17 +35,15 @@ const RadioButton = ({
   disabled,
   ...props
 }: RadioButtonProps) => {
-  const iconSpace = <div className='size-6' />;
-
-  const leftIcon = hasLeftIcon ? <CheckCircleIcon /> : iconSpace;
-  const rightIcon = hasRightIcon ? <CheckCircleIcon /> : iconSpace;
+  const leftIcon = hasLeftIcon && <CheckCircleIcon />;
+  const rightIcon = hasRightIcon && <CheckCircleIcon />;
 
   return (
     <label className={cn('inline-flex cursor-pointer', disabled && 'cursor-not-allowed')}>
       <input type='radio' className='peer sr-only' disabled={disabled} {...props} />
       <span
         className={cn(
-          'label-large flex min-w-[148px] items-center justify-center gap-3 rounded-2xl p-4 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#2F9BFF]',
+          'label-large flex min-w-[148px] items-center justify-between gap-3 rounded-2xl p-4 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#2F9BFF]',
           VARIANT_CLASSES[variant],
           className,
         )}
