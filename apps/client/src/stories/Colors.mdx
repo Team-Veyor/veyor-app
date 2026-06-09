@@ -6,6 +6,8 @@ import { ColorItem, ColorPalette, Meta } from '@storybook/addon-docs/blocks';
 
 Veyor 클라이언트에서 사용하는 색상 토큰입니다.
 
+## Solid
+
 <ColorPalette>
   <ColorItem
     title='base'
@@ -36,19 +38,67 @@ Veyor 클라이언트에서 사용하는 색상 토큰입니다.
     subtitle='Brand colors'
     colors={{
       brand: '#09ba8e',
-      'brand-light': '#daf5ee',
     }}
   />
   <ColorItem
-    title='alpha'
-    subtitle='Overlay colors'
+    title='success'
+    subtitle='Success state colors'
+    colors={{
+      success: '#07c',
+    }}
+  />
+  <ColorItem
+    title='warning'
+    subtitle='Warning state colors'
+    colors={{
+      warning: '#b86f00',
+    }}
+  />
+  <ColorItem
+    title='danger'
+    subtitle='Danger state colors'
+    colors={{
+      danger: '#c3324a',
+    }}
+  />
+</ColorPalette>
+
+## Alpha
+
+<ColorPalette>
+  <ColorItem
+    title='base-alpha'
+    subtitle='Base overlay colors'
     colors={{
       'white-alpha-40': 'rgba(255, 255, 255, 0.4)',
-      'gray-30-alpha': 'rgba(0, 0, 0, 0.3)',
-      'gray-20-alpha': 'rgba(0, 0, 0, 0.2)',
+    }}
+  />
+  <ColorItem
+    title='gray-alpha'
+    subtitle='Gray overlay colors'
+    colors={{
+      'gray-5-alpha': 'rgba(0, 0, 0, 0.05)',
       'gray-10-alpha': 'rgba(0, 0, 0, 0.1)',
+      'gray-20-alpha': 'rgba(0, 0, 0, 0.2)',
+      'gray-30-alpha': 'rgba(0, 0, 0, 0.3)',
+    }}
+  />
+  <ColorItem
+    title='brand-alpha'
+    subtitle='Brand overlay colors'
+    colors={{
+      'brand-alpha-10': 'rgba(9, 186, 142, 0.1)',
       'brand-alpha-15': 'rgba(9, 186, 142, 0.15)',
       'brand-alpha-30': 'rgba(9, 186, 142, 0.3)',
+    }}
+  />
+  <ColorItem
+    title='state-alpha'
+    subtitle='State overlay colors'
+    colors={{
+      'blue-alpha-10': 'rgba(0, 153, 255, 0.1)',
+      'yellow-alpha-10': 'rgba(255, 204, 0, 0.1)',
+      'red-alpha-10': 'rgba(252, 76, 87, 0.1)',
     }}
   />
 </ColorPalette>
