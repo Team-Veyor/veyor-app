@@ -14,6 +14,7 @@ const Input = ({
   type = 'text',
   placeholder,
   className,
+  value,
   wrapperClassName,
   ...props
 }: InputProps) => {
@@ -28,6 +29,7 @@ const Input = ({
         type={type}
         placeholder={placeholder}
         className={cn(inputClasses, className)}
+        value={value}
         {...props}
       />
     </div>

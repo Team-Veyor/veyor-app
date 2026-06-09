@@ -12,6 +12,16 @@ type ApiErrorBody = {
   message?: unknown;
 };
 
+export class ApiError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 type ApiInstanceOptions = {
   includeAuth?: boolean;
   includeJsonHeaders?: boolean;
@@ -83,7 +93,8 @@ export const apiFetch = async <T>(path: string, options: Options = {}): Promise<
 
   if (!response.ok) {
     const errorBody: ApiErrorBody = await response.json<ApiErrorBody>().catch(() => ({}));
-    throw new Error(
+    throw new ApiError(
+      response.status,
       typeof errorBody.message === 'string' ? errorBody.message : `API ${response.status}`,
     );
   }
