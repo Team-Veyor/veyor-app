@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 
 const ITEMS = [
   { href: '/home', label: '홈', Icon: HomeIcon },
-  { href: '/profile', label: '내 정보', Icon: UserIcon },
+  { href: '/user', label: '내 정보', Icon: UserIcon },
 ];
 
 /**
