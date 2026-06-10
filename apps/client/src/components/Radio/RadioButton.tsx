@@ -19,7 +19,7 @@ const VARIANT_CLASSES = {
   outlined:
     'border border-gray-200 bg-transparent text-gray-600 peer-checked:border-gray-900 peer-checked:text-gray-900 peer-checked:[&_.radio-icon]:text-gray-900',
   filled:
-    'border-transparent bg-gray-50 text-gray-600 peer-checked:text-gray-950 peer-checked:[&_.radio-icon]:text-[#00C896]',
+    'border-transparent bg-gray-50 text-gray-600 peer-checked:text-gray-950 peer-checked:[&_.radio-icon]:text-brand-500',
 };
 
 /**
@@ -43,7 +43,7 @@ const RadioButton = ({
       <input type='radio' className='peer sr-only' disabled={disabled} {...props} />
       <span
         className={cn(
-          'label-large flex min-w-[148px] items-center justify-between gap-3 rounded-2xl p-4 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#2F9BFF]',
+          'label-large flex min-w-[148px] items-center justify-between gap-12 rounded-16 p-16 transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-500',
           VARIANT_CLASSES[variant],
           className,
         )}
