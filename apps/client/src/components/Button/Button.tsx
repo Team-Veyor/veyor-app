@@ -14,7 +14,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const THEME_CLASSES = {
   dark: 'bg-gray-900 text-gray-50 after:bg-black-alpha-30 enabled:hover:after:opacity-100',
-  brand: 'bg-brand-700 text-white after:bg-brand-alpha-30 enabled:hover:after:opacity-100',
+  brand: 'bg-brand-500 text-white after:bg-brand-alpha-30 enabled:hover:after:opacity-100',
   light: 'bg-brand-alpha-5 text-brand-500 after:bg-white-alpha-40 enabled:hover:after:opacity-100',
   gray: 'bg-gray-200 text-gray-600 after:bg-white-alpha-40 enabled:hover:after:opacity-100',
 };
@@ -40,7 +40,7 @@ const Button = ({
     <button
       type='button'
       className={cn(
-        'relative flex w-full items-center justify-center gap-[12px] overflow-hidden rounded-[20px] shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors cursor-pointer after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity disabled:cursor-not-allowed disabled:opacity-40',
+        'relative flex w-full items-center justify-center gap-12 overflow-hidden rounded-20 shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)] transition-colors cursor-pointer after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity disabled:cursor-not-allowed disabled:opacity-40',
         THEME_CLASSES[theme],
         SIZE_CLASSES[size],
         className,

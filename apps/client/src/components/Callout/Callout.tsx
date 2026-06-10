@@ -51,7 +51,7 @@ const Callout = ({
   return (
     <div
       className={cn(
-        'flex flex-col w-full gap-4 rounded-16 py-3 px-4',
+        'flex flex-col w-full gap-4 rounded-16 p-3',
         'shadow-[0_0_80px_0_rgba(0,0,0,0.05)]',
         TYPE_CLASSES[type],
         className,
