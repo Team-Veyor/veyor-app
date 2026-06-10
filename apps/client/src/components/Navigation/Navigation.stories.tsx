@@ -29,13 +29,13 @@ type Story = StoryObj<typeof meta>;
 /** `/home` 진입 시 "홈" 아이템이 활성화된 상태. */
 export const HomeActive: Story = {};
 
-/** `/profile` 진입 시 "내 정보" 아이템이 활성화된 상태. */
+/** `/user` 진입 시 "내 정보" 아이템이 활성화된 상태. */
 export const ProfileActive: Story = {
   parameters: {
     nextjs: {
       appDirectory: true,
       navigation: {
-        pathname: '/profile',
+        pathname: '/user',
       },
     },
   },
