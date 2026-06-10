@@ -11,7 +11,7 @@ interface TodaySurveyProps {
   participated: boolean;
 }
 
-const TodaySurvey = ({ title, rewardAmount, estMinutes, url, participated }: TodaySurveyProps) => {
+const TodaySurvey = ({ title, rewardAmount, estMinutes, url }: TodaySurveyProps) => {
   return (
     <section className='flex flex-col gap-20 pt-16 px-20 pb-20 rounded-20 bg-white'>
       <div className='flex flex-col gap-[6.5px]'>
@@ -22,6 +22,7 @@ const TodaySurvey = ({ title, rewardAmount, estMinutes, url, participated }: Tod
             <CashIcon />
             <p className='label-medium-strong'>{rewardAmount}원</p>
             <p>/</p>
+            {/* TODO: participated 여부에 따라 텍스트 변경 */}
             <p className='text-tertiary'>{estMinutes}분</p>
           </div>
         </div>
