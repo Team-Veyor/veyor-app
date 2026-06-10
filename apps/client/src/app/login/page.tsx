@@ -13,7 +13,7 @@ export default function LoginPage() {
     <main className='flex h-dvh items-center justify-center bg-gray-50'>
       <section className='flex w-full max-w-sm flex-col gap-10 h-full pb-[32px] pt-[84px]'>
         <div className='flex flex-col items-center gap-1'>
-          <LogoIcon />
+          <LogoIcon className='text-gray-900' />
           <p className='title-xsmall-weak text-gray-500'>백일 설문 기록</p>
         </div>
 
