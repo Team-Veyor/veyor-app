@@ -4,9 +4,10 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import WarningModal from '@/components/Modal/WarningModal';
-import { supabase } from '@/lib/supabase';
 import UserMenuList from './_components/UserMenuList';
+import useLogoutMutation from './_hooks/useLogoutMutation';
 import { useUserMenuGroups } from './_hooks/useUserMenuGroups';
+import useWithdrawMutation from './_hooks/useWithdrawMutation';
 
 const DUMMY_USER = {
   nickname: '길동이',
@@ -18,20 +19,30 @@ const UserPage = () => {
   const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const router = useRouter();
+  const logoutMutation = useLogoutMutation();
+  const withdrawMutation = useWithdrawMutation();
 
   const menuGroups = useUserMenuGroups({
     onLogout: () => setLogoutOpen(true),
     onWithdraw: () => setWithdrawOpen(true),
   });
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.replace('/login');
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        setLogoutOpen(false);
+        router.replace('/login');
+      },
+    });
   };
 
   const handleWithdraw = () => {
-    // TODO: 실제 탈퇴 API 연결
-    setWithdrawOpen(false);
+    withdrawMutation.mutate(undefined, {
+      onSuccess: () => {
+        setWithdrawOpen(false);
+        router.replace('/login');
+      },
+    });
   };
 
   return (
@@ -50,9 +61,9 @@ const UserPage = () => {
       {logoutOpen && (
         <ConfirmModal
           title='로그아웃 하시겠어요?'
-          description='현재 계정에서 로그아웃됩니다.\n언제든 다시 로그인할 수 있습니다.'
+          description={'현재 계정에서 로그아웃됩니다.\n언제든 다시 로그인할 수 있습니다.'}
           leftButtonText='취소'
-          rightButtonText='로그아웃'
+          rightButtonText={logoutMutation.isPending ? '처리 중...' : '로그아웃'}
           onLeftButtonClick={() => setLogoutOpen(false)}
           onRightButtonClick={handleLogout}
         />
@@ -63,7 +74,7 @@ const UserPage = () => {
           title='정말 탈퇴하시겠어요?'
           description={'탈퇴하면 계정 정보와 활동 내역이 삭제되며\n복구할 수 없습니다.'}
           leftButtonText='취소'
-          rightButtonText='탈퇴하기'
+          rightButtonText={withdrawMutation.isPending ? '처리 중...' : '탈퇴하기'}
           onLeftButtonClick={() => setWithdrawOpen(false)}
           onRightButtonClick={handleWithdraw}
         />

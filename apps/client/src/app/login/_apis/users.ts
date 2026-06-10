@@ -12,5 +12,3 @@ export type MeResponse = {
 };
 
 export const getUser = () => apiFetch<MeResponse>('/users/me');
-
-export const deleteUser = () => apiFetch<null>('/users/me', { method: 'delete' });
