@@ -39,21 +39,21 @@ const Modal = ({ title, description, children, className }: ModalProps) => {
       aria-labelledby={titleId}
       aria-modal='true'
       className={cn(
-        'fixed left-1/2 top-1/2 m-0 w-[calc(100%-32px)] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-2xl border-none bg-gray-50 p-[22px] shadow-[0_24px_64px_0_rgba(0,0,0,0.24)] outline-none backdrop:bg-black-alpha-30',
+        'fixed left-1/2 top-1/2 m-0 w-[311px] -translate-x-1/2 -translate-y-1/2 rounded-24 border-none bg-gray-50 pt-[22px] pb-16 shadow-[0_24px_64px_0_rgba(0,0,0,0.24)] outline-none backdrop:bg-black-alpha-30',
         className,
       )}
       onCancel={(event) => event.preventDefault()}
     >
       <div className='flex flex-col gap-5'>
-        <div className='flex flex-col gap-2'>
-          <span id={titleId} className='title-small text-gray-950'>
+        <div className='flex flex-col gap-2 px-20'>
+          <span id={titleId} className='title-small text-gray-900'>
             {title}
           </span>
-          <span id={descriptionId} className='subtext-large whitespace-pre-line text-gray-600'>
+          <span id={descriptionId} className='subtext-large whitespace-pre-line text-gray-500'>
             {description}
           </span>
         </div>
-        <div className='flex items-center justify-center gap-2'>{children}</div>
+        <div className='flex items-center justify-center gap-8 px-16'>{children}</div>
       </div>
     </dialog>
   );
