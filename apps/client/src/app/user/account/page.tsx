@@ -12,6 +12,7 @@ import PlusIcon from '@/assets/icons/PlusIcon';
 import Badge from '@/components/Badge/Badge';
 import List from '@/components/List/List';
 import Menu from '@/components/Menu/Menu';
+import ConfirmModal from '@/components/Modal/ConfirmModal';
 import WarningModal from '@/components/Modal/WarningModal';
 
 interface AccountMenuItem {
@@ -21,20 +22,29 @@ interface AccountMenuItem {
 
 const AccountPage = () => {
   const [accountToDelete, setAccountToDelete] = useState<Account | null>(null);
+  const [accountToSetPrimary, setAccountToSetPrimary] = useState<Account | null>(null);
 
   const router = useRouter();
 
   const { data: accounts } = useAccounts();
-  const { mutate: setPrimary } = useSetPrimaryAccountMutation();
+  const { mutate: setPrimary, isPending: isSettingPrimary } = useSetPrimaryAccountMutation();
   const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccountMutation();
 
   const createAccountMenuItems = (account: Account): AccountMenuItem[] => [
     ...(!account.isPrimary
-      ? [{ label: '대표 계좌로 선택', onSelect: () => setPrimary(account.id) }]
+      ? [{ label: '대표 계좌로 선택', onSelect: () => setAccountToSetPrimary(account) }]
       : []),
     { label: '수정', onSelect: () => router.push(`/account/${account.id}/edit`) },
     { label: '삭제', onSelect: () => setAccountToDelete(account) },
   ];
+
+  const handleConfirmSetPrimary = () => {
+    if (!accountToSetPrimary || isSettingPrimary) return;
+
+    setPrimary(accountToSetPrimary.id, {
+      onSuccess: () => setAccountToSetPrimary(null),
+    });
+  };
 
   const handleConfirmDelete = () => {
     if (!accountToDelete || isDeleting) return;
@@ -80,6 +90,17 @@ const AccountPage = () => {
           </List.Item.Trailing>
         </List.Item>
       </List>
+
+      {accountToSetPrimary && (
+        <ConfirmModal
+          title='대표 계좌로 선택할까요?'
+          description='이후 리워드는 변경한 계좌로 지급됩니다. '
+          leftButtonText='아니요'
+          rightButtonText='예'
+          onLeftButtonClick={() => setAccountToSetPrimary(null)}
+          onRightButtonClick={handleConfirmSetPrimary}
+        />
+      )}
 
       {accountToDelete && (
         <WarningModal

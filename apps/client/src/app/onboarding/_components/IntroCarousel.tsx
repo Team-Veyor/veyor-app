@@ -81,7 +81,7 @@ const IntroCarousel = () => {
         ))}
       </div>
 
-      <Button theme='dark' size='large' onClick={() => router.replace('/home')}>
+      <Button variant='secondary' theme='dark' size='large' onClick={() => router.replace('/home')}>
         시작하기
       </Button>
     </section>

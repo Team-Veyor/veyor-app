@@ -25,7 +25,7 @@ const WeeklyStreakCard = ({ streak, weeklyStatus, totalRewardAmount }: WeeklyStr
       <div className='border-t border-black-alpha-5' />
       <SavedMoney money={totalRewardAmount} />
 
-      <Button theme='gray' size='small'>
+      <Button variant='secondary' theme='light' size='small'>
         참여 내역 보기
       </Button>
     </section>
