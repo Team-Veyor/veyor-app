@@ -20,14 +20,13 @@ interface AccountMenuItem {
 }
 
 const AccountPage = () => {
-  const { data: accounts } = useAccounts();
+  const [accountToDelete, setAccountToDelete] = useState<Account | null>(null);
 
   const router = useRouter();
 
+  const { data: accounts } = useAccounts();
   const { mutate: setPrimary } = useSetPrimaryAccountMutation();
   const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccountMutation();
-
-  const [accountToDelete, setAccountToDelete] = useState<Account | null>(null);
 
   const createAccountMenuItems = (account: Account): AccountMenuItem[] => [
     ...(!account.isPrimary

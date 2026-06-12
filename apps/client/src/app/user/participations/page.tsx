@@ -1,7 +1,7 @@
 'use client';
 
-import ParticipationItem from '@/app/participations/_components/ParticipationItem';
-import useParticipations from '@/app/participations/_hooks/useParticipations';
+import ParticipationItem from '@/app/user/participations/_components/ParticipationItem';
+import useParticipations from '@/app/user/participations/_hooks/useParticipations';
 // import useParticipations from '@/app/participations/_hooks/useParticipations';
 import CashIcon from '@/assets/icons/CashIcon';
 import List from '@/components/List/List';

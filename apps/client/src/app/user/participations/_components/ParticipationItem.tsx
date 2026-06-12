@@ -1,4 +1,4 @@
-import type { Participation } from '@/app/participations/_types/types';
+import type { Participation } from '@/app/user/participations/_types/types';
 import List from '@/components/List/List';
 import { formatDate } from '@/lib/date';
 

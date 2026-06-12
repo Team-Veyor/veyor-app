@@ -7,15 +7,15 @@ import UserIcon from '@/assets/icons/UserIcon';
 import { cn } from '@/lib/utils';
 
 const ITEMS = [
-  { href: '/home', label: '홈', Icon: HomeIcon },
-  { href: '/user', label: '내 정보', Icon: UserIcon },
+  { href: '/home', label: '홈', Icon: HomeIcon, match: ['/home'] },
+  { href: '/user', label: '내 정보', Icon: UserIcon, match: ['/user', '/policy'] },
 ];
 
 /**
  * 화면 하단에 고정되는 바텀 네비게이션.
  *
- * 현재 경로(`usePathname`)와 각 아이템의 `href`를 prefix 매칭해
- * 활성 아이템을 강조합니다.
+ * 현재 경로(`usePathname`)와 각 아이템의 `match` 경로들을 prefix 매칭해
+ * 활성 아이템을 강조합니다. (예: '내 정보'는 `/user`, `/policy` 하위 모두 포함)
  */
 const Navigation = () => {
   const pathname = usePathname();
@@ -30,8 +30,8 @@ const Navigation = () => {
         'shadow-[0_0_80px_0_var(--color-black-alpha-5)]',
       )}
     >
-      {ITEMS.map(({ href, label, Icon }) => {
-        const active = pathname === href || pathname.startsWith(`${href}/`);
+      {ITEMS.map(({ href, label, Icon, match }) => {
+        const active = match.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 
         return (
           <Link

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getParticipations } from '@/app/participations/_apis/participations';
+import { getParticipations } from '@/app/user/participations/_apis/participations';
 
 export const PARTICIPATIONS_QUERY_KEY = ['participations'] as const;
 

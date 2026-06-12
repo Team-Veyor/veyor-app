@@ -26,13 +26,13 @@ export const useUserMenuGroups = ({
 
   const account: MenuItem[] = [
     { label: '계좌 정보 관리', onSelect: () => router.push('/user/account') },
-    { label: '참여 내역', onSelect: () => router.push('/participations') },
+    { label: '참여 내역', onSelect: () => router.push('/user/participations') },
   ];
 
   const policy: MenuItem[] = [
-    { label: '서비스 이용 동의', onSelect: () => router.push('/user/consents') },
-    { label: '이용 약관', onSelect: () => router.push('/terms/terms') },
-    { label: '오픈소스 라이선스', onSelect: () => router.push('/terms/open-source') },
+    { label: '서비스 이용 동의', onSelect: () => router.push('/policy/consents') },
+    { label: '이용 약관', onSelect: () => router.push('/policy/terms') },
+    { label: '오픈소스 라이선스', onSelect: () => router.push('/policy/open-source') },
   ];
 
   const session: MenuItem[] = [
