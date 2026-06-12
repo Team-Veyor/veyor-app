@@ -15,8 +15,10 @@ interface CalloutProps {
   size?: CalloutSize;
   /** 상단 제목 텍스트 */
   title: string;
-  /** 하단 불릿 리스트로 표시되는 서브 텍스트 배열. 비어있거나 생략하면 리스트가 렌더링되지 않습니다. */
+  /** 하단 리스트로 표시되는 서브 텍스트 배열. 비어있거나 생략하면 리스트가 렌더링되지 않습니다. */
   subTexts?: string[];
+  /** 서브 텍스트에 불릿(`list-disc`)을 표시할지 여부. 기본값 `true`. */
+  hasBullet?: boolean;
   /** 외부에서 주입할 추가 클래스 */
   className?: string;
 }
@@ -44,6 +46,7 @@ const Callout = ({
   size = 'large',
   title,
   subTexts,
+  hasBullet = true,
   className,
 }: CalloutProps) => {
   const titleClass = SIZE_CLASSES[size];
@@ -65,7 +68,12 @@ const Callout = ({
       </div>
 
       {subTexts && subTexts.length > 0 && (
-        <ul className={cn('flex flex-col list-disc pl-32 gap-4 subtext-small')}>
+        <ul
+          className={cn(
+            'flex flex-col gap-4 pl-32 subtext-small',
+            hasBullet ? 'list-disc' : 'list-none whitespace-pre-line',
+          )}
+        >
           {subTexts.map((text) => (
             <li key={text}>{text}</li>
           ))}
