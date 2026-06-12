@@ -57,7 +57,7 @@ const AccountPage = () => {
             <List.Item.Trailing>
               {account.isPrimary ? <Badge type='brand'>대표 계좌</Badge> : null}
 
-              <Menu trigger={<MoreIcon />}>
+              <Menu trigger={<MoreIcon className='cursor-pointer' />}>
                 {createAccountMenuItems(account).map((item) => (
                   <Menu.Item
                     key={item.label}
