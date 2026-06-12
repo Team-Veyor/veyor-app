@@ -1,9 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/Button/Button';
 
 const AccountRegisterCard = () => {
+  const router = useRouter();
+
   return (
     <section className='flex flex-col pt-20 px-20 pb-24 rounded-20 bg-white'>
       <header className='flex flex-col gap-8'>
@@ -19,7 +22,7 @@ const AccountRegisterCard = () => {
         <Image src='/bank.png' alt='계좌 등록' width={262} height={178} priority />
       </div>
 
-      <Button theme='brand' size='medium' onClick={() => {}}>
+      <Button theme='brand' size='medium' onClick={() => router.push('/add-account')}>
         입력하기
       </Button>
     </section>

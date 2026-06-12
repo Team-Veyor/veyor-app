@@ -19,9 +19,9 @@ const Input = ({
   ...props
 }: InputProps) => {
   const wrapperClasses =
-    'w-full rounded-[16px] bg-gray-50 p-[16px] shadow-[inset_0_0_0_1px_var(--color-gray-200)] transition-shadow focus-within:shadow-[inset_0_0_0_1px_var(--color-gray-800)]';
+    'w-full rounded-[16px] bg-gray-50 p-[16px] border border-gray-200 focus-within:border-gray-900 transition-colors';
   const inputClasses =
-    'body-large-strong w-full bg-transparent text-gray-900 placeholder:text-gray-500 focus:outline-none disabled:cursor-not-allowed disabled:text-gray-400 disabled:placeholder:text-gray-400';
+    'body-large-strong w-full bg-gray-50 text-gray-900 placeholder:text-gray-500 focus:outline-none disabled:cursor-not-allowed disabled:text-gray-500 disabled:placeholder:text-gray-500 disabled:opacity-60';
 
   return (
     <div className={cn(wrapperClasses, wrapperClassName)}>
