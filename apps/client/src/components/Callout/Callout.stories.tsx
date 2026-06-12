@@ -21,6 +21,10 @@ const meta = {
     },
     title: { control: 'text' },
     subTexts: { control: 'object' },
+    hasBullet: {
+      control: 'boolean',
+      table: { defaultValue: { summary: 'true' } },
+    },
   },
   args: {
     type: 'default',
@@ -69,5 +73,12 @@ export const Large: Story = {
 export const WithoutSubTexts: Story = {
   args: {
     subTexts: undefined,
+  },
+};
+
+export const WithoutBullet: Story = {
+  args: {
+    hasBullet: false,
+    subTexts: ['첫 번째 줄 안내 문구입니다.\n두 번째 줄 안내 문구입니다.'],
   },
 };
