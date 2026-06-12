@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 const OpenSourcePage = () => {
   return (
-    <div className='flex flex-col px-24 pt-16 pb-[120px] gap-[40px]'>
+    <div className='flex flex-col px-24 pt-16 pb-[120px] gap-20'>
       {OPEN_SOURCE_LICENSES.map((item) => (
         <a
           key={item.name}
