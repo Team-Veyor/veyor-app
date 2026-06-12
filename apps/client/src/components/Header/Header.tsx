@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import ChevronLeftIcon from '@/assets/icons/ChevronLeftIcon';
 import LogoIcon from '@/assets/icons/LogoIcon';
+import { cn } from '@/lib/utils';
 
 interface NavigationHeaderProps {
   type: 'logo' | 'title';
@@ -11,11 +12,16 @@ interface NavigationHeaderProps {
   onBack?: () => void;
 }
 
+const BG_CLASSNAME = {
+  logo: 'bg-gray-100',
+  title: 'bg-white',
+};
+
 const Header = ({ type, title, Lable, onBack }: NavigationHeaderProps) => {
   const router = useRouter();
 
   return (
-    <header className='flex items-center justify-between h-[44px]'>
+    <header className={cn('flex items-center justify-between h-[44px]', BG_CLASSNAME[type])}>
       {type === 'logo' && (
         <LogoIcon className='w-[52px] h-[44px] mr-16 px-8 pl-24 box-content text-gray-500' />
       )}
