@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Header from '@/components/Header/Header';
+import Navigation from '@/components/Navigation/Navigation';
 
 interface OpenSourceLayoutProps {
   children: ReactNode;
@@ -8,8 +9,13 @@ interface OpenSourceLayoutProps {
 const layout = ({ children }: OpenSourceLayoutProps) => {
   return (
     <>
-      <Header type='title' title='오픈소스 라이선스' />
-      <main className='flex flex-col min-h-dvh px-16 pt-16 gap-12'>{children}</main>
+      <div className='flex h-dvh flex-col'>
+        <Header type='title' title='오픈소스 라이선스' />
+        <main className='min-h-0 flex-1 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden'>
+          {children}
+        </main>
+      </div>
+      <Navigation />
     </>
   );
 };
