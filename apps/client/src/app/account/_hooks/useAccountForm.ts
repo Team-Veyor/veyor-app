@@ -2,16 +2,16 @@
 
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
-import type { CreateAccountRequest } from '@/app/add-account/_types/types';
+import type { CreateAccountRequest } from '@/app/account/_types/types';
 
-const INITIAL_FORM: CreateAccountRequest = {
+const EMPTY_FORM: CreateAccountRequest = {
   bank: '',
   holderName: '',
   accountNo: '',
 };
 
-const useAccountForm = () => {
-  const [form, setForm] = useState<CreateAccountRequest>(INITIAL_FORM);
+const useAccountForm = (initialForm?: Partial<CreateAccountRequest>) => {
+  const [form, setForm] = useState<CreateAccountRequest>({ ...EMPTY_FORM, ...initialForm });
 
   const setBank = (bank: string) => {
     setForm((prev) => ({ ...prev, bank }));

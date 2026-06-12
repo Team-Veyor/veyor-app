@@ -22,7 +22,7 @@ const AccountRegisterCard = () => {
         <Image src='/bank.png' alt='계좌 등록' width={262} height={178} priority />
       </div>
 
-      <Button theme='brand' size='medium' onClick={() => router.push('/add-account')}>
+      <Button theme='brand' size='medium' onClick={() => router.push('/account/new')}>
         입력하기
       </Button>
     </section>
