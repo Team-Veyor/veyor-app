@@ -55,6 +55,7 @@ const AccountForm = ({
         />
       </div>
       <Button
+        variant='secondary'
         theme='dark'
         size='large'
         className='mt-auto'

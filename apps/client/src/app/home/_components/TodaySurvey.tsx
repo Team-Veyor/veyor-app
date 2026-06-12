@@ -28,7 +28,6 @@ const TodaySurvey = ({ title, rewardAmount, estMinutes, url }: TodaySurveyProps)
         </div>
       </div>
       <Button
-        theme='brand'
         size='small'
         onClick={() => {
           window.open(url, '_blank');

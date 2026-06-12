@@ -19,7 +19,8 @@ export default function LoginPage() {
 
         <div className='flex flex-col mt-auto px-[16px]'>
           <Button
-            theme='gray'
+            variant='secondary'
+            theme='light'
             className='gap-2 bg-[#FEE500] text-[rgba(0, 0, 0, 0.85)'
             disabled={isLoadingKakao}
             size='large'
