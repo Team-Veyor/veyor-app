@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { OPEN_SOURCE_LICENSES } from './_constants/licenses';
+import { OPEN_SOURCE_LICENSES } from '../_constants/licenses';
 
 export const metadata: Metadata = {
   title: '오픈소스 라이선스',
