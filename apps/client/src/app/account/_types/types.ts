@@ -7,6 +7,8 @@ export type CreateAccountRequest = {
   holderName: string;
 };
 
+export type UpdateAccountRequest = CreateAccountRequest;
+
 export type Account = {
   id: string;
   bank: string;
