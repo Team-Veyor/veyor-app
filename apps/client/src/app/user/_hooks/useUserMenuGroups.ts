@@ -26,7 +26,7 @@ export const useUserMenuGroups = ({
 
   const account: MenuItem[] = [
     { label: '계좌 정보 관리', onSelect: () => router.push('/user/account') },
-    { label: '참여 내역', onSelect: () => router.push('/participations') },
+    { label: '참여 내역', onSelect: () => router.push('/user/participations') },
   ];
 
   const policy: MenuItem[] = [
