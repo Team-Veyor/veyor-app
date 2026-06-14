@@ -28,6 +28,10 @@ const meta = {
       control: 'boolean',
       table: { defaultValue: { summary: 'true' } },
     },
+    isLoading: {
+      control: 'boolean',
+      table: { defaultValue: { summary: 'false' } },
+    },
     children: {
       control: 'text',
     },
@@ -42,6 +46,7 @@ const meta = {
     theme: 'dark',
     size: 'large',
     hasGlow: true,
+    isLoading: false,
     disabled: false,
   },
   decorators: [
@@ -60,6 +65,10 @@ export const Default: Story = {};
 
 export const Disabled: Story = {
   args: { disabled: true },
+};
+
+export const Loading: Story = {
+  args: { isLoading: true },
 };
 
 /** variant × theme 6개 조합 한눈에 보기 */
