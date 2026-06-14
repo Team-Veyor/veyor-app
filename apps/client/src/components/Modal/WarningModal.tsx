@@ -29,10 +29,22 @@ const WarningModal = ({
 }: WarningModalProps) => {
   return (
     <Modal title={title} description={description} {...modalProps}>
-      <Button theme='gray' size='large' onClick={onLeftButtonClick}>
+      <Button
+        variant='secondary'
+        theme='light'
+        size='medium'
+        hasGlow={false}
+        onClick={onLeftButtonClick}
+      >
         {leftButtonText}
       </Button>
-      <Button theme='dark' size='large' onClick={onRightButtonClick}>
+      <Button
+        variant='danger'
+        theme='light'
+        size='medium'
+        hasGlow={false}
+        onClick={onRightButtonClick}
+      >
         {rightButtonText}
       </Button>
     </Modal>

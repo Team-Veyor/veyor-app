@@ -95,6 +95,18 @@ components/Modal/
 - 컴포넌트 안에 도메인 API 호출이나 서버 상태 처리를 넣지 않습니다. 화면에서 주입받은 props/callback으로 동작하게 합니다.
 - props 타입은 `<ComponentName>Props`로 명명하고 컴포넌트 파일 안에 둡니다.
 
+### Storybook 작성 규칙
+
+- Storybook은 `react-docgen-typescript`로 props 타입과 JSDoc을 자동으로 읽어 Docs/Controls를 구성합니다. 이 동작을 적극 활용하고, 같은 정보를 `argTypes`에 중복 작성하지 않습니다.
+- 컴포넌트 파일(`<ComponentName>.tsx`)에서:
+  - props는 명시적 `interface <ComponentName>Props`로 선언합니다 (react-docgen-typescript가 인식하는 형태).
+  - 각 prop 위에 JSDoc 주석을 달아 설명·기본값을 적습니다. 이 주석이 Storybook Controls 패널의 description으로 자동 노출됩니다.
+  - 컴포넌트 함수 선언 위 JSDoc은 Docs 페이지 상단 설명으로 사용됩니다.
+- `<ComponentName>.stories.tsx`에서:
+  - 설명은 JSDoc 주석으로만 작성합니다. meta 위 JSDoc은 스토리북 전체 설명, 각 `Story` 위 JSDoc은 해당 스토리 description으로 렌더링됩니다.
+  - `argTypes`에는 `control`, `options`, `table.defaultValue`처럼 자동 추론이 불가능한 UI 설정만 둡니다. `description`은 컴포넌트 JSDoc과 중복되므로 적지 않습니다.
+  - 기본/변형/상태 예시를 분리하고, 여러 변형을 한 화면에서 비교하는 카탈로그 스토리(`AllTypes` 등)는 `parameters.controls.disable: true`로 Controls를 끕니다.
+
 ---
 
 ## 네이밍 / 가독성

@@ -15,8 +15,10 @@ const Header = ({ type, title, Lable, onBack }: NavigationHeaderProps) => {
   const router = useRouter();
 
   return (
-    <header className='flex items-center justify-between h-[44px]'>
-      {type === 'logo' && <LogoIcon className='mr-[16px] px-[8px] pl-[16px]' />}
+    <header className='flex items-center justify-between h-[44px] bg-gray-100'>
+      {type === 'logo' && (
+        <LogoIcon className='w-[52px] h-[44px] mr-16 px-8 pl-24 box-content text-gray-500' />
+      )}
 
       {type === 'title' && (
         <div className='flex items-center'>

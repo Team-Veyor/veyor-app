@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "./tokens.generated.css";
+@import 'tailwindcss';
+@import './tokens.generated.css';
 
 @theme {
   --font-sans: var(--font-suit), ui-sans-serif, system-ui, sans-serif;
@@ -14,8 +14,7 @@
 
   html {
     height: 100%;
-    /* TODO: 색상 변경 */
-    background: var(--color-gray-50);
+    background: var(--color-gray-100);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
   }
@@ -23,8 +22,7 @@
   body {
     min-height: 100dvh;
     margin: 0;
-    /* TODO: 색상 변경 */
-    background: var(--color-gray-50);
+    background: var(--color-gray-100);
     color: var(--color-gray-950);
     overscroll-behavior-y: none;
     -webkit-font-smoothing: antialiased;

@@ -27,10 +27,22 @@ const ConfirmModal = ({
 }: ConfirmModalProps) => {
   return (
     <Modal title={title} description={description} {...modalProps}>
-      <Button theme='gray' size='large' onClick={onLeftButtonClick}>
+      <Button
+        variant='secondary'
+        theme='light'
+        size='medium'
+        hasGlow={false}
+        onClick={onLeftButtonClick}
+      >
         {leftButtonText}
       </Button>
-      <Button theme='brand' size='large' onClick={onRightButtonClick}>
+      <Button
+        variant='secondary'
+        theme='dark'
+        size='medium'
+        hasGlow={false}
+        onClick={onRightButtonClick}
+      >
         {rightButtonText}
       </Button>
     </Modal>
