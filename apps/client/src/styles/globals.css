@@ -28,6 +28,16 @@
   animation: var(--animate-skeleton-shimmer);
 }
 
+@utility scrollbar-custom {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 99px;
+    background: var(--color-black-alpha-10);
+  }
+}
+
 @layer base {
   *,
   *::before,
