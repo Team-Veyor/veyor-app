@@ -5,6 +5,7 @@ export type TodaySurveySummary = {
   rewardAmount: number;
   externalUrl: string;
   participated: boolean;
+  rewardStatus: RewardStatus;
 };
 
 export type WeeklyStreak = {

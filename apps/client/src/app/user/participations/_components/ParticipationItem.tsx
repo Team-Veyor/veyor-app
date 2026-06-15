@@ -11,7 +11,7 @@ const ParticipationItem = ({ participation }: ParticipationItemProps) => {
 
   return (
     <List.Item className='justify-between py-20'>
-      <List.Item.Content title={surveyTitle} subtext={formatDate(completedAt)} />
+      <List.Item.Content title={surveyTitle} subtext={formatDate(completedAt, 'yyyy.mm.dd')} />
       <List.Item.Trailing>
         <p className='label-medium text-blue-500'>+{rewardAmount.toLocaleString()}원</p>
       </List.Item.Trailing>

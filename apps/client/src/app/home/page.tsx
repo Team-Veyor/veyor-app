@@ -45,6 +45,7 @@ const HomePage = () => {
         estMinutes={todaySurvey.estMinutes}
         url={todaySurvey.externalUrl}
         participated={todaySurvey.participated}
+        rewardStatus={todaySurvey.rewardStatus}
       />
 
       <WeeklyStreakCard

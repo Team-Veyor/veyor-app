@@ -50,7 +50,6 @@ const LOADING_LOTTIE_SIZE_CLASSES = {
 };
 
 const GLOW_CLASS = 'shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)]';
-const BUTTON_LOADING_LOTTIE_SRC = '/lottie/button_primary-large-loading.lottie';
 
 const DARK_LOADING_LOTTIE = '/lottie/button_primary-dark-loading.lottie';
 const LIGHT_LOADING_LOTTIE: Record<ButtonVariant, string> = {

@@ -39,7 +39,7 @@ const WeeklyStreak = ({ status }: { status: string[] }) => {
 
   return (
     <div className='flex w-full flex-col gap-8'>
-      <div className='grid w-full grid-cols-6'>
+      <div className='grid w-full grid-cols-7'>
         {WEEKDAYS.map(({ key, label }) => (
           <div key={key} className='flex justify-center label-xsmall text-gray-500'>
             {label}
@@ -47,7 +47,7 @@ const WeeklyStreak = ({ status }: { status: string[] }) => {
         ))}
       </div>
 
-      <div className='grid w-full grid-cols-6 items-center'>
+      <div className='grid w-full grid-cols-7 items-center'>
         {WEEKDAYS.map(({ key }, index) => {
           const isLast = index === WEEKDAYS.length - 1;
           const checked = checkedSet.has(key);
@@ -69,7 +69,7 @@ const StreakConnector = ({ active }: { active: boolean }) => (
   <span
     aria-hidden='true'
     className={cn(
-      'absolute left-full top-1/2 h-px w-[21px] rounded-full -translate-x-1/2 -translate-y-1/2',
+      'absolute left-full top-1/2 h-px w-8 rounded-full -translate-x-1/2 -translate-y-1/2',
       active ? 'bg-brand-alpha-50' : 'bg-black-alpha-10',
     )}
   />
