@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import { ToastProvider } from '@/components/Toast/ToastProvider';
 import { supabase } from '@/lib/supabase';
 
 export default function Providers({ children }: { children: ReactNode }) {
@@ -37,5 +38,9 @@ export default function Providers({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [queryClient]);
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ToastProvider>{children}</ToastProvider>
+    </QueryClientProvider>
+  );
 }
