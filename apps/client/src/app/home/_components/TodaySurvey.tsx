@@ -1,5 +1,7 @@
 'use client';
 
+import RewardBadge from '@/app/home/_components/RewardBadge';
+import type { RewardStatus } from '@/app/home/types/types';
 import CashIcon from '@/assets/icons/CashIcon';
 import Button from '@/components/Button/Button';
 
@@ -9,9 +11,17 @@ interface TodaySurveyProps {
   estMinutes: string;
   url: string;
   participated: boolean;
+  rewardStatus: RewardStatus;
 }
 
-const TodaySurvey = ({ title, rewardAmount, estMinutes, url }: TodaySurveyProps) => {
+const TodaySurvey = ({
+  title,
+  rewardAmount,
+  estMinutes,
+  url,
+  participated,
+  rewardStatus,
+}: TodaySurveyProps) => {
   return (
     <section className='flex flex-col gap-20 pt-16 px-20 pb-20 rounded-20 bg-white'>
       <div className='flex flex-col gap-[6.5px]'>
@@ -22,8 +32,11 @@ const TodaySurvey = ({ title, rewardAmount, estMinutes, url }: TodaySurveyProps)
             <CashIcon />
             <p className='label-medium-strong'>{rewardAmount}원</p>
             <p>/</p>
-            {/* TODO: participated 여부에 따라 텍스트 변경 */}
-            <p className='text-tertiary'>{estMinutes}분</p>
+            {participated ? (
+              <RewardBadge rewardStatus={rewardStatus} />
+            ) : (
+              <p className='text-tertiary'>{estMinutes}분</p>
+            )}
           </div>
         </div>
       </div>
