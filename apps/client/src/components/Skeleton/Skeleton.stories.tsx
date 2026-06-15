@@ -10,21 +10,23 @@ const meta = {
   tags: ['autodocs'],
   args: {
     shape: 'rect',
-    width: 200,
-    height: 16,
+    width: 100,
+    height: 24,
   },
   argTypes: {
     shape: {
-      control: 'radio',
+      control: { type: 'radio' },
       options: ['rect', 'circle'],
     },
+    width: { control: { type: 'number' } },
+    height: { control: { type: 'number' } },
   },
 } satisfies Meta<typeof Skeleton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** 텍스트 한 줄을 대체하는 기본 사각형 스켈레톤. */
+/** 기본 스켈레톤. shape 컨트롤로 rect(rounded)·circle(원형)을 전환해볼 수 있습니다. */
 export const Default: Story = {};
 
 /** 아바타·아이콘 자리에 쓰는 원형 스켈레톤. */
@@ -36,9 +38,9 @@ export const Circle: Story = {
 export const TextBlock: Story = {
   render: () => (
     <div className='flex w-[280px] flex-col gap-8'>
-      <Skeleton width='100%' height={16} />
-      <Skeleton width='90%' height={16} />
-      <Skeleton width='60%' height={16} />
+      <Skeleton width='100%' height={18} />
+      <Skeleton width='90%' height={18} />
+      <Skeleton width='60%' height={18} />
     </div>
   ),
 };
@@ -49,8 +51,8 @@ export const Card: Story = {
     <div className='flex w-[280px] flex-col gap-12 rounded-20 bg-white p-20'>
       <Skeleton width={120} height={20} />
       <div className='flex flex-col gap-8'>
-        <Skeleton width='100%' height={14} />
-        <Skeleton width='80%' height={14} />
+        <Skeleton width='100%' height={18} />
+        <Skeleton width='80%' height={18} />
       </div>
     </div>
   ),
