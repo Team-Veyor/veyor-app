@@ -1,11 +1,15 @@
 'use client';
 
+import { useState } from 'react';
+import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
+import { getBankMeta } from '@/app/account/_constants/banks';
 import useAccountForm from '@/app/account/_hooks/useAccountForm';
 import useBanks from '@/app/account/_hooks/useBanks';
 import type { CreateAccountRequest } from '@/app/account/_types/types';
+import ChevronDownIcon from '@/assets/icons/ChevronDownIcon';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import Select from '@/components/Select/Select';
+import { cn } from '@/lib/utils';
 
 interface AccountFormProps {
   /** 폼 초기값. 수정 페이지에서 기존 계좌 정보를 채울 때 사용합니다. */
@@ -26,10 +30,12 @@ const AccountForm = ({
 }: AccountFormProps) => {
   const { data: banks = [] } = useBanks();
 
+  const [isBankSheetOpen, setIsBankSheetOpen] = useState(false);
+
   const { form, setBank, handleHolderNameChange, handleAccountNoChange, isFormFilled } =
     useAccountForm(initialForm);
 
-  const bankOptions = banks.map((bank) => ({ value: bank, label: bank }));
+  const selectedBankLabel = form.bank ? getBankMeta(form.bank).label : null;
 
   const handleSave = () => {
     if (!isFormFilled || isSubmitting) return;
@@ -46,14 +52,37 @@ const AccountForm = ({
           value={form.accountNo}
           onChange={handleAccountNoChange}
         />
-        <Select
-          options={bankOptions}
-          value={form.bank}
-          onChange={setBank}
-          placeholder='은행'
-          title='은행 선택'
-        />
+        <button
+          type='button'
+          onClick={() => setIsBankSheetOpen(true)}
+          className={cn(
+            'flex w-full items-center justify-between gap-12 rounded-[16px] border border-gray-200 bg-white p-[16px] transition-colors',
+            isBankSheetOpen && 'border-gray-900',
+          )}
+        >
+          <span
+            className={cn(
+              'body-large-strong text-left',
+              selectedBankLabel ? 'text-gray-900' : 'text-gray-500',
+            )}
+          >
+            {selectedBankLabel ?? '은행'}
+          </span>
+          <ChevronDownIcon className='size-24 shrink-0 text-gray-500' />
+        </button>
       </div>
+
+      {isBankSheetOpen && (
+        <BankSelectBottomSheet
+          banks={banks}
+          selectedBank={form.bank}
+          onConfirm={(bank) => {
+            setBank(bank);
+            setIsBankSheetOpen(false);
+          }}
+          onClose={() => setIsBankSheetOpen(false)}
+        />
+      )}
       <Button
         variant='secondary'
         theme='dark'
