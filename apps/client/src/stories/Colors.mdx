@@ -1,6 +1,13 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import tokensCss from '../styles/tokens.generated.css?raw';
 
 <Meta title='Foundation/Color' />
+
+export const TOKEN_COLORS = Object.fromEntries(
+  Array.from(tokensCss.matchAll(/--color-([a-z0-9-]+):\s*([^;]+);/g), ([, token, value]) => [token, value.trim()]),
+);
+
+export const getTokenColor = (token) => TOKEN_COLORS[token] ?? `var(--color-${token})`;
 
 export const TokenPalette = ({ groups }) => (
   <div style={{ display: 'grid', gap: 24, margin: '16px 0 32px' }}>
@@ -32,7 +39,7 @@ export const TokenPalette = ({ groups }) => (
                 style={{
                   height: 64,
                   borderBottom: '1px solid #e8e8e8',
-                  background: `var(--color-${token})`,
+                  background: getTokenColor(token),
                 }}
               />
               <div style={{ padding: '8px 10px', fontSize: 13, fontWeight: 600 }}>{token}</div>
