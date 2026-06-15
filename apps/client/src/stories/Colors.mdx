@@ -1,211 +1,323 @@
-import { ColorItem, ColorPalette, Meta } from '@storybook/addon-docs/blocks';
+import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title='Foundation/Color' />
+
+export const TokenPalette = ({ groups }) => (
+  <div style={{ display: 'grid', gap: 24, margin: '16px 0 32px' }}>
+    {groups.map((group) => (
+      <section key={group.title}>
+        <div style={{ marginBottom: 12 }}>
+          <h3 style={{ margin: 0 }}>{group.title}</h3>
+          {group.subtitle ? <p style={{ margin: '4px 0 0', color: '#737373' }}>{group.subtitle}</p> : null}
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+            gap: 12,
+          }}
+        >
+          {group.tokens.map((token) => (
+            <div
+              key={token}
+              style={{
+                overflow: 'hidden',
+                border: '1px solid #e8e8e8',
+                borderRadius: 8,
+                background: '#ffffff',
+              }}
+            >
+              <div
+                aria-label={token}
+                style={{
+                  height: 64,
+                  borderBottom: '1px solid #e8e8e8',
+                  background: `var(--color-${token})`,
+                }}
+              />
+              <div style={{ padding: '8px 10px', fontSize: 13, fontWeight: 600 }}>{token}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+);
 
 # Color
 
 Veyor 클라이언트에서 사용하는 색상 토큰입니다.
 
-토큰 소스는 `tokens/global.json`(core) · `tokens/semantic.json`(semantic) 이며, `pnpm tokens:build` 결과인 `src/styles/tokens.generated.css` 의 CSS 변수를 참조합니다. 피그마(Tokens Studio)에서 값을 수정해 푸시 → 빌드만 하면 이 문서도 자동으로 반영됩니다.
+토큰 소스는 `tokens/global.json`(core) · `tokens/semantic.json`(semantic) · `apps/client/tokens.json`(primitive) 이며, `pnpm tokens:build` 결과인 `src/styles/tokens.generated.css` 의 CSS 변수를 참조합니다. 피그마(Tokens Studio)에서 값을 수정해 푸시 → 빌드만 하면 이 문서도 자동으로 반영됩니다.
 
 ## Semantic
 
 의미 기반 토큰입니다. 컴포넌트에서는 가능한 한 이 토큰을 사용합니다.
 
-<ColorPalette>
-  <ColorItem
-    title='brand'
-    subtitle='Brand semantic'
-    colors={{
-      brand: 'var(--color-brand)',
-      'surface-brand': 'var(--color-surface-brand)',
-    }}
-  />
-  <ColorItem
-    title='success'
-    subtitle='Success semantic'
-    colors={{
-      success: 'var(--color-success)',
-      'surface-success': 'var(--color-surface-success)',
-    }}
-  />
-  <ColorItem
-    title='warning'
-    subtitle='Warning semantic'
-    colors={{
-      warning: 'var(--color-warning)',
-      'surface-warning': 'var(--color-surface-warning)',
-    }}
-  />
-  <ColorItem
-    title='danger'
-    subtitle='Danger semantic'
-    colors={{
-      danger: 'var(--color-danger)',
-      'surface-danger': 'var(--color-surface-danger)',
-    }}
-  />
-</ColorPalette>
+<TokenPalette
+  groups={[
+    {
+      title: 'brand',
+      subtitle: 'Brand semantic',
+      tokens: ['brand', 'surface-brand'],
+    },
+    {
+      title: 'success',
+      subtitle: 'Success semantic',
+      tokens: ['success', 'surface-success'],
+    },
+    {
+      title: 'warning',
+      subtitle: 'Warning semantic',
+      tokens: ['warning', 'surface-warning'],
+    },
+    {
+      title: 'danger',
+      subtitle: 'Danger semantic',
+      tokens: ['danger', 'surface-danger'],
+    },
+    {
+      title: 'surface',
+      subtitle: 'Surface',
+      tokens: ['surface-default'],
+    },
+  ]}
+/>
+
+## Semantic — Text
+
+텍스트 색상 토큰입니다.
+
+<TokenPalette
+  groups={[
+    {
+      title: 'text',
+      subtitle: 'Text neutral',
+      tokens: ['text-primary', 'text-secondary', 'text-tertiary', 'text-quaternary', 'text-inverse'],
+    },
+    {
+      title: 'text-brand',
+      subtitle: 'Text brand',
+      tokens: ['text-brand', 'text-brand-weak'],
+    },
+    {
+      title: 'text-status',
+      subtitle: 'Text status',
+      tokens: [
+        'text-success',
+        'text-success-weak',
+        'text-warning-process',
+        'text-warning-process-weak',
+        'text-danger',
+        'text-danger-weak',
+      ],
+    },
+  ]}
+/>
+
+## Semantic — Fill
+
+배경/채움 색상 토큰입니다.
+
+<TokenPalette
+  groups={[
+    {
+      title: 'fill',
+      subtitle: 'Fill neutral',
+      tokens: ['fill-primary', 'fill-secondary', 'fill-tertiary', 'fill-quaternary'],
+    },
+    {
+      title: 'fill-brand',
+      subtitle: 'Fill brand',
+      tokens: ['fill-brand', 'fill-brand-weak'],
+    },
+    {
+      title: 'fill-danger',
+      subtitle: 'Fill danger',
+      tokens: ['fill-danger', 'fill-danger-weak'],
+    },
+  ]}
+/>
+
+## Semantic — Icon
+
+아이콘 색상 토큰입니다.
+
+<TokenPalette
+  groups={[
+    {
+      title: 'icon',
+      subtitle: 'Icon neutral',
+      tokens: ['icon-primary', 'icon-secondary', 'icon-tertiary'],
+    },
+    {
+      title: 'icon-brand',
+      subtitle: 'Icon brand',
+      tokens: ['icon-brand', 'icon-brand-weak'],
+    },
+    {
+      title: 'icon-status',
+      subtitle: 'Icon status',
+      tokens: [
+        'icon-success',
+        'icon-success-weak',
+        'icon-warning-process',
+        'icon-warning-process-weak',
+        'icon-danger',
+        'icon-danger-weak',
+      ],
+    },
+  ]}
+/>
+
+## Semantic — Border
+
+테두리 색상 토큰입니다.
+
+<TokenPalette
+  groups={[
+    {
+      title: 'border',
+      subtitle: 'Border',
+      tokens: ['border-defualt', 'border-defualt-weak', 'border-active', 'border-select'],
+    },
+  ]}
+/>
 
 ## Core — Scale
 
 원시(primitive) 색상 스케일입니다. semantic 토큰이 없을 때만 직접 사용합니다.
 
-<ColorPalette>
-  <ColorItem
-    title='gray'
-    subtitle='Neutral grayscale'
-    colors={{
-      'gray-50': 'var(--color-gray-50)',
-      'gray-100': 'var(--color-gray-100)',
-      'gray-200': 'var(--color-gray-200)',
-      'gray-300': 'var(--color-gray-300)',
-      'gray-400': 'var(--color-gray-400)',
-      'gray-500': 'var(--color-gray-500)',
-      'gray-600': 'var(--color-gray-600)',
-      'gray-700': 'var(--color-gray-700)',
-      'gray-800': 'var(--color-gray-800)',
-      'gray-900': 'var(--color-gray-900)',
-      'gray-950': 'var(--color-gray-950)',
-    }}
-  />
-  <ColorItem
-    title='brand'
-    subtitle='Brand scale'
-    colors={{
-      'brand-50': 'var(--color-brand-50)',
-      'brand-100': 'var(--color-brand-100)',
-      'brand-200': 'var(--color-brand-200)',
-      'brand-300': 'var(--color-brand-300)',
-      'brand-400': 'var(--color-brand-400)',
-      'brand-500': 'var(--color-brand-500)',
-      'brand-600': 'var(--color-brand-600)',
-      'brand-700': 'var(--color-brand-700)',
-      'brand-800': 'var(--color-brand-800)',
-      'brand-900': 'var(--color-brand-900)',
-      'brand-950': 'var(--color-brand-950)',
-    }}
-  />
-  <ColorItem
-    title='blue'
-    subtitle='Blue scale'
-    colors={{
-      'blue-50': 'var(--color-blue-50)',
-      'blue-100': 'var(--color-blue-100)',
-      'blue-200': 'var(--color-blue-200)',
-      'blue-300': 'var(--color-blue-300)',
-      'blue-400': 'var(--color-blue-400)',
-      'blue-500': 'var(--color-blue-500)',
-      'blue-600': 'var(--color-blue-600)',
-      'blue-700': 'var(--color-blue-700)',
-      'blue-800': 'var(--color-blue-800)',
-      'blue-900': 'var(--color-blue-900)',
-      'blue-950': 'var(--color-blue-950)',
-    }}
-  />
-  <ColorItem
-    title='yellow'
-    subtitle='Yellow scale'
-    colors={{
-      'yellow-50': 'var(--color-yellow-50)',
-      'yellow-100': 'var(--color-yellow-100)',
-      'yellow-200': 'var(--color-yellow-200)',
-      'yellow-300': 'var(--color-yellow-300)',
-      'yellow-400': 'var(--color-yellow-400)',
-      'yellow-500': 'var(--color-yellow-500)',
-      'yellow-600': 'var(--color-yellow-600)',
-      'yellow-700': 'var(--color-yellow-700)',
-      'yellow-800': 'var(--color-yellow-800)',
-      'yellow-900': 'var(--color-yellow-900)',
-      'yellow-950': 'var(--color-yellow-950)',
-    }}
-  />
-  <ColorItem
-    title='red'
-    subtitle='Red scale'
-    colors={{
-      'red-50': 'var(--color-red-50)',
-      'red-100': 'var(--color-red-100)',
-      'red-200': 'var(--color-red-200)',
-      'red-300': 'var(--color-red-300)',
-      'red-400': 'var(--color-red-400)',
-      'red-500': 'var(--color-red-500)',
-      'red-600': 'var(--color-red-600)',
-      'red-700': 'var(--color-red-700)',
-      'red-800': 'var(--color-red-800)',
-      'red-900': 'var(--color-red-900)',
-      'red-950': 'var(--color-red-950)',
-    }}
-  />
-  <ColorItem
-    title='base'
-    subtitle='Base colors'
-    colors={{
-      white: 'var(--color-white)',
-      black: 'var(--color-black)',
-    }}
-  />
-</ColorPalette>
+<TokenPalette
+  groups={[
+    {
+      title: 'gray',
+      subtitle: 'Neutral grayscale',
+      tokens: [
+        'gray-50',
+        'gray-100',
+        'gray-200',
+        'gray-300',
+        'gray-400',
+        'gray-500',
+        'gray-600',
+        'gray-700',
+        'gray-800',
+        'gray-900',
+        'gray-950',
+      ],
+    },
+    {
+      title: 'brand',
+      subtitle: 'Brand scale',
+      tokens: [
+        'brand-50',
+        'brand-100',
+        'brand-200',
+        'brand-300',
+        'brand-400',
+        'brand-500',
+        'brand-600',
+        'brand-700',
+        'brand-800',
+        'brand-900',
+        'brand-950',
+      ],
+    },
+    {
+      title: 'blue',
+      subtitle: 'Blue scale',
+      tokens: [
+        'blue-50',
+        'blue-100',
+        'blue-200',
+        'blue-300',
+        'blue-400',
+        'blue-500',
+        'blue-600',
+        'blue-700',
+        'blue-800',
+        'blue-900',
+        'blue-950',
+      ],
+    },
+    {
+      title: 'yellow',
+      subtitle: 'Yellow scale',
+      tokens: [
+        'yellow-50',
+        'yellow-100',
+        'yellow-200',
+        'yellow-300',
+        'yellow-400',
+        'yellow-500',
+        'yellow-600',
+        'yellow-700',
+        'yellow-800',
+        'yellow-900',
+        'yellow-950',
+      ],
+    },
+    {
+      title: 'red',
+      subtitle: 'Red scale',
+      tokens: [
+        'red-50',
+        'red-100',
+        'red-200',
+        'red-300',
+        'red-400',
+        'red-500',
+        'red-600',
+        'red-700',
+        'red-800',
+        'red-900',
+        'red-950',
+      ],
+    },
+    {
+      title: 'base',
+      subtitle: 'Base colors',
+      tokens: ['white', 'black'],
+    },
+  ]}
+/>
 
 ## Core — Alpha
 
 투명도가 적용된 오버레이 색상입니다.
 
-<ColorPalette>
-  <ColorItem
-    title='white-alpha'
-    subtitle='White overlay'
-    colors={{
-      'white-alpha-30': 'var(--color-white-alpha-30)',
-      'white-alpha-40': 'var(--color-white-alpha-40)',
-      'white-alpha-60': 'var(--color-white-alpha-60)',
-      'white-alpha-90': 'var(--color-white-alpha-90)',
-    }}
-  />
-  <ColorItem
-    title='black-alpha'
-    subtitle='Black overlay'
-    colors={{
-      'black-alpha-5': 'var(--color-black-alpha-5)',
-      'black-alpha-10': 'var(--color-black-alpha-10)',
-      'black-alpha-20': 'var(--color-black-alpha-20)',
-      'black-alpha-30': 'var(--color-black-alpha-30)',
-    }}
-  />
-  <ColorItem
-    title='brand-alpha'
-    subtitle='Brand overlay'
-    colors={{
-      'brand-alpha-5': 'var(--color-brand-alpha-5)',
-      'brand-alpha-10': 'var(--color-brand-alpha-10)',
-      'brand-alpha-15': 'var(--color-brand-alpha-15)',
-      'brand-alpha-30': 'var(--color-brand-alpha-30)',
-      'brand-alpha-50': 'var(--color-brand-alpha-50)',
-    }}
-  />
-  <ColorItem
-    title='blue-alpha'
-    subtitle='Blue overlay'
-    colors={{
-      'blue-alpha-5': 'var(--color-blue-alpha-5)',
-      'blue-alpha-10': 'var(--color-blue-alpha-10)',
-    }}
-  />
-  <ColorItem
-    title='yellow-alpha'
-    subtitle='Yellow overlay'
-    colors={{
-      'yellow-alpha-5': 'var(--color-yellow-alpha-5)',
-      'yellow-alpha-10': 'var(--color-yellow-alpha-10)',
-      'yellow-alpha-40': 'var(--color-yellow-alpha-40)',
-    }}
-  />
-  <ColorItem
-    title='red-alpha'
-    subtitle='Red overlay'
-    colors={{
-      'red-alpha-10': 'var(--color-red-alpha-10)',
-      'red-alpha-30': 'var(--color-red-alpha-30)',
-    }}
-  />
-</ColorPalette>
+<TokenPalette
+  groups={[
+    {
+      title: 'white-alpha',
+      subtitle: 'White overlay',
+      tokens: ['white-alpha-30', 'white-alpha-40', 'white-alpha-60', 'white-alpha-90'],
+    },
+    {
+      title: 'black-alpha',
+      subtitle: 'Black overlay',
+      tokens: ['black-alpha-5', 'black-alpha-10', 'black-alpha-20', 'black-alpha-30'],
+    },
+    {
+      title: 'brand-alpha',
+      subtitle: 'Brand overlay',
+      tokens: ['brand-alpha-5', 'brand-alpha-10', 'brand-alpha-15', 'brand-alpha-30', 'brand-alpha-50'],
+    },
+    {
+      title: 'blue-alpha',
+      subtitle: 'Blue overlay',
+      tokens: ['blue-alpha-5', 'blue-alpha-10'],
+    },
+    {
+      title: 'yellow-alpha',
+      subtitle: 'Yellow overlay',
+      tokens: ['yellow-alpha-5', 'yellow-alpha-10', 'yellow-alpha-40'],
+    },
+    {
+      title: 'red-alpha',
+      subtitle: 'Red overlay',
+      tokens: ['red-alpha-10', 'red-alpha-30'],
+    },
+  ]}
+/>

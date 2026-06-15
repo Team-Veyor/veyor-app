@@ -1,3 +1,6 @@
+'use client';
+
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import type { ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 import type { Size } from '@/types/types';
@@ -15,6 +18,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   /** 안쪽 광(glow) 효과 on/off */
   hasGlow?: boolean;
+  /** 로딩 상태. true일 때 로띠 애니메이션을 표시하고 버튼을 비활성화합니다. */
+  isLoading?: boolean;
 }
 
 const VARIANT_CLASSES = {
@@ -38,7 +43,23 @@ const SIZE_CLASSES = {
   large: 'py-[20px] label-large rounded-[20px]',
 };
 
+const LOADING_LOTTIE_SIZE_CLASSES = {
+  small: 'h-[40px] w-[74px]',
+  medium: 'h-[52px] w-[96px]',
+  large: 'h-[64px] w-[118px]',
+};
+
 const GLOW_CLASS = 'shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)]';
+
+const DARK_LOADING_LOTTIE = '/lottie/button_primary-dark-loading.lottie';
+const LIGHT_LOADING_LOTTIE: Record<ButtonVariant, string> = {
+  primary: '/lottie/button_primary-light-loading.lottie',
+  secondary: '/lottie/button_secondary-light-loading.lottie',
+  danger: '/lottie/button_danger-light-loading.lottie',
+};
+
+const getLoadingLottieSrc = (variant: ButtonVariant, theme: ButtonTheme) =>
+  theme === 'dark' ? DARK_LOADING_LOTTIE : LIGHT_LOADING_LOTTIE[variant];
 
 /**
  * 공통 버튼 컴포넌트.
@@ -49,6 +70,8 @@ const Button = ({
   theme = 'dark',
   size = 'medium',
   hasGlow = true,
+  isLoading = false,
+  disabled,
   className,
   children,
   ...props
@@ -56,16 +79,35 @@ const Button = ({
   return (
     <button
       type='button'
+      aria-busy={isLoading}
+      disabled={disabled || isLoading}
       className={cn(
-        'relative flex w-full items-center justify-center gap-12 overflow-hidden rounded-20 transition-colors cursor-pointer after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity enabled:hover:after:opacity-100 disabled:cursor-not-allowed disabled:opacity-40',
+        'relative flex w-full items-center justify-center gap-12 overflow-hidden rounded-20 transition-colors cursor-pointer after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:transition-opacity enabled:hover:after:opacity-100 disabled:cursor-not-allowed',
         VARIANT_CLASSES[variant][theme],
         SIZE_CLASSES[size],
         hasGlow && GLOW_CLASS,
+        disabled && !isLoading && 'opacity-40',
         className,
       )}
       {...props}
     >
-      {children}
+      {isLoading ? (
+        <>
+          <span className='invisible'>{children}</span>
+          <DotLottieReact
+            src={getLoadingLottieSrc(variant, theme)}
+            autoplay
+            loop
+            className={cn(
+              'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
+              LOADING_LOTTIE_SIZE_CLASSES[size],
+            )}
+            aria-hidden='true'
+          />
+        </>
+      ) : (
+        children
+      )}
     </button>
   );
 };

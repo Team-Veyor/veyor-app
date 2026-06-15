@@ -67,12 +67,12 @@ const BottomSheet = ({ children, footer, className, onClose }: BottomSheetProps)
       }}
       onClick={handleBackdropClick}
     >
-      <div className='flex flex-col h-[363px]'>
+      <div className='flex flex-col'>
         <div className='flex justify-center pb-20'>
           <span aria-hidden='true' className='h-1 w-10 rounded-full bg-gray-200' />
         </div>
         <div className='px-5'>{children}</div>
-        {footer && <footer className='px-5 pt-[34px]'>{footer}</footer>}
+        {footer && <footer className='mt-auto px-5 pt-[34px]'>{footer}</footer>}
       </div>
     </dialog>
   );

@@ -144,7 +144,7 @@ function isPlainGroup(value) {
 }
 
 export default {
-  source: ['tokens/**/*.json', 'tokens.json'],
+  source: ['tokens/**/*.json', 'apps/client/tokens.json'],
   preprocessors: ['token-studio/flatten-sets'],
   platforms: {
     css: {

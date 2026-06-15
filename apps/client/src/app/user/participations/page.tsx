@@ -1,6 +1,8 @@
 'use client';
 
+import EmptyList from '@/app/user/participations/_components/EmptyList';
 import ParticipationItem from '@/app/user/participations/_components/ParticipationItem';
+import ParticipationsSkeleton from '@/app/user/participations/_components/ParticipationsSkeleton';
 import useParticipations from '@/app/user/participations/_hooks/useParticipations';
 // import useParticipations from '@/app/participations/_hooks/useParticipations';
 import CashIcon from '@/assets/icons/CashIcon';
@@ -11,8 +13,7 @@ const ParticipationsPage = () => {
   const { data, isPending, isError } = useParticipations();
 
   if (isPending) {
-    // TODO: 로딩 스피너 추가
-    return <p className='px-16 py-20 label-medium text-gray-500'>불러오는 중...</p>;
+    return <ParticipationsSkeleton />;
   }
 
   if (isError || !data) {
@@ -34,9 +35,9 @@ const ParticipationsPage = () => {
 
       <div className='h-8 shrink-0 bg-gray-100' />
 
-      <div className='min-h-0 flex-1 overflow-y-auto pb-[92px]'>
+      <div className='scrollbar-custom min-h-0 flex-1 overflow-y-auto pb-[92px]'>
         {items.length === 0 ? (
-          <p className='px-16 py-20 label-medium text-gray-500'>아직 참여한 설문이 없어요.</p>
+          <EmptyList />
         ) : (
           <List className='rounded-none px-16'>
             {items.map((participation) => (

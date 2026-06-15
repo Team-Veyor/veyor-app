@@ -223,6 +223,11 @@ async function main() {
     `expected ${todaySurveyId}, got ${r.body?.todaySurvey?.id}`,
   );
   check('홈 남성타깃 설문 제외', r.body?.todaySurvey?.id !== maleSurveyId);
+  check(
+    '홈 미참여 시 rewardStatus pending',
+    r.body?.todaySurvey?.participated === false && r.body?.todaySurvey?.rewardStatus === 'pending',
+    JSON.stringify(r.body?.todaySurvey),
+  );
 
   // ---------- 4. 계좌 ----------
   console.log('[4] 계좌');

@@ -1,20 +1,22 @@
 'use client';
 
+import { useState } from 'react';
+import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
+import { getBankLogo } from '@/app/account/_constants/banks';
 import useAccountForm from '@/app/account/_hooks/useAccountForm';
 import useBanks from '@/app/account/_hooks/useBanks';
+import useClipboardAccount from '@/app/account/_hooks/useClipboardAccount';
 import type { CreateAccountRequest } from '@/app/account/_types/types';
+import ChevronDownIcon from '@/assets/icons/ChevronDownIcon';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
-import Select from '@/components/Select/Select';
+import ConfirmModal from '@/components/Modal/ConfirmModal';
+import { cn } from '@/lib/utils';
 
 interface AccountFormProps {
-  /** 폼 초기값. 수정 페이지에서 기존 계좌 정보를 채울 때 사용합니다. */
   initialForm?: Partial<CreateAccountRequest>;
-  /** 계좌번호 입력의 placeholder. 수정 시 마스킹된 계좌번호를 노출합니다. */
   accountNoPlaceholder?: string;
-  /** 저장 진행 중 여부. 버튼 비활성화에 사용됩니다. */
   isSubmitting?: boolean;
-  /** 저장 버튼 클릭 시 채워진 폼 값을 전달받는 콜백 */
   onSubmit: (form: CreateAccountRequest) => void;
 }
 
@@ -24,17 +26,24 @@ const AccountForm = ({
   isSubmitting = false,
   onSubmit,
 }: AccountFormProps) => {
-  const { data: banks = [] } = useBanks();
+  const [isBankSheetOpen, setIsBankSheetOpen] = useState(false);
 
-  const { form, setBank, handleHolderNameChange, handleAccountNoChange, isFormFilled } =
+  const { data: banks = [] } = useBanks();
+  const { parsed, clear } = useClipboardAccount(banks);
+  const { form, setBank, handleHolderNameChange, handleAccountNoChange, prefill, isFormFilled } =
     useAccountForm(initialForm);
 
-  const bankOptions = banks.map((bank) => ({ value: bank, label: bank }));
+  const selectedBankLabel = form.bank ? getBankLogo(form.bank).label : null;
 
   const handleSave = () => {
     if (!isFormFilled || isSubmitting) return;
 
     onSubmit(form);
+  };
+
+  const handleApplyClipboard = () => {
+    if (parsed) prefill(parsed);
+    clear();
   };
 
   return (
@@ -46,14 +55,37 @@ const AccountForm = ({
           value={form.accountNo}
           onChange={handleAccountNoChange}
         />
-        <Select
-          options={bankOptions}
-          value={form.bank}
-          onChange={setBank}
-          placeholder='은행'
-          title='은행 선택'
-        />
+        <button
+          type='button'
+          onClick={() => setIsBankSheetOpen(true)}
+          className={cn(
+            'flex w-full items-center justify-between gap-12 rounded-16 border border-gray-200 bg-white p-16 transition-colors',
+            isBankSheetOpen && 'border-gray-900',
+          )}
+        >
+          <span
+            className={cn(
+              'body-large-strong text-left',
+              selectedBankLabel ? 'text-gray-900' : 'text-gray-500',
+            )}
+          >
+            {selectedBankLabel ?? '은행'}
+          </span>
+          <ChevronDownIcon className='size-24 shrink-0 text-gray-500' />
+        </button>
       </div>
+
+      {isBankSheetOpen && (
+        <BankSelectBottomSheet
+          banks={banks}
+          selectedBank={form.bank}
+          onConfirm={(bank) => {
+            setBank(bank);
+            setIsBankSheetOpen(false);
+          }}
+          onClose={() => setIsBankSheetOpen(false)}
+        />
+      )}
       <Button
         variant='secondary'
         theme='dark'
@@ -64,6 +96,17 @@ const AccountForm = ({
       >
         저장
       </Button>
+
+      {parsed && (
+        <ConfirmModal
+          title='계좌번호를 자동으로 입력할까요?'
+          description='복사한 계좌정보가 있어요.'
+          leftButtonText='아니요'
+          rightButtonText='예'
+          onLeftButtonClick={clear}
+          onRightButtonClick={handleApplyClipboard}
+        />
+      )}
     </>
   );
 };

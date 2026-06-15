@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { WEEKDAYS } from '@/app/home/_constants/constants';
 import CashIcon from '@/assets/icons/CashIcon';
 import CheckIcon from '@/assets/icons/CheckIcon';
@@ -11,6 +14,8 @@ interface WeeklyStreakCardProps {
 }
 
 const WeeklyStreakCard = ({ streak, weeklyStatus, totalRewardAmount }: WeeklyStreakCardProps) => {
+  const router = useRouter();
+
   return (
     <section className='flex flex-col gap-16 pt-20 px-20 pb-12 rounded-20 bg-white'>
       <header className='flex flex-col gap-4'>
@@ -25,7 +30,12 @@ const WeeklyStreakCard = ({ streak, weeklyStatus, totalRewardAmount }: WeeklyStr
       <div className='border-t border-black-alpha-5' />
       <SavedMoney money={totalRewardAmount} />
 
-      <Button variant='secondary' theme='light' size='small'>
+      <Button
+        variant='secondary'
+        theme='light'
+        size='small'
+        onClick={() => router.push('/user/participations')}
+      >
         참여 내역 보기
       </Button>
     </section>
@@ -39,7 +49,7 @@ const WeeklyStreak = ({ status }: { status: string[] }) => {
 
   return (
     <div className='flex w-full flex-col gap-8'>
-      <div className='grid w-full grid-cols-6'>
+      <div className='grid w-full grid-cols-7'>
         {WEEKDAYS.map(({ key, label }) => (
           <div key={key} className='flex justify-center label-xsmall text-gray-500'>
             {label}
@@ -47,7 +57,7 @@ const WeeklyStreak = ({ status }: { status: string[] }) => {
         ))}
       </div>
 
-      <div className='grid w-full grid-cols-6 items-center'>
+      <div className='grid w-full grid-cols-7 items-center'>
         {WEEKDAYS.map(({ key }, index) => {
           const isLast = index === WEEKDAYS.length - 1;
           const checked = checkedSet.has(key);
@@ -69,7 +79,7 @@ const StreakConnector = ({ active }: { active: boolean }) => (
   <span
     aria-hidden='true'
     className={cn(
-      'absolute left-full top-1/2 h-px w-[21px] rounded-full -translate-x-1/2 -translate-y-1/2',
+      'absolute left-full top-1/2 h-px w-8 rounded-full -translate-x-1/2 -translate-y-1/2',
       active ? 'bg-brand-alpha-50' : 'bg-black-alpha-10',
     )}
   />
