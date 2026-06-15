@@ -9,8 +9,12 @@ interface HomeLayoutProps {
 const layout = ({ children }: HomeLayoutProps) => {
   return (
     <>
-      <Header type='logo' />
-      <main className='flex flex-col h-dvh px-16 pb-16 pt-8 gap-12'>{children}</main>
+      <div className='flex h-dvh flex-col'>
+        <Header type='logo' />
+        <main className='min-h-0 flex-1 flex flex-col gap-12 overflow-y-auto px-16 pb-16 pt-8'>
+          {children}
+        </main>
+      </div>
       <Navigation />
     </>
   );
