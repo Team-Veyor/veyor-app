@@ -13,13 +13,9 @@ import {
 import Toast, { type ToastType } from './Toast';
 
 export interface ToastOptions {
-  /** 토스트의 상태 톤. */
   type?: ToastType;
-  /** 토스트에 표시할 메시지입니다. */
   message: string;
-  /** 기본 상태 아이콘 대신 표시할 커스텀 아이콘입니다. */
   icon?: ReactNode;
-  /** 토스트가 자동으로 사라지기까지의 시간(ms). 0 이하이면 자동으로 닫히지 않습니다. */
   duration?: number;
 }
 
@@ -32,9 +28,7 @@ interface ToastState {
 }
 
 interface ToastContextValue {
-  /** 전역 토스트를 표시합니다. */
   showToast: (toast: ToastOptions) => void;
-  /** 현재 표시 중인 토스트를 닫습니다. */
   hideToast: () => void;
 }
 
