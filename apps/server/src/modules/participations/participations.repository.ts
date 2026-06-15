@@ -71,6 +71,29 @@ export class ParticipationsRepository {
     return !!data;
   }
 
+  /** 특정 설문 참여 여부 + 리워드 지급 상태. 미참여면 status는 null. */
+  async getParticipationStatus(
+    userId: string,
+    surveyId: string,
+  ): Promise<{ participated: boolean; rewardStatus: string | null }> {
+    const { data } = await this.db
+      .from('participations')
+      .select('id, reward:rewards(status)')
+      .eq('user_id', userId)
+      .eq('survey_id', surveyId)
+      .maybeSingle();
+
+    if (!data) {
+      return { participated: false, rewardStatus: null };
+    }
+    const row = data as Record<string, unknown>;
+    const reward = Array.isArray(row.reward) ? row.reward[0] : row.reward;
+    return {
+      participated: true,
+      rewardStatus: (reward as { status: string } | null)?.status ?? null,
+    };
+  }
+
   /** 기간 내 참여 목록(설문 제목·리워드 포함). from/to는 ISO 문자열. */
   async listByUser(userId: string, from?: string, to?: string): Promise<ParticipationListItem[]> {
     let query = this.db
