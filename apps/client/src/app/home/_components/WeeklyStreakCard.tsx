@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { WEEKDAYS } from '@/app/home/_constants/constants';
 import CashIcon from '@/assets/icons/CashIcon';
 import CheckIcon from '@/assets/icons/CheckIcon';
@@ -11,6 +14,8 @@ interface WeeklyStreakCardProps {
 }
 
 const WeeklyStreakCard = ({ streak, weeklyStatus, totalRewardAmount }: WeeklyStreakCardProps) => {
+  const router = useRouter();
+
   return (
     <section className='flex flex-col gap-16 pt-20 px-20 pb-12 rounded-20 bg-white'>
       <header className='flex flex-col gap-4'>
@@ -25,7 +30,12 @@ const WeeklyStreakCard = ({ streak, weeklyStatus, totalRewardAmount }: WeeklyStr
       <div className='border-t border-black-alpha-5' />
       <SavedMoney money={totalRewardAmount} />
 
-      <Button variant='secondary' theme='light' size='small'>
+      <Button
+        variant='secondary'
+        theme='light'
+        size='small'
+        onClick={() => router.push('/user/participations')}
+      >
         참여 내역 보기
       </Button>
     </section>
