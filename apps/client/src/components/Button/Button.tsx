@@ -52,6 +52,16 @@ const LOADING_LOTTIE_SIZE_CLASSES = {
 const GLOW_CLASS = 'shadow-[inset_0_0_12px_0_rgba(255,255,255,0.80)]';
 const BUTTON_LOADING_LOTTIE_SRC = '/lottie/button_primary-large-loading.lottie';
 
+const DARK_LOADING_LOTTIE = '/lottie/button_primary-dark-loading.lottie';
+const LIGHT_LOADING_LOTTIE: Record<ButtonVariant, string> = {
+  primary: '/lottie/button_primary-light-loading.lottie',
+  secondary: '/lottie/button_secondary-light-loading.lottie',
+  danger: '/lottie/button_danger-light-loading.lottie',
+};
+
+const getLoadingLottieSrc = (variant: ButtonVariant, theme: ButtonTheme) =>
+  theme === 'dark' ? DARK_LOADING_LOTTIE : LIGHT_LOADING_LOTTIE[variant];
+
 /**
  * 공통 버튼 컴포넌트.
  * 표준 `<button>` 속성을 그대로 받으며, variant·theme·size·glow로 스타일을 제어합니다.
@@ -86,7 +96,7 @@ const Button = ({
         <>
           <span className='invisible'>{children}</span>
           <DotLottieReact
-            src={BUTTON_LOADING_LOTTIE_SRC}
+            src={getLoadingLottieSrc(variant, theme)}
             autoplay
             loop
             className={cn(
