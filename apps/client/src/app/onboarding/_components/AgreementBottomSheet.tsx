@@ -62,7 +62,13 @@ const AgreementBottomSheet = ({
     <BottomSheet
       onClose={onClose}
       footer={
-        <Button size='large' disabled={!canSubmit} onClick={() => onSubmit(Array.from(agreedIds))}>
+        <Button
+          size='large'
+          theme='dark'
+          variant='secondary'
+          disabled={!canSubmit}
+          onClick={() => onSubmit(Array.from(agreedIds))}
+        >
           확인
         </Button>
       }
@@ -97,7 +103,7 @@ const AllAgreeRow = ({ label, checked, onToggle }: AllAgreeRowProps) => (
     onClick={onToggle}
     aria-pressed={checked}
     className={cn(
-      'label-large flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-gray-100 p-4 text-left transition-colors',
+      'label-large flex w-full cursor-pointer items-center gap-3 rounded-2xl bg-gray-100 p-16 text-left transition-colors',
       FOCUS_RING,
     )}
   >
@@ -116,7 +122,7 @@ interface AgreementRowProps {
 }
 
 const AgreementRow = ({ item, checked, onToggle, onExpand }: AgreementRowProps) => (
-  <li className='flex cursor-pointer items-center gap-3 py-[8px]'>
+  <li className='flex cursor-pointer items-center gap-3 py-8'>
     <button
       type='button'
       onClick={onToggle}

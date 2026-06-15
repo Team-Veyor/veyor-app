@@ -17,13 +17,16 @@ export const INTRO_SLIDES = [
   {
     id: 'daily-survey',
     title: '매일 1~5분\n설문 1개씩 참여하면',
+    imageSrc: '/onboarding/onboarding1.png',
   },
   {
     id: 'reward-account',
     title: '보상을 계좌로\n익일 입금',
+    imageSrc: '/onboarding/onboarding2.png',
   },
   {
     id: 'simple-reward',
     title: '복잡한 가입, 미션 없이\n참여한 만큼 보상받아요',
+    imageSrc: '/onboarding/onboarding3.png',
   },
 ] as const satisfies readonly IntroSlide[];

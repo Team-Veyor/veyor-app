@@ -16,6 +16,18 @@ const SLIDE_TRANSITION = {
   ease: [0.25, 0.1, 0.25, 1],
 } as const;
 
+const SLIDE_VARIANTS = {
+  enter: (direction: SlideDirection) => ({
+    x: direction === 'next' ? '100%' : '-100%',
+  }),
+  center: {
+    x: 0,
+  },
+  exit: (direction: SlideDirection) => ({
+    x: direction === 'next' ? '-100%' : '100%',
+  }),
+};
+
 const SLIDE_COUNT = INTRO_SLIDES.length;
 
 const IntroCarousel = () => {
@@ -35,16 +47,17 @@ const IntroCarousel = () => {
   };
 
   return (
-    <section className='flex h-full flex-col px-[16px] pt-[36px]'>
+    <section className='flex h-full flex-col px-16 pt-36'>
       <div className='relative min-h-0 flex-1 overflow-hidden'>
         <AnimatePresence initial={false} custom={direction}>
           <motion.button
             key={currentSlide.id}
             type='button'
             custom={direction}
-            initial={{ x: direction === 'next' ? '100%' : '-100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: direction === 'next' ? '-100%' : '100%' }}
+            variants={SLIDE_VARIANTS}
+            initial='enter'
+            animate='center'
+            exit='exit'
             transition={SLIDE_TRANSITION}
             className='absolute inset-0 flex cursor-pointer flex-col text-left'
             onClick={() => changeSlide(currentIndex + 1)}
@@ -55,15 +68,20 @@ const IntroCarousel = () => {
               </h1>
             </div>
 
-            <div className='relative h-[380px] w-full overflow-hidden'>
-              {/* TODO: 이미지 교체 */}
-              <Image src='/dummy.png' alt={currentSlide.title} fill className='object-cover' />
+            <div className='relative flex size-full items-center justify-center overflow-hidden'>
+              <Image
+                src={currentSlide.imageSrc}
+                alt={currentSlide.title}
+                width={375}
+                height={380}
+                className='object-cover object-center'
+              />
             </div>
           </motion.button>
         </AnimatePresence>
       </div>
 
-      <div className='flex justify-center gap-[8px] py-[30px]'>
+      <div className='flex justify-center gap-8 py-[30px]'>
         {INTRO_SLIDES.map((slide, index) => (
           <button
             key={slide.id}

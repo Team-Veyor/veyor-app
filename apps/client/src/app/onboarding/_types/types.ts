@@ -11,6 +11,7 @@ export type AgreementItem = {
 export type IntroSlide = {
   id: string;
   title: string;
+  imageSrc: string;
 };
 
 export type Consents = Record<AgreementId, boolean>;
