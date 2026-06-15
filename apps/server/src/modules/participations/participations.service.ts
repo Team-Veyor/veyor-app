@@ -46,6 +46,11 @@ export class ParticipationsService {
     return this.repo.exists(userId, surveyId);
   }
 
+  /** 특정 설문 참여 여부 + 리워드 지급 상태. */
+  async getParticipationStatus(userId: string, surveyId: string) {
+    return this.repo.getParticipationStatus(userId, surveyId);
+  }
+
   async list(userId: string, from?: string, to?: string) {
     const rows = await this.repo.listByUser(userId, from, to);
     const items: ParticipationItem[] = rows.map((r) => ({

@@ -30,6 +30,7 @@ export class HomeService {
             rewardAmount: today.rewardAmount,
             externalUrl: today.externalUrl,
             participated: today.participated,
+            rewardStatus: today.rewardStatus,
           }
         : null,
       streak,

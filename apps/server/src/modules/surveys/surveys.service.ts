@@ -2,6 +2,8 @@ import { GoneException, Injectable, NotFoundException } from '@nestjs/common';
 import { ParticipationsService } from '../participations/participations.service';
 import { type SurveyRow, SurveysRepository } from './surveys.repository';
 
+export type RewardStatus = 'pending' | 'paid';
+
 export interface TodaySurvey {
   id: string;
   title: string;
@@ -10,6 +12,7 @@ export interface TodaySurvey {
   externalUrl: string;
   expiresAt: string | null;
   participated: boolean;
+  rewardStatus: RewardStatus;
 }
 
 @Injectable()
@@ -50,7 +53,10 @@ export class SurveysService {
     if (!survey) {
       return null;
     }
-    const participated = await this.participations.hasParticipated(userId, survey.id);
+    const { participated, rewardStatus } = await this.participations.getParticipationStatus(
+      userId,
+      survey.id,
+    );
     return {
       id: survey.id,
       title: survey.title,
@@ -59,6 +65,7 @@ export class SurveysService {
       externalUrl: survey.external_url,
       expiresAt: survey.expires_at,
       participated,
+      rewardStatus: rewardStatus === 'paid' ? 'paid' : 'pending',
     };
   }
 
