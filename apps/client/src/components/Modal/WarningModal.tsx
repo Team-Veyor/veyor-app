@@ -8,6 +8,8 @@ interface WarningModalProps extends ModalProps {
   leftButtonText: string;
   /** 오른쪽(경고) 버튼에 표시할 텍스트. 탈퇴/삭제 등 경고 액션입니다. */
   rightButtonText: string;
+  /** 오른쪽 버튼 로딩 상태 */
+  rightButtonIsLoading?: boolean;
   /** 왼쪽 버튼 클릭 시 실행되는 콜백 */
   onLeftButtonClick: () => void;
   /** 오른쪽 버튼 클릭 시 실행되는 콜백 (경고 액션) */
@@ -23,6 +25,7 @@ const WarningModal = ({
   description,
   leftButtonText,
   rightButtonText,
+  rightButtonIsLoading = false,
   onLeftButtonClick,
   onRightButtonClick,
   ...modalProps
@@ -43,6 +46,7 @@ const WarningModal = ({
         theme='light'
         size='medium'
         hasGlow={false}
+        isLoading={rightButtonIsLoading}
         onClick={onRightButtonClick}
       >
         {rightButtonText}

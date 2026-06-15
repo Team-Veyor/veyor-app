@@ -61,7 +61,8 @@ const UserPage = () => {
           title='로그아웃 하시겠어요?'
           description={'현재 계정에서 로그아웃됩니다.\n언제든 다시 로그인할 수 있습니다.'}
           leftButtonText='취소'
-          rightButtonText={logoutMutation.isPending ? '처리 중...' : '로그아웃'}
+          rightButtonText='로그아웃'
+          rightButtonIsLoading={logoutMutation.isPending}
           onLeftButtonClick={() => setLogoutOpen(false)}
           onRightButtonClick={handleLogout}
         />
@@ -72,7 +73,8 @@ const UserPage = () => {
           title='정말 탈퇴하시겠어요?'
           description={'탈퇴하면 계정 정보와 활동 내역이 삭제되며\n복구할 수 없습니다.'}
           leftButtonText='취소'
-          rightButtonText={withdrawMutation.isPending ? '처리 중...' : '탈퇴하기'}
+          rightButtonText='탈퇴하기'
+          rightButtonIsLoading={withdrawMutation.isPending}
           onLeftButtonClick={() => setWithdrawOpen(false)}
           onRightButtonClick={handleWithdraw}
         />
