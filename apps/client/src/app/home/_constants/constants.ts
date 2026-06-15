@@ -5,4 +5,5 @@ export const WEEKDAYS = [
   { key: 'thu', label: '목' },
   { key: 'fri', label: '금' },
   { key: 'sat', label: '토' },
+  { key: 'sun', label: '일' },
 ] as const;
