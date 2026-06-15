@@ -35,7 +35,7 @@ const ParticipationsPage = () => {
 
       <div className='h-8 shrink-0 bg-gray-100' />
 
-      <div className='min-h-0 flex-1 overflow-y-auto pb-[92px]'>
+      <div className='scrollbar-custom min-h-0 flex-1 overflow-y-auto pb-[92px]'>
         {items.length === 0 ? (
           <EmptyList />
         ) : (

@@ -6,19 +6,17 @@ import ConfirmModal from '@/components/Modal/ConfirmModal';
 import WarningModal from '@/components/Modal/WarningModal';
 import UserMenuList from './_components/UserMenuList';
 import useLogoutMutation from './_hooks/useLogoutMutation';
+import useMe from './_hooks/useMe';
 import { useUserMenuGroups } from './_hooks/useUserMenuGroups';
 import useWithdrawMutation from './_hooks/useWithdrawMutation';
-
-const DUMMY_USER = {
-  nickname: '길동이',
-  email: 'hong@example.com',
-};
 
 const UserPage = () => {
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
 
   const router = useRouter();
+
+  const { data: me } = useMe();
   const logoutMutation = useLogoutMutation();
   const withdrawMutation = useWithdrawMutation();
 
@@ -47,9 +45,9 @@ const UserPage = () => {
 
   return (
     <>
-      <div className='flex items-baseline gap-8 px-8'>
-        <span className='label-medium text-gray-900'>{DUMMY_USER.nickname}</span>
-        <span className='body-small text-gray-500'>{DUMMY_USER.email}</span>
+      <div className='flex items-baseline gap-8 px-8 py-4'>
+        <span className='label-medium text-gray-900'>{me?.name}</span>
+        <span className='body-small text-gray-500'>{me?.email}</span>
       </div>
 
       <div className='flex flex-col gap-12'>

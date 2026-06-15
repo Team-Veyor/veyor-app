@@ -12,7 +12,7 @@ const AddAccountPage = () => {
 
   const handleSubmit = (form: CreateAccountRequest) => {
     mutate(form, {
-      onSuccess: () => router.replace('/home'),
+      onSuccess: () => router.replace('/user/account'),
     });
   };
 
