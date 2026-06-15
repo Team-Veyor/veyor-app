@@ -62,8 +62,8 @@ const Content = ({ title, subtext, children }: ContentProps) => {
     <span className='flex flex-1 flex-col items-start'>
       {children ?? (
         <div className='flex flex-col items-start gap-[2px]'>
-          {title && <span className='label-medium text-gray-600'>{title}</span>}
-          {subtext && <span className='subtext-medium text-gray-500'>{subtext}</span>}
+          {title && <span className='label-medium text-text-secondary'>{title}</span>}
+          {subtext && <span className='subtext-medium text-text-tertiary'>{subtext}</span>}
         </div>
       )}
     </span>

@@ -22,6 +22,12 @@ const TodaySurvey = ({
   participated,
   rewardStatus,
 }: TodaySurveyProps) => {
+  const handleButtonClick = () => {
+    if (participated) return;
+
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <section className='flex flex-col gap-20 pt-16 px-20 pb-20 rounded-20 bg-white'>
       <div className='flex flex-col gap-[6.5px]'>
@@ -40,14 +46,11 @@ const TodaySurvey = ({
           </div>
         </div>
       </div>
-      <Button
-        size='small'
-        onClick={() => {
-          window.open(url, '_blank');
-        }}
-      >
-        시작하기
-      </Button>
+      {!participated && (
+        <Button size='small' onClick={handleButtonClick} disabled={participated}>
+          시작하기
+        </Button>
+      )}
     </section>
   );
 };

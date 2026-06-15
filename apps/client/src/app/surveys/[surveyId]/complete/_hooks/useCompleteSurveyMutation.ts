@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { completeSurvey } from '@/app/home/_apis/surveys';
 import { HOME_QUERY_KEY } from '@/app/home/_hooks/useHomeQuery';
-import type { CompleteSurveyResponse } from '@/app/home/types/types';
+import { completeSurvey } from '@/app/surveys/[surveyId]/complete/_apis/surveys';
+import type { CompleteSurveyResponse } from '@/app/surveys/[surveyId]/complete/_types/types';
 
 const useCompleteSurveyMutation = () => {
   const queryClient = useQueryClient();

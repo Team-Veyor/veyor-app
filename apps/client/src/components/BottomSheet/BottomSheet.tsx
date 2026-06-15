@@ -32,7 +32,12 @@ const dialogClassName = cn(
  * 마운트 시 자동으로 `showModal()`을 호출해 표시되며, ESC 키 또는 바깥 클릭으로 닫힙니다.
  * 본문은 `children`, 하단 액션 영역은 `footer`로 자유롭게 구성할 수 있습니다.
  */
-const BottomSheet = ({ children, footer, className, onClose }: BottomSheetProps) => {
+const BottomSheet = ({
+  children,
+  footer,
+  className,
+  onClose,
+}: BottomSheetProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 

@@ -21,14 +21,4 @@ export type HomeResponse = {
   totalRewardAmount: number;
 };
 
-export type CompleteSurveyResponse = {
-  participationId: string;
-  surveyId: string;
-  status: 'completed';
-  reward: {
-    amount: number;
-    status: RewardStatus;
-  };
-};
-
 export type RewardStatus = 'pending' | 'paid';
