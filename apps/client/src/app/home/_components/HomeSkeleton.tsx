@@ -20,9 +20,9 @@ const HomeSkeleton = () => {
       </section>
 
       <section className='flex flex-col gap-16 pt-20 px-20 pb-12 rounded-20 bg-white'>
-        <div className='flex flex-col gap-4'>
-          <Skeleton width='40%' height={20} />
-          <Skeleton width='70%' height={14} />
+        <div className='flex flex-col gap-[7px]'>
+          <Skeleton width='40%' height={28} className='rounded-max' />
+          <Skeleton width='70%' height={18} />
         </div>
 
         <div className='flex flex-col gap-8'>
@@ -53,11 +53,10 @@ const HomeSkeleton = () => {
         <div className='border-t border-black-alpha-5' />
 
         <div className='flex items-center justify-between'>
-          <Skeleton width={96} height={16} />
-          <Skeleton width={56} height={16} />
+          <Skeleton width='100%' height={18} />
         </div>
 
-        <Skeleton height={40} className='rounded-12' />
+        <Skeleton height={43} className='rounded-16' />
       </section>
     </div>
   );
