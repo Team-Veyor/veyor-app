@@ -1,4 +1,4 @@
-export interface BankMeta {
+export interface BankLogo {
   value: string;
   label: string;
   icon: string;
@@ -40,7 +40,7 @@ const BANK_LIST: Record<string, { label: string; icon?: string }> = {
  * API 은행명으로 표시용 메타를 조회합니다.
  * 매핑에 없는 은행명이 와도 은행명을 그대로 라벨로, fallback 아이콘을 써서 깨지지 않습니다.
  */
-export const getBankMeta = (value: string): BankMeta => {
+export const getBankLogo = (value: string): BankLogo => {
   const presentation = BANK_LIST[value];
 
   return {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
-import { getBankMeta } from '@/app/account/_constants/banks';
+import { getBankLogo } from '@/app/account/_constants/banks';
 import useAccountForm from '@/app/account/_hooks/useAccountForm';
 import useBanks from '@/app/account/_hooks/useBanks';
 import type { CreateAccountRequest } from '@/app/account/_types/types';
@@ -35,7 +35,7 @@ const AccountForm = ({
   const { form, setBank, handleHolderNameChange, handleAccountNoChange, isFormFilled } =
     useAccountForm(initialForm);
 
-  const selectedBankLabel = form.bank ? getBankMeta(form.bank).label : null;
+  const selectedBankLabel = form.bank ? getBankLogo(form.bank).label : null;
 
   const handleSave = () => {
     if (!isFormFilled || isSubmitting) return;
@@ -56,7 +56,7 @@ const AccountForm = ({
           type='button'
           onClick={() => setIsBankSheetOpen(true)}
           className={cn(
-            'flex w-full items-center justify-between gap-12 rounded-[16px] border border-gray-200 bg-white p-[16px] transition-colors',
+            'flex w-full items-center justify-between gap-12 rounded-16 border border-gray-200 bg-white p-16 transition-colors',
             isBankSheetOpen && 'border-gray-900',
           )}
         >

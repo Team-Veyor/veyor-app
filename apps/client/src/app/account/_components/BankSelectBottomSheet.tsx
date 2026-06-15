@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getBankMeta } from '@/app/account/_constants/banks';
+import { getBankLogo } from '@/app/account/_constants/banks';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Button from '@/components/Button/Button';
 import { cn } from '@/lib/utils';
@@ -48,7 +48,7 @@ const BankSelectBottomSheet = ({
 
         <ul className='scrollbar-custom grid max-h-[433px] w-full grid-cols-3 gap-2 overflow-y-auto py-0.5 pr-1.5 pl-0.5'>
           {banks.map((bank) => {
-            const meta = getBankMeta(bank);
+            const logo = getBankLogo(bank);
             const checked = selected === bank;
 
             return (
@@ -64,13 +64,13 @@ const BankSelectBottomSheet = ({
                 >
                   {/** biome-ignore lint/performance/noImgElement: 정적 SVG 아이콘 */}
                   <img
-                    src={meta.icon}
+                    src={logo.icon}
                     alt=''
                     width={28}
                     height={28}
                     className='size-7 object-contain'
                   />
-                  <span className='label-medium text-gray-950'>{meta.label}</span>
+                  <span className='label-medium text-gray-950'>{logo.label}</span>
                 </button>
               </li>
             );
