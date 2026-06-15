@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: '백설기',
     description:
       '누구나 더 나은 의사결정을 위한 의견을 모으고, 모든 참여가 정당하게 보상받을 수 있는 생태계',
-    start_url: '/',
+    start_url: '/login',
     display: 'standalone',
     background_color: '#ffffff', // TODO: 색상 변경
     theme_color: '#111827',
