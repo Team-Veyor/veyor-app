@@ -25,6 +25,10 @@ const useAccountForm = (initialForm?: Partial<CreateAccountRequest>) => {
     setForm((prev) => ({ ...prev, accountNo: event.target.value }));
   };
 
+  const prefill = (values: Partial<CreateAccountRequest>) => {
+    setForm((prev) => ({ ...prev, ...values }));
+  };
+
   const isFormFilled = Boolean(form.bank && form.accountNo && form.holderName);
 
   return {
@@ -32,6 +36,7 @@ const useAccountForm = (initialForm?: Partial<CreateAccountRequest>) => {
     setBank,
     handleHolderNameChange,
     handleAccountNoChange,
+    prefill,
     isFormFilled,
   };
 };
