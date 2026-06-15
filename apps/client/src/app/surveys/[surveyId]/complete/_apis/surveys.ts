@@ -1,4 +1,4 @@
-import type { CompleteSurveyResponse } from '@/app/home/types/types';
+import type { CompleteSurveyResponse } from '@/app/surveys/[surveyId]/complete/_types/types';
 import { apiFetch } from '@/lib/api';
 
 export const completeSurvey = (surveyId: string) =>

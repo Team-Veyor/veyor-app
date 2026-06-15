@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import SurveyCompleteBottomSheet from '@/app/surveys/[surveyId]/complete/_components/SurveyCompleteBottomSheet';
+import SurveyCompleteSkeleton from '@/app/surveys/[surveyId]/complete/_components/SurveyCompleteSkeleton';
 import useCompleteSurveyMutation from '@/app/surveys/[surveyId]/complete/_hooks/useCompleteSurveyMutation';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { useToast } from '@/components/Toast/ToastProvider';
@@ -18,14 +19,18 @@ const COMPLETE_ERROR_TOAST_MESSAGES: Record<number, string> = {
 
 const SurveyCompletePage = () => {
   const router = useRouter();
+
   const { surveyId } = useParams<{ surveyId: string }>();
   const hasRequestedRef = useRef(false);
+
   const completeSurveyMutation = useCompleteSurveyMutation();
   const { showToast } = useToast();
 
   const completeError = completeSurveyMutation.error;
   const completeErrorToastMessage =
-    completeError instanceof ApiError ? COMPLETE_ERROR_TOAST_MESSAGES[completeError.status] : undefined;
+    completeError instanceof ApiError
+      ? COMPLETE_ERROR_TOAST_MESSAGES[completeError.status]
+      : undefined;
 
   useEffect(() => {
     if (!surveyId || hasRequestedRef.current) return;
@@ -55,14 +60,12 @@ const SurveyCompletePage = () => {
   };
 
   return (
-    <main className='min-h-dvh bg-gray-100'>
-      {completeSurveyMutation.isPending && (
-        <div className='flex min-h-dvh items-center justify-center px-20'>
-          <p className='label-medium text-gray-500'>설문 완료를 인증하고 있어요.</p>
-        </div>
-      )}
+    <div className='min-h-dvh bg-gray-100'>
+      {completeSurveyMutation.isPending && <SurveyCompleteSkeleton />}
 
-      {completeSurveyMutation.isSuccess && <SurveyCompleteBottomSheet onHomeClick={handleHomeClick} />}
+      {completeSurveyMutation.isSuccess && (
+        <SurveyCompleteBottomSheet onHomeClick={handleHomeClick} />
+      )}
 
       {completeSurveyMutation.isError && !completeErrorToastMessage && (
         <ConfirmModal
@@ -74,7 +77,7 @@ const SurveyCompletePage = () => {
           onRightButtonClick={handleContactClick}
         />
       )}
-    </main>
+    </div>
   );
 };
 
