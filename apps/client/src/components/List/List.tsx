@@ -12,7 +12,7 @@ const List = ({ className, children, ...props }: ListProps) => {
   return (
     <ul
       className={cn(
-        'flex flex-col rounded-20 bg-white px-20',
+        'flex flex-col rounded-20 bg-white px-24 py-4',
         'divide-y divide-gray-100',
         className,
       )}
