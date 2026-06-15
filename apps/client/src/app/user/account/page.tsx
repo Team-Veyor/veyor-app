@@ -1,25 +1,17 @@
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import AccountCard, { type AccountMenuItem } from '@/app/account/_components/AccountCard';
 import PrimaryAccountBottomSheet from '@/app/account/_components/PrimaryAccountBottomSheet';
 import useDeleteAccountMutation from '@/app/account/_hooks/useDeleteAccountMutation';
 import useSetPrimaryAccountMutation from '@/app/account/_hooks/useSetPrimaryAccountMutation';
 import type { Account } from '@/app/account/_types/types';
 import useAccounts from '@/app/user/_hooks/useAccounts';
-import MoreIcon from '@/assets/icons/MoreIcon';
 import PlusIcon from '@/assets/icons/PlusIcon';
-import Badge from '@/components/Badge/Badge';
 import List from '@/components/List/List';
-import Menu from '@/components/Menu/Menu';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import WarningModal from '@/components/Modal/WarningModal';
-
-interface AccountMenuItem {
-  label: string;
-  onSelect: () => void;
-}
 
 const AccountPage = () => {
   const [accountToDelete, setAccountToDelete] = useState<Account | null>(null);
@@ -86,29 +78,11 @@ const AccountPage = () => {
   return (
     <>
       {accounts?.map((account) => (
-        <List key={account.id}>
-          <List.Item>
-            <List.Item.Leading>
-              <Image src={`/dummy_bank.png`} alt='은행' width={32} height={32} />
-            </List.Item.Leading>
-            <List.Item.Content title={account.bank} subtext={account.accountNoMasked} />
-            <List.Item.Trailing>
-              {account.isPrimary ? <Badge type='brand'>대표 계좌</Badge> : null}
-
-              <Menu trigger={<MoreIcon className='cursor-pointer' />}>
-                {createAccountMenuItems(account).map((item) => (
-                  <Menu.Item
-                    key={item.label}
-                    onClick={item.onSelect}
-                    className={item.label === '삭제' ? 'text-red-500' : undefined}
-                  >
-                    {item.label}
-                  </Menu.Item>
-                ))}
-              </Menu>
-            </List.Item.Trailing>
-          </List.Item>
-        </List>
+        <AccountCard
+          key={account.id}
+          account={account}
+          menuItems={createAccountMenuItems(account)}
+        />
       ))}
 
       <List>
