@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import PrimaryAccountBottomSheet from '@/app/account/_components/PrimaryAccountBottomSheet';
 import useDeleteAccountMutation from '@/app/account/_hooks/useDeleteAccountMutation';
 import useSetPrimaryAccountMutation from '@/app/account/_hooks/useSetPrimaryAccountMutation';
 import type { Account } from '@/app/account/_types/types';
@@ -23,6 +24,7 @@ interface AccountMenuItem {
 const AccountPage = () => {
   const [accountToDelete, setAccountToDelete] = useState<Account | null>(null);
   const [accountToSetPrimary, setAccountToSetPrimary] = useState<Account | null>(null);
+  const [primaryCandidates, setPrimaryCandidates] = useState<Account[] | null>(null);
 
   const router = useRouter();
 
@@ -49,8 +51,35 @@ const AccountPage = () => {
   const handleConfirmDelete = () => {
     if (!accountToDelete || isDeleting) return;
 
-    deleteAccount(accountToDelete.id, {
-      onSuccess: () => setAccountToDelete(null),
+    const deletedAccount = accountToDelete;
+    const remaining = (accounts ?? []).filter((account) => account.id !== deletedAccount.id);
+
+    deleteAccount(deletedAccount.id, {
+      onSuccess: () => {
+        setAccountToDelete(null);
+
+        if (!deletedAccount.isPrimary) return;
+
+        if (remaining.length === 0) {
+          router.push('/account/new');
+          return;
+        }
+
+        if (remaining.length === 1) {
+          setPrimary(remaining[0].id);
+          return;
+        }
+
+        setPrimaryCandidates(remaining);
+      },
+    });
+  };
+
+  const handleSelectPrimaryCandidate = (accountId: string) => {
+    if (isSettingPrimary) return;
+
+    setPrimary(accountId, {
+      onSuccess: () => setPrimaryCandidates(null),
     });
   };
 
@@ -110,6 +139,14 @@ const AccountPage = () => {
           rightButtonText='삭제'
           onLeftButtonClick={() => setAccountToDelete(null)}
           onRightButtonClick={handleConfirmDelete}
+        />
+      )}
+
+      {primaryCandidates && (
+        <PrimaryAccountBottomSheet
+          accounts={primaryCandidates}
+          onConfirm={handleSelectPrimaryCandidate}
+          onClose={() => setPrimaryCandidates(null)}
         />
       )}
     </>
