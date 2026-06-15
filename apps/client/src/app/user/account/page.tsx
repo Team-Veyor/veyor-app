@@ -12,6 +12,7 @@ import PlusIcon from '@/assets/icons/PlusIcon';
 import List from '@/components/List/List';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import WarningModal from '@/components/Modal/WarningModal';
+import { useToast } from '@/components/Toast/ToastProvider';
 
 const AccountPage = () => {
   const [accountToDelete, setAccountToDelete] = useState<Account | null>(null);
@@ -19,6 +20,8 @@ const AccountPage = () => {
   const [primaryCandidates, setPrimaryCandidates] = useState<Account[] | null>(null);
 
   const router = useRouter();
+
+  const { showToast } = useToast();
 
   const { data: accounts } = useAccounts();
   const { mutate: setPrimary, isPending: isSettingPrimary } = useSetPrimaryAccountMutation();
@@ -36,7 +39,16 @@ const AccountPage = () => {
     if (!accountToSetPrimary || isSettingPrimary) return;
 
     setPrimary(accountToSetPrimary.id, {
-      onSuccess: () => setAccountToSetPrimary(null),
+      onSuccess: () => {
+        setAccountToSetPrimary(null);
+        showToast({ type: 'success', message: '대표 계좌로 선택되었습니다.' });
+      },
+      onError: () => {
+        showToast({
+          type: 'warning',
+          message: '대표 계좌 선택에 실패했습니다. 다시 시도해주세요.',
+        });
+      },
     });
   };
 
@@ -49,6 +61,7 @@ const AccountPage = () => {
     deleteAccount(deletedAccount.id, {
       onSuccess: () => {
         setAccountToDelete(null);
+        showToast({ type: 'success', message: '계좌가 삭제되었습니다.' });
 
         if (!deletedAccount.isPrimary) return;
 
@@ -71,7 +84,10 @@ const AccountPage = () => {
     if (isSettingPrimary) return;
 
     setPrimary(accountId, {
-      onSuccess: () => setPrimaryCandidates(null),
+      onSuccess: () => {
+        setPrimaryCandidates(null);
+        showToast({ type: 'success', message: '대표 계좌로 선택되었습니다.' });
+      },
     });
   };
 
