@@ -7,20 +7,12 @@ import Button from '@/components/Button/Button';
 import { cn } from '@/lib/utils';
 
 interface BankSelectBottomSheetProps {
-  /** API(`GET /accounts/banks`)가 반환한 은행명 목록 */
   banks: string[];
-  /** 현재 선택된 은행명. 시트를 다시 열 때 초기 선택값으로 사용됩니다. */
   selectedBank?: string;
-  /** 확인 버튼 클릭 시 선택된 은행명을 전달합니다. */
   onConfirm: (bank: string) => void;
-  /** 바깥(backdrop) 클릭 또는 ESC로 시트가 닫힐 때 실행되는 콜백 */
   onClose?: () => void;
 }
 
-/**
- * 은행을 그리드로 나열해 선택하는 BottomSheet.
- * 본문(grid)은 최대 433px 너비로 가운데 정렬되며 세로로 스크롤됩니다.
- */
 const BankSelectBottomSheet = ({
   banks,
   selectedBank,
@@ -59,7 +51,9 @@ const BankSelectBottomSheet = ({
                   aria-pressed={checked}
                   className={cn(
                     'flex w-full cursor-pointer flex-col items-center gap-2 rounded-20 bg-white py-12 transition-colors',
-                    checked ? 'ring-2 ring-brand-500' : 'ring-1 ring-transparent',
+                    checked
+                      ? 'ring-1 ring-border-select bg-fill-tertiary'
+                      : 'ring-1 ring-transparent bg-fill-quaternary',
                   )}
                 >
                   {/** biome-ignore lint/performance/noImgElement: 정적 SVG 아이콘 */}

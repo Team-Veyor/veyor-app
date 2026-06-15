@@ -20,7 +20,7 @@ export interface BottomSheetProps {
 const dialogClassName = cn(
   'fixed inset-x-[10px] bottom-[10px] top-auto',
   'm-0 w-auto max-w-none rounded-[28px] border-none outline-none',
-  'bg-gray-50 pt-[16px] pb-[22px]',
+  'bg-white pt-[16px] pb-[22px]',
   'overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
   'shadow-[0_-12px_48px_0_rgba(0,0,0,0.16)]',
   'translate-y-full transition-transform duration-300 ease-out',
