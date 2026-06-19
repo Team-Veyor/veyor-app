@@ -9,19 +9,30 @@ const ANIMATION_DURATION_MS = 300;
 export interface BottomSheetProps {
   /** 시트 본문에 렌더링할 노드 */
   children?: ReactNode;
+  /** 핸들 아래에 고정으로 표시할 상단 영역(보통 제목). `scrollBody`와 함께 쓰면 스크롤되지 않습니다. */
+  header?: ReactNode;
   /** 하단 액션 영역(보통 버튼). 지정하지 않으면 영역이 표시되지 않습니다. */
   footer?: ReactNode;
   /** `<dialog>` 요소에 추가할 Tailwind 클래스 */
   className?: string;
+  /**
+   * 본문(children)만 스크롤하고 핸들·footer는 고정할지 여부.
+   * `max-height`를 지정한 긴 콘텐츠에서 제목/하단 버튼을 고정하고 싶을 때 사용합니다.
+   * @default false
+   */
+  scrollBody?: boolean;
   /** 바깥(backdrop) 클릭 또는 ESC 키 입력 시 호출되는 콜백. 닫힘 애니메이션 후 실행됩니다. */
   onClose?: () => void;
 }
+
+const HIDE_SCROLLBAR =
+  '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
 
 const dialogClassName = cn(
   'fixed inset-x-[10px] bottom-[10px] top-auto',
   'm-0 w-auto max-w-none rounded-[28px] border-none outline-none',
   'bg-white pt-[16px] pb-[22px]',
-  'overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+  HIDE_SCROLLBAR,
   'shadow-[0_-12px_48px_0_rgba(0,0,0,0.16)]',
   'translate-y-full transition-transform duration-300 ease-out',
   'backdrop:bg-black-alpha-30 backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300',
@@ -34,8 +45,10 @@ const dialogClassName = cn(
  */
 const BottomSheet = ({
   children,
+  header,
   footer,
   className,
+  scrollBody = false,
   onClose,
 }: BottomSheetProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -65,19 +78,29 @@ const BottomSheet = ({
     <dialog
       ref={dialogRef}
       aria-modal='true'
-      className={cn(dialogClassName, isVisible && 'translate-y-0 backdrop:opacity-100', className)}
+      className={cn(
+        dialogClassName,
+        scrollBody ? 'flex flex-col overflow-hidden' : 'overflow-y-auto',
+        isVisible && 'translate-y-0 backdrop:opacity-100',
+        className,
+      )}
       onCancel={(event) => {
         event.preventDefault();
         handleClose();
       }}
       onClick={handleBackdropClick}
     >
-      <div className='flex flex-col'>
-        <div className='flex justify-center pb-20'>
+      <div className={cn('flex flex-col', scrollBody && 'min-h-0 flex-1')}>
+        <div className='flex shrink-0 justify-center pb-20'>
           <span aria-hidden='true' className='h-1 w-10 rounded-full bg-gray-200' />
         </div>
-        <div className='px-5'>{children}</div>
-        {footer && <footer className='mt-auto px-5 pt-[34px]'>{footer}</footer>}
+        {header && <div className='shrink-0 px-5'>{header}</div>}
+        <div
+          className={cn('px-5', scrollBody && cn('min-h-0 flex-1 overflow-y-auto', HIDE_SCROLLBAR))}
+        >
+          {children}
+        </div>
+        {footer && <footer className='mt-auto shrink-0 px-5 pt-[34px]'>{footer}</footer>}
       </div>
     </dialog>
   );

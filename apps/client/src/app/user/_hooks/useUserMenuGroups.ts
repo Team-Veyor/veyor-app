@@ -3,8 +3,7 @@
 import { useRouter } from 'next/navigation';
 import type { MenuItem } from '../types/menu';
 
-// TODO: 채팅 상담 링크 확정되면 교체
-const CHAT_SUPPORT_URL = '#';
+const CHAT_SUPPORT_URL = 'https://open.kakao.com/o/sMjP3qti';
 
 interface UseUserMenuGroupsParams {
   onLogout: () => void;
