@@ -1,13 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getUser } from '@/app/login/_apis/users';
+import { LOGIN_ERROR_MESSAGE } from '@/app/login/_constants/constants';
+import Spinner from '@/components/Spinner/Spinner';
+import { useToast } from '@/components/Toast/ToastProvider';
 import { supabase } from '@/lib/supabase';
 
 export default function AuthCallbackPage() {
   const router = useRouter();
-  const [message, setMessage] = useState('로그인 정보를 확인하는 중...');
+  const { showToast } = useToast();
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -31,16 +34,16 @@ export default function AuthCallbackPage() {
       router.replace(me.onboarded ? '/home' : '/onboarding');
     };
 
-    handleCallback().catch(async (error) => {
+    handleCallback().catch(async () => {
       await supabase.auth.signOut();
-      setMessage(error instanceof Error ? error.message : '로그인 처리 중 오류가 발생했어요.');
-      window.setTimeout(() => router.replace('/login'), 1500);
+      showToast({ type: 'warning', message: LOGIN_ERROR_MESSAGE.default });
+      router.replace('/login');
     });
-  }, [router]);
+  }, [router, showToast]);
 
   return (
     <main className='flex min-h-dvh items-center justify-center bg-gray-50 px-5'>
-      <p className='body-medium text-gray-600'>{message}</p>
+      <Spinner size={32} label='로그인 정보를 확인하는 중' />
     </main>
   );
 }
