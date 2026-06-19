@@ -10,6 +10,13 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    label: { control: 'text' },
+    helperText: { control: 'text' },
+    placeholder: { control: 'text' },
+    error: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+  },
   args: {
     placeholder: '내용을 입력해 주세요',
     value: '',
@@ -36,11 +43,28 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    label: 'Label',
+    helperText: 'Help text',
+    placeholder: 'Placeholder',
+  },
+};
 
 export const WithValue: Story = {
   args: {
+    label: 'Label',
+    helperText: 'Help text',
     value: '입력된 값',
+  },
+};
+
+export const ErrorState: Story = {
+  args: {
+    label: 'Label',
+    helperText: 'Help text',
+    placeholder: 'Placeholder',
+    error: true,
   },
 };
 

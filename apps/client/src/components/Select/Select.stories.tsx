@@ -18,6 +18,13 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    label: { control: 'text' },
+    helperText: { control: 'text' },
+    placeholder: { control: 'text' },
+    error: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+  },
   args: {
     options: BANK_OPTIONS,
     placeholder: '은행',
@@ -49,11 +56,28 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    label: 'Label',
+    helperText: 'Help text',
+    placeholder: 'Placeholder',
+  },
+};
 
 export const WithValue: Story = {
   args: {
+    label: 'Label',
+    helperText: 'Help text',
     value: 'shinhan',
+  },
+};
+
+export const ErrorState: Story = {
+  args: {
+    label: 'Label',
+    helperText: 'Help text',
+    placeholder: 'Placeholder',
+    error: true,
   },
 };
 
