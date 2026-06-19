@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import AccountCard, { type AccountMenuItem } from '@/app/account/_components/AccountCard';
+import AccountSkeleton from '@/app/account/_components/AccountSkeleton';
 import PrimaryAccountBottomSheet from '@/app/account/_components/PrimaryAccountBottomSheet';
 import useDeleteAccountMutation from '@/app/account/_hooks/useDeleteAccountMutation';
 import useSetPrimaryAccountMutation from '@/app/account/_hooks/useSetPrimaryAccountMutation';
@@ -23,7 +24,11 @@ const AccountPage = () => {
 
   const { showToast } = useToast();
 
-  const { data: accounts } = useAccounts();
+  const {
+    data: accounts,
+    isLoading: isLoadingAccounts,
+    isPending: isPendingAccounts,
+  } = useAccounts();
   const { mutate: setPrimary, isPending: isSettingPrimary } = useSetPrimaryAccountMutation();
   const { mutate: deleteAccount, isPending: isDeleting } = useDeleteAccountMutation();
 
@@ -90,6 +95,10 @@ const AccountPage = () => {
       },
     });
   };
+
+  if (isPendingAccounts || isLoadingAccounts) {
+    return <AccountSkeleton />;
+  }
 
   return (
     <>

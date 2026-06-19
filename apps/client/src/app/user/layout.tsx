@@ -18,6 +18,7 @@ const PAGE_TITLES: Record<string, string> = {
 const layout = ({ children }: UserLayoutProps) => {
   const pathname = usePathname();
 
+  const isAccount = pathname === '/user/account';
   const isParticipations = pathname === '/user/participations';
   const title = PAGE_TITLES[pathname];
 
@@ -36,7 +37,7 @@ const layout = ({ children }: UserLayoutProps) => {
           {children}
         </main>
       </div>
-      <Navigation />
+      {!isAccount && <Navigation />}
     </>
   );
 };
