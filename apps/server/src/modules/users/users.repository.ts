@@ -7,6 +7,7 @@ export interface ProfileRow {
   email: string | null;
   birth_year: number | null;
   gender: string | null;
+  occupation: string | null;
   onboarded_at: string | null;
 }
 
@@ -21,7 +22,7 @@ export class UsersRepository {
   async getProfile(userId: string): Promise<ProfileRow | null> {
     const { data, error } = await this.db
       .from('profiles')
-      .select('id, name, email, birth_year, gender, onboarded_at')
+      .select('id, name, email, birth_year, gender, occupation, onboarded_at')
       .eq('id', userId)
       .maybeSingle();
     if (error) {
@@ -32,13 +33,18 @@ export class UsersRepository {
 
   async updateProfile(
     userId: string,
-    patch: Partial<{ birth_year: number; gender: string; onboarded_at: string }>,
+    patch: Partial<{
+      birth_year: number;
+      gender: string;
+      occupation: string;
+      onboarded_at: string;
+    }>,
   ): Promise<ProfileRow> {
     const { data, error } = await this.db
       .from('profiles')
       .update(patch)
       .eq('id', userId)
-      .select('id, name, email, birth_year, gender, onboarded_at')
+      .select('id, name, email, birth_year, gender, occupation, onboarded_at')
       .single();
     if (error) {
       throw new InternalServerErrorException('프로필 저장에 실패했습니다.');

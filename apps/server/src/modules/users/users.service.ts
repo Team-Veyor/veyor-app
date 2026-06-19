@@ -24,6 +24,7 @@ export class UsersService {
       email: profile.email,
       birthYear: profile.birth_year,
       gender: profile.gender,
+      occupation: profile.occupation,
       onboarded: profile.onboarded_at != null,
       totalRewardCount: totals.count,
       totalRewardAmount: totals.amount,
@@ -43,6 +44,7 @@ export class UsersService {
     await this.repo.updateProfile(userId, {
       birth_year: dto.birthYear,
       gender: dto.gender,
+      ...(dto.occupation ? { occupation: dto.occupation } : {}),
       onboarded_at: new Date().toISOString(),
     });
     await this.consents.setMany(userId, {

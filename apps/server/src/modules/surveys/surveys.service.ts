@@ -24,7 +24,7 @@ export class SurveysService {
 
   private matchesTarget(
     survey: SurveyRow,
-    profile: { birth_year: number | null; gender: string | null },
+    profile: { birth_year: number | null; gender: string | null; occupation: string | null },
   ): boolean {
     if (survey.target_gender && survey.target_gender !== profile.gender) {
       return false;
@@ -36,6 +36,14 @@ export class SurveysService {
     }
     if (survey.target_birth_year_max != null) {
       if (profile.birth_year == null || profile.birth_year > survey.target_birth_year_max) {
+        return false;
+      }
+    }
+    // 직업 타깃: 프로필에 직업이 있을 때만 필터링한다.
+    // 아직 직업 미수집(null)인 사용자는 노출을 유지하고, 온보딩에서 직업을
+    // 수집하기 시작하면 자연히 정밀 매칭으로 전환된다.
+    if (survey.target_occupation && profile.occupation) {
+      if (survey.target_occupation !== profile.occupation) {
         return false;
       }
     }
