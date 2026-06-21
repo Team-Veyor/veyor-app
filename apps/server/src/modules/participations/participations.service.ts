@@ -32,8 +32,15 @@ export class ParticipationsService {
   constructor(private readonly repo: ParticipationsRepository) {}
 
   /** 설문 완료 처리: 참여 이력 + 리워드(pending) 생성. */
+  /** 참여 시작: 'started' 선기록(멱등). 이미 기록 있으면 기존 상태 반환. */
+  async start(userId: string, surveyId: string) {
+    const { participationId, status } = await this.repo.start(userId, surveyId);
+    return { participationId, surveyId, status };
+  }
+
+  /** 완료 인증: start 기록을 'completed'로 전이 + 리워드(pending) 생성. */
   async complete(userId: string, surveyId: string, rewardAmount: number) {
-    const { participationId } = await this.repo.createWithReward(userId, surveyId, rewardAmount);
+    const { participationId } = await this.repo.completeFromStarted(userId, surveyId, rewardAmount);
     return {
       participationId,
       surveyId,
@@ -42,8 +49,9 @@ export class ParticipationsService {
     };
   }
 
+  /** 완료 여부(홈의 '참여함' 표시용). started만 한 상태는 false. */
   async hasParticipated(userId: string, surveyId: string): Promise<boolean> {
-    return this.repo.exists(userId, surveyId);
+    return this.repo.hasCompleted(userId, surveyId);
   }
 
   /** 특정 설문 참여 여부 + 리워드 지급 상태. */

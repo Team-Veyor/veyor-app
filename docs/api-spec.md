@@ -156,6 +156,7 @@
 
 ### `GET /surveys/today`
 오늘 노출 설문 1건(개인화: 연령/성별 타깃 반영). 없으면 `null`.
+> 노출 조건: `is_published=true` AND `approval_status='approved'` AND 기간 내(`opens_at ≤ now ≤ expires_at`). 운영자가 어드민에서 **게시**한 설문만 노출된다.
 ```json
 200
 {
@@ -169,8 +170,25 @@
 }
 ```
 
+### `POST /surveys/:surveyId/start`
+설문 참여 시작(SURVEY-1). "참여" 버튼 클릭 → 외부 설문으로 이동하기 **직전** 호출. 참여 이력을 `started` 상태로 선기록한다(완료 인증의 전제 — 직접 URL 접속 어뷰징 차단용).
+```json
+201
+{
+  "participationId": "uuid",
+  "surveyId": "uuid",
+  "status": "started"
+}
+```
+| 에러 | 코드 | 메시지 |
+| --- | --- | --- |
+| 참여 불가(미게시·기간 외) | 404/410 | "참여할 수 없는 설문입니다." |
+| 설문 없음 | 404 | - |
+
+> 멱등: 이미 `started`/`completed` 기록이 있으면 기존 상태를 반환(중복 생성 안 함).
+
 ### `POST /surveys/:surveyId/complete`
-설문 완료 인증(B-1). 참여 이력 + 리워드 지급 대기 생성.
+설문 완료 인증(B-1). **`start` 기록이 있어야** 처리되며, 참여 이력을 `completed`로 전이 + 리워드 지급 대기 생성.
 ```json
 201
 {
@@ -182,12 +200,13 @@
 ```
 | 에러 | 코드 | 메시지 |
 | --- | --- | --- |
+| 시작 기록 없음(미시작) | 400 | "설문을 완료할 수 없습니다." |
 | 이미 참여한 설문 | 409 | "이미 참여한 설문입니다." |
 | 만료된 설문 | 410 | "참여 기간이 지난 설문입니다." |
 | 설문 없음 | 404 | - |
 | 처리 실패 | 500 | "인증할 수 없습니다. 다시 시도해주세요." |
 
-> 정책: 외부 설문 제출만으로는 완료가 아니며, 이 엔드포인트 호출(= 완료 버튼)까지 해야 참여 인정. 설문당 1회(`UNIQUE(user_id, survey_id)`).
+> 정책: 외부 설문 제출만으로는 완료가 아니며, **참여 버튼(`start`) → 외부 설문 → 완료 인증(`complete`)** 까지 거쳐야 참여 인정. `start` 없이 `complete` 직접 호출은 거부(어뷰징 차단) — 사용자에게는 시작 여부를 노출하지 않고 일반 메시지("설문을 완료할 수 없습니다.")만 안내. 설문당 1회(`UNIQUE(user_id, survey_id)`), 한 행이 `started → completed`로 전이.
 
 ---
 
@@ -300,6 +319,7 @@
 | PATCH | `/consents` | ✓ | PROFILE-3 |
 | GET | `/home` | ✓ | HOME-1~3 |
 | GET | `/surveys/today` | ✓ | HOME-1, SURVEY-1 |
+| POST | `/surveys/:id/start` | ✓ | SURVEY-1 |
 | POST | `/surveys/:id/complete` | ✓ | SURVEY-2~3 |
 | GET | `/participations` | ✓ | REWARD-4 |
 | GET | `/accounts/banks` | ✓ | ACCOUNT-1 |

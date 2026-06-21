@@ -127,6 +127,8 @@ async function main() {
         est_minutes: '2-3',
         opens_at: new Date(now - 3600_000).toISOString(),
         expires_at: new Date(now + 86400_000).toISOString(),
+        is_published: true,
+        approval_status: 'approved',
       },
       {
         title: '남성 타깃 설문 (e2e)',
@@ -135,6 +137,8 @@ async function main() {
         target_gender: 'male',
         opens_at: new Date(now - 60_000).toISOString(), // 더 최신이지만 타깃 불일치로 제외돼야 함
         expires_at: new Date(now + 86400_000).toISOString(),
+        is_published: true,
+        approval_status: 'approved',
       },
       {
         title: '만료 설문 (e2e)',
@@ -142,6 +146,17 @@ async function main() {
         reward_amount: 100,
         opens_at: new Date(now - 7200_000).toISOString(),
         expires_at: new Date(now - 3600_000).toISOString(),
+        is_published: true,
+        approval_status: 'approved',
+      },
+      {
+        title: '미게시 설문 (e2e)',
+        external_url: 'https://example.com/survey/draft',
+        reward_amount: 999,
+        opens_at: new Date(now - 30_000).toISOString(), // 가장 최신이지만 미게시라 노출 제외
+        expires_at: new Date(now + 86400_000).toISOString(),
+        is_published: false,
+        approval_status: 'pending',
       },
     ])
     .select('id, title, expires_at, target_gender');
@@ -150,6 +165,7 @@ async function main() {
   const todaySurveyId = seed.data.find((s) => s.title.includes('오늘')).id;
   const maleSurveyId = seed.data.find((s) => s.title.includes('남성')).id;
   const expiredSurveyId = seed.data.find((s) => s.title.includes('만료')).id;
+  const draftSurveyId = seed.data.find((s) => s.title.includes('미게시')).id;
 
   // ---------- 1. 온보딩 ----------
   console.log('[1] 온보딩/사용자');
@@ -318,14 +334,22 @@ async function main() {
     JSON.stringify(r),
   );
 
-  // ---------- 5. 설문 참여 ----------
+  // ---------- 5. 설문 참여 (start → 외부 설문 → complete) ----------
   console.log('[5] 설문 참여/완료');
   r = await api('GET', '/surveys/today', { token });
   check(
-    'GET /surveys/today',
+    'GET /surveys/today (게시·승인된 설문만, 미게시 제외)',
     r.status === 200 && r.body?.id === todaySurveyId && r.body?.participated === false,
     JSON.stringify(r.body),
   );
+
+  // 미게시 설문은 시작 불가 (노출 게이트)
+  r = await api('POST', `/surveys/${draftSurveyId}/start`, { token });
+  check('미게시 설문 시작 차단 404', r.status === 404, JSON.stringify(r));
+
+  // start 기록 없이 complete 직접 호출 → 차단(일반 메시지)
+  r = await api('POST', `/surveys/${maleSurveyId}/complete`, { token });
+  check('start 없이 완료 차단 400', r.status === 400, JSON.stringify(r));
 
   r = await api('POST', `/surveys/${expiredSurveyId}/complete`, { token });
   check('만료 설문 완료 410', r.status === 410, JSON.stringify(r));
@@ -336,6 +360,19 @@ async function main() {
   r = await api('POST', '/surveys/not-a-uuid/complete', { token });
   check('잘못된 surveyId 400', r.status === 400, JSON.stringify(r));
 
+  // 참여 시작 (외부 설문 이동 직전)
+  r = await api('POST', `/surveys/${todaySurveyId}/start`, { token });
+  check('설문 시작 201 + started', r.status === 201 && r.body?.status === 'started', JSON.stringify(r));
+
+  // 시작 멱등 — 재호출해도 중복 생성 안 함
+  r = await api('POST', `/surveys/${todaySurveyId}/start`, { token });
+  check('설문 시작 멱등', r.status === 201 && r.body?.status === 'started', JSON.stringify(r));
+
+  // 시작만 한 상태는 아직 완료 아님
+  r = await api('GET', '/surveys/today', { token });
+  check('시작 후에도 participated false', r.body?.participated === false, JSON.stringify(r.body));
+
+  // 완료 인증 (start 기록 있어야 통과)
   r = await api('POST', `/surveys/${todaySurveyId}/complete`, { token });
   check(
     '설문 완료 201 + 리워드 pending',

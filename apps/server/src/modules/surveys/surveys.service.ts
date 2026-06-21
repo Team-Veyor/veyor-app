@@ -77,7 +77,29 @@ export class SurveysService {
     };
   }
 
-  /** 설문 완료 인증: 참여 이력 + 리워드 생성. */
+  /**
+   * 설문 참여 시작: "참여" 버튼 → 외부 설문 이동 직전 호출.
+   * 노출중(게시·승인·기간 내)인 설문만 시작 가능. 참여 이력을 'started'로 선기록(멱등).
+   */
+  async start(userId: string, surveyId: string, now: Date = new Date()) {
+    const survey = await this.repo.findById(surveyId);
+    if (!survey) {
+      throw new NotFoundException('참여할 수 없는 설문입니다.');
+    }
+    if (survey.expires_at && new Date(survey.expires_at).getTime() < now.getTime()) {
+      throw new GoneException('참여할 수 없는 설문입니다.');
+    }
+    const open =
+      survey.is_published &&
+      survey.approval_status === 'approved' &&
+      new Date(survey.opens_at).getTime() <= now.getTime();
+    if (!open) {
+      throw new NotFoundException('참여할 수 없는 설문입니다.');
+    }
+    return this.participations.start(userId, surveyId);
+  }
+
+  /** 설문 완료 인증: start 기록이 있어야 처리. 참여 이력 완료 전이 + 리워드 생성. */
   async complete(userId: string, surveyId: string, now: Date = new Date()) {
     const survey = await this.repo.findById(surveyId);
     if (!survey) {
@@ -86,7 +108,7 @@ export class SurveysService {
     if (survey.expires_at && new Date(survey.expires_at).getTime() < now.getTime()) {
       throw new GoneException('참여 기간이 지난 설문입니다.');
     }
-    // 중복 참여는 participations 레이어의 unique 제약에서 409로 처리
+    // start 기록 게이트·중복 참여는 participations 레이어에서 처리
     return this.participations.complete(userId, surveyId, survey.reward_amount);
   }
 }

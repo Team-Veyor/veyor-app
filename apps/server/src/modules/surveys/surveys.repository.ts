@@ -13,10 +13,12 @@ export interface SurveyRow {
   target_occupation: string | null;
   opens_at: string;
   expires_at: string | null;
+  is_published: boolean;
+  approval_status: string;
 }
 
 const SURVEY_COLS =
-  'id, title, external_url, reward_amount, est_minutes, target_gender, target_birth_year_min, target_birth_year_max, target_occupation, opens_at, expires_at';
+  'id, title, external_url, reward_amount, est_minutes, target_gender, target_birth_year_min, target_birth_year_max, target_occupation, opens_at, expires_at, is_published, approval_status';
 
 @Injectable()
 export class SurveysRepository {
@@ -40,7 +42,11 @@ export class SurveysRepository {
     return (data as SurveyRow) ?? null;
   }
 
-  /** 현재 노출 가능한(기간 내) 설문 후보 목록. 타깃 필터는 호출부(JS)에서. */
+  /**
+   * 현재 노출 가능한(게시·승인·기간 내) 설문 후보 목록. 타깃 필터는 호출부(JS)에서.
+   * 서버는 secret key(admin)로 RLS를 우회하므로, 노출 게이트(is_published·approval_status)를
+   * 여기서 명시적으로 건다. (surveys RLS의 surveys_select_published 와 동일 의미)
+   */
   async findOpenCandidates(nowIso: string): Promise<SurveyRow[]> {
     const { data, error } = await this.db
       .from('surveys')

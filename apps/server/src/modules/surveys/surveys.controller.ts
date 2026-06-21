@@ -13,7 +13,13 @@ export class SurveysController {
     return this.service.getToday(user.id);
   }
 
-  /** POST /surveys/:surveyId/complete — 설문 완료 인증 */
+  /** POST /surveys/:surveyId/start — 설문 참여 시작(외부 설문 이동 직전, started 선기록) */
+  @Post(':surveyId/start')
+  start(@CurrentUser() user: AuthUser, @Param('surveyId', ParseUUIDPipe) surveyId: string) {
+    return this.service.start(user.id, surveyId);
+  }
+
+  /** POST /surveys/:surveyId/complete — 설문 완료 인증(start 기록 필요) */
   @Post(':surveyId/complete')
   complete(@CurrentUser() user: AuthUser, @Param('surveyId', ParseUUIDPipe) surveyId: string) {
     return this.service.complete(user.id, surveyId);

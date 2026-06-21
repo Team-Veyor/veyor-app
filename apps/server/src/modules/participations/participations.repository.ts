@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { SupabaseService } from '../../core/supabase/supabase.service';
 
 export interface ParticipationRow {
@@ -26,59 +31,129 @@ export class ParticipationsRepository {
     return this.supabase.admin;
   }
 
-  /** 참여 + 리워드(pending) 생성. 설문당 1회(unique) 위반 시 ConflictException. */
-  async createWithReward(
+  /**
+   * 참여 시작: status='started' 선기록. 멱등 — 이미 기록 있으면 기존 상태 반환.
+   * (외부 설문 이동 직전 호출. 완료 인증의 전제)
+   */
+  async start(
+    userId: string,
+    surveyId: string,
+  ): Promise<{ participationId: string; status: string }> {
+    const existing = await this.findOwn(userId, surveyId);
+    if (existing) {
+      return { participationId: existing.id, status: existing.status };
+    }
+    const { data, error } = await this.db
+      .from('participations')
+      .insert({ user_id: userId, survey_id: surveyId, status: 'started' })
+      .select('id, status')
+      .single();
+    if (error) {
+      // 23505 = 동시 요청 경쟁: 이미 생성됨 → 재조회
+      if (error.code === '23505') {
+        const row = await this.findOwn(userId, surveyId);
+        if (row) {
+          return { participationId: row.id, status: row.status };
+        }
+      }
+      throw new InternalServerErrorException('참여를 시작할 수 없습니다. 다시 시도해주세요.');
+    }
+    return { participationId: data.id, status: data.status as string };
+  }
+
+  /**
+   * 완료 인증: start 기록(started)을 completed로 전이 + 리워드(pending) 생성.
+   * - start 기록 없음 → BadRequest (직접 호출 차단, 일반 메시지)
+   * - 이미 completed → Conflict
+   */
+  async completeFromStarted(
     userId: string,
     surveyId: string,
     rewardAmount: number,
   ): Promise<{ participationId: string }> {
-    const { data: participation, error } = await this.db
-      .from('participations')
-      .insert({ user_id: userId, survey_id: surveyId })
-      .select('id')
-      .single();
+    const existing = await this.findOwn(userId, surveyId);
+    if (!existing) {
+      throw new BadRequestException('설문을 완료할 수 없습니다.');
+    }
+    if (existing.status === 'completed') {
+      throw new ConflictException('이미 참여한 설문입니다.');
+    }
 
-    if (error) {
-      // 23505 = unique_violation (설문당 1회)
-      if (error.code === '23505') {
-        throw new ConflictException('이미 참여한 설문입니다.');
-      }
+    // started → completed (조건부 갱신으로 동시성 보호)
+    const { data: updated, error: updateError } = await this.db
+      .from('participations')
+      .update({ status: 'completed', completed_at: new Date().toISOString() })
+      .eq('id', existing.id)
+      .eq('status', 'started')
+      .select('id')
+      .maybeSingle();
+    if (updateError) {
       throw new InternalServerErrorException('인증할 수 없습니다. 다시 시도해주세요.');
+    }
+    if (!updated) {
+      // 다른 요청이 먼저 완료 처리함
+      throw new ConflictException('이미 참여한 설문입니다.');
     }
 
     const { error: rewardError } = await this.db.from('rewards').insert({
-      participation_id: participation.id,
+      participation_id: existing.id,
       user_id: userId,
       amount: rewardAmount,
       status: 'pending',
     });
     if (rewardError) {
-      // 보상 생성 실패 시 참여도 롤백(보상 없는 참여 방지)
-      await this.db.from('participations').delete().eq('id', participation.id);
+      if (rewardError.code === '23505') {
+        // 이미 리워드 존재 → 이미 완료된 참여
+        throw new ConflictException('이미 참여한 설문입니다.');
+      }
+      // 리워드 실패 시 started로 롤백(보상 없는 완료 방지)
+      await this.db
+        .from('participations')
+        .update({ status: 'started', completed_at: null })
+        .eq('id', existing.id);
       throw new InternalServerErrorException('인증할 수 없습니다. 다시 시도해주세요.');
     }
 
-    return { participationId: participation.id };
+    return { participationId: existing.id };
   }
 
-  async exists(userId: string, surveyId: string): Promise<boolean> {
+  /** 본인 참여 1건 조회(없으면 null). */
+  private async findOwn(
+    userId: string,
+    surveyId: string,
+  ): Promise<{ id: string; status: string } | null> {
+    const { data } = await this.db
+      .from('participations')
+      .select('id, status')
+      .eq('user_id', userId)
+      .eq('survey_id', surveyId)
+      .maybeSingle();
+    return (data as { id: string; status: string }) ?? null;
+  }
+
+  /** 완료 여부(홈 '참여함' 표시용). started만 한 상태는 false. */
+  async hasCompleted(userId: string, surveyId: string): Promise<boolean> {
     const { data } = await this.db
       .from('participations')
       .select('id')
       .eq('user_id', userId)
       .eq('survey_id', surveyId)
+      .eq('status', 'completed')
       .maybeSingle();
     return !!data;
   }
 
-  /** 특정 설문 참여 여부 + 리워드 지급 상태. 미참여면 status는 null. */
+  /**
+   * 특정 설문 참여 여부 + 리워드 지급 상태.
+   * participated 는 **완료(completed)** 기준 — 시작만(started) 한 상태는 false.
+   */
   async getParticipationStatus(
     userId: string,
     surveyId: string,
   ): Promise<{ participated: boolean; rewardStatus: string | null }> {
     const { data } = await this.db
       .from('participations')
-      .select('id, reward:rewards(status)')
+      .select('status, reward:rewards(status)')
       .eq('user_id', userId)
       .eq('survey_id', surveyId)
       .maybeSingle();
@@ -89,7 +164,7 @@ export class ParticipationsRepository {
     const row = data as Record<string, unknown>;
     const reward = Array.isArray(row.reward) ? row.reward[0] : row.reward;
     return {
-      participated: true,
+      participated: row.status === 'completed',
       rewardStatus: (reward as { status: string } | null)?.status ?? null,
     };
   }
@@ -100,6 +175,7 @@ export class ParticipationsRepository {
       .from('participations')
       .select('id, completed_at, survey:surveys(title), reward:rewards(amount, status)')
       .eq('user_id', userId)
+      .eq('status', 'completed')
       .order('completed_at', { ascending: false });
 
     if (from) {
@@ -138,12 +214,13 @@ export class ParticipationsRepository {
     return { count: rows.length, amount };
   }
 
-  /** 완료 날짜(완료 시각) 전체. streak 계산용. */
+  /** 완료 날짜(완료 시각) 전체. streak 계산용. 완료된 참여만. */
   async getCompletedDates(userId: string): Promise<string[]> {
     const { data, error } = await this.db
       .from('participations')
       .select('completed_at')
       .eq('user_id', userId)
+      .eq('status', 'completed')
       .order('completed_at', { ascending: false });
     if (error) {
       throw new InternalServerErrorException('집계를 불러오지 못했습니다.');
