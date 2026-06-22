@@ -250,7 +250,7 @@ async function main() {
   r = await api('GET', '/accounts/banks', { token });
   check(
     'GET /accounts/banks 은행 목록',
-    r.status === 200 && Array.isArray(r.body) && r.body.includes('KB국민은행'),
+    r.status === 200 && Array.isArray(r.body) && r.body.includes('KB국민'),
     JSON.stringify(r),
   );
 
@@ -263,7 +263,7 @@ async function main() {
 
   r = await api('POST', '/accounts', {
     token,
-    body: { bank: 'KB국민은행', accountNo: '33330000001234', holderName: '김가온' },
+    body: { bank: 'KB국민', accountNo: '33330000001234', holderName: '김가온' },
   });
   const acc1 = r.body;
   check(
@@ -275,7 +275,7 @@ async function main() {
 
   r = await api('POST', '/accounts', {
     token,
-    body: { bank: '신한은행', accountNo: '110123456789', holderName: '김가온' },
+    body: { bank: '신한', accountNo: '110123456789', holderName: '김가온' },
   });
   const acc2 = r.body;
   check(
@@ -298,7 +298,7 @@ async function main() {
 
   r = await api('POST', '/accounts', {
     token,
-    body: { bank: 'KB국민은행', accountNo: '33330000001234', holderName: '김가온' },
+    body: { bank: 'KB국민', accountNo: '33330000001234', holderName: '김가온' },
   });
   check('POST /accounts 중복 계좌 409', r.status === 409, JSON.stringify(r));
 
@@ -322,7 +322,7 @@ async function main() {
     JSON.stringify(r),
   );
 
-  r = await api('PATCH', `/accounts/${NONEXISTENT_UUID}`, { token, body: { bank: '신한은행' } });
+  r = await api('PATCH', `/accounts/${NONEXISTENT_UUID}`, { token, body: { bank: '신한' } });
   check('PATCH 없는 계좌 404', r.status === 404, JSON.stringify(r));
 
   r = await api('DELETE', `/accounts/${acc2.id}`, { token }); // 대표 삭제 → 남은 1개 자동 대표
