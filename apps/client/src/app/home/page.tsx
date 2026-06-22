@@ -36,11 +36,13 @@ const HomePage = () => {
       />
 
       <TodaySurvey
+        id={data.todaySurvey.id}
         title={data.todaySurvey.title}
         rewardAmount={data.todaySurvey.rewardAmount}
         estMinutes={data.todaySurvey.estMinutes}
         url={data.todaySurvey.externalUrl}
         participated={data.todaySurvey.participated}
+        accountRegistered={data.accountRegistered}
         rewardStatus={data.todaySurvey.rewardStatus}
       />
 
