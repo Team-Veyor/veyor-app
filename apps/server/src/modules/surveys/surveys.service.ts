@@ -1,4 +1,5 @@
-import { GoneException, Injectable, NotFoundException } from '@nestjs/common';
+import { GoneException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { AccountsService } from '../accounts/accounts.service';
 import { ParticipationsService } from '../participations/participations.service';
 import { type SurveyRow, SurveysRepository } from './surveys.repository';
 
@@ -20,6 +21,7 @@ export class SurveysService {
   constructor(
     private readonly repo: SurveysRepository,
     private readonly participations: ParticipationsService,
+    private readonly accounts: AccountsService,
   ) {}
 
   private matchesTarget(
@@ -95,6 +97,10 @@ export class SurveysService {
       new Date(survey.opens_at).getTime() <= now.getTime();
     if (!open) {
       throw new NotFoundException('참여할 수 없는 설문입니다.');
+    }
+    // 대표계좌가 없으면 리워드 지급 대상이 될 수 없으므로 시작 단계에서 차단(428).
+    if (!(await this.accounts.hasAny(userId))) {
+      throw new HttpException('대표계좌를 먼저 등록해주세요.', 428);
     }
     return this.participations.start(userId, surveyId);
   }

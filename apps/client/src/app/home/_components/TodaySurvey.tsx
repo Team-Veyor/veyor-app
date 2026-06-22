@@ -7,6 +7,7 @@ import type { RewardStatus } from '@/app/home/types/types';
 import CashIcon from '@/assets/icons/CashIcon';
 import Button from '@/components/Button/Button';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { ApiError } from '@/lib/api';
 
 interface TodaySurveyProps {
   id: string;
@@ -49,7 +50,13 @@ const TodaySurvey = ({
       onSuccess: () => {
         window.open(url, '_blank', 'noopener,noreferrer');
       },
-      onError: () => {
+      onError: (error) => {
+        // 서버 검증(428 Precondition Required): 대표계좌 미등록 → 계좌 등록으로 유도
+        if (error instanceof ApiError && error.status === 428) {
+          showToast({ type: 'warning', message: '대표계좌를 먼저 등록해주세요.' });
+          router.push('/account/new');
+          return;
+        }
         showToast({
           type: 'warning',
           message: '설문을 시작할 수 없어요. 잠시 후 다시 시도해주세요.',
