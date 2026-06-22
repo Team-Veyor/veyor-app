@@ -1,14 +1,24 @@
 import { BadRequestException } from '@nestjs/common';
 
-/** 선택 가능한 직업군. surveys.target_occupation 과 동일한 집합. */
+/**
+ * 선택 가능한 직업군 코드(서버 저장·전송 값). surveys.target_occupation 과 동일한 집합.
+ * 표시 라벨(한글)은 client/admin에서 매핑한다.
+ *   school_student=중·고등학생, college_student=대학생, graduate_student=대학원생,
+ *   job_seeker=취업 준비생, office_worker=직장인, freelancer=프리랜서,
+ *   self_employed=자영업자, homemaker=주부, unemployed=무직, retired=은퇴, other=기타
+ */
 export const OCCUPATIONS = [
-  '중학생',
-  '고등학생',
-  '대학생',
-  '직장인',
-  '무직',
-  '주부',
-  '기타',
+  'school_student',
+  'college_student',
+  'graduate_student',
+  'job_seeker',
+  'office_worker',
+  'freelancer',
+  'self_employed',
+  'homemaker',
+  'unemployed',
+  'retired',
+  'other',
 ] as const;
 export type Occupation = (typeof OCCUPATIONS)[number];
 
