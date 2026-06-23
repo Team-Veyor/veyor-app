@@ -1,4 +1,5 @@
 import { GoneException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import type { SurveyCompleteFailureReason } from '@veyor/shared';
 import { AccountsService } from '../accounts/accounts.service';
 import { ParticipationsService } from '../participations/participations.service';
 import { type SurveyRow, SurveysRepository } from './surveys.repository';
@@ -111,10 +112,18 @@ export class SurveysService {
     if (!survey) {
       throw new NotFoundException('설문을 찾을 수 없습니다.');
     }
+    // 만료는 참여 이력보다 먼저 판정한다(만료는 공개 정보라 노출 무해). 이미 완료한 사용자가 만료 설문을
+    // 재인증하면 already_participated 대신 survey_expired를 받지만 둘 다 사실이며, 만료 우선이 의도된 동작이다.
     if (survey.expires_at && new Date(survey.expires_at).getTime() < now.getTime()) {
-      throw new GoneException('참여 기간이 지난 설문입니다.');
+      throw new GoneException({
+        code: 'survey_expired' satisfies SurveyCompleteFailureReason,
+        message: '참여 기간이 지난 설문입니다.',
+      });
     }
-    // start 기록 게이트·중복 참여는 participations 레이어에서 처리
-    return this.participations.complete(userId, surveyId, survey.reward_amount);
+    // 모집 정원(유료 모집 인원). null이면 무제한. 마감 판정은 participations 레이어에서
+    // start 기록·중복 참여 게이트를 통과한 뒤 수행한다(비참여자에게 마감 정보 미노출).
+    const recruitLimit = await this.repo.getRecruitLimit(surveyId);
+    // start 기록 게이트·중복 참여·정원 마감은 participations 레이어에서 처리
+    return this.participations.complete(userId, surveyId, survey.reward_amount, recruitLimit);
   }
 }

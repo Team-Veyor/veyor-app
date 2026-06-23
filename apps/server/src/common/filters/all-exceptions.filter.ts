@@ -13,6 +13,8 @@ type ErrorBody = {
   path: string;
   timestamp: string;
   message: unknown;
+  /** 머신리더블 사유 코드(예외 payload에 code가 있을 때만). 클라이언트 분기용. */
+  code?: string;
 };
 
 /**
@@ -33,10 +35,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const status =
       exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const message =
-      exception instanceof HttpException
-        ? exception.getResponse()
-        : '내부 서버 오류가 발생했습니다.';
+    const { message, code } = this.extract(exception);
 
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.logger.error(
@@ -50,7 +49,31 @@ export class AllExceptionsFilter implements ExceptionFilter {
       path: request.url,
       timestamp: new Date().toISOString(),
       message,
+      ...(code ? { code } : {}),
     };
     response.status(status).json(body);
+  }
+
+  /**
+   * 예외에서 사용자 메시지와 사유 코드를 추출한다.
+   * - `new HttpException('msg', status)` → message 문자열
+   * - `new XxxException('msg')`(빌트인) → getResponse()가 { message, error, statusCode } 객체 → message만 뽑음
+   * - `new XxxException({ code, message })` → 사유 코드와 메시지를 함께 노출
+   */
+  private extract(exception: unknown): { message: unknown; code?: string } {
+    if (!(exception instanceof HttpException)) {
+      return { message: '내부 서버 오류가 발생했습니다.' };
+    }
+    const res = exception.getResponse();
+    if (typeof res === 'string') {
+      return { message: res };
+    }
+    if (res && typeof res === 'object') {
+      const obj = res as Record<string, unknown>;
+      const code = typeof obj.code === 'string' ? obj.code : undefined;
+      const message = 'message' in obj ? obj.message : res;
+      return { message, code };
+    }
+    return { message: '요청을 처리할 수 없습니다.' };
   }
 }

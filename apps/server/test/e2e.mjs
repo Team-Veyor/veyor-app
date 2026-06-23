@@ -347,12 +347,20 @@ async function main() {
   r = await api('POST', `/surveys/${draftSurveyId}/start`, { token });
   check('미게시 설문 시작 차단 404', r.status === 404, JSON.stringify(r));
 
-  // start 기록 없이 complete 직접 호출 → 차단(일반 메시지)
+  // start 기록 없이 complete 직접 호출 → 차단(일반 메시지 + tracking_param_lost 코드)
   r = await api('POST', `/surveys/${maleSurveyId}/complete`, { token });
-  check('start 없이 완료 차단 400', r.status === 400, JSON.stringify(r));
+  check(
+    'start 없이 완료 차단 400 + tracking_param_lost',
+    r.status === 400 && r.body?.code === 'tracking_param_lost',
+    JSON.stringify(r),
+  );
 
   r = await api('POST', `/surveys/${expiredSurveyId}/complete`, { token });
-  check('만료 설문 완료 410', r.status === 410, JSON.stringify(r));
+  check(
+    '만료 설문 완료 410 + survey_expired',
+    r.status === 410 && r.body?.code === 'survey_expired',
+    JSON.stringify(r),
+  );
 
   r = await api('POST', `/surveys/${NONEXISTENT_UUID}/complete`, { token });
   check('없는 설문 완료 404', r.status === 404, JSON.stringify(r));
@@ -362,7 +370,11 @@ async function main() {
 
   // 참여 시작 (외부 설문 이동 직전)
   r = await api('POST', `/surveys/${todaySurveyId}/start`, { token });
-  check('설문 시작 201 + started', r.status === 201 && r.body?.status === 'started', JSON.stringify(r));
+  check(
+    '설문 시작 201 + started',
+    r.status === 201 && r.body?.status === 'started',
+    JSON.stringify(r),
+  );
 
   // 시작 멱등 — 재호출해도 중복 생성 안 함
   r = await api('POST', `/surveys/${todaySurveyId}/start`, { token });
@@ -381,7 +393,11 @@ async function main() {
   );
 
   r = await api('POST', `/surveys/${todaySurveyId}/complete`, { token });
-  check('중복 참여 409', r.status === 409, JSON.stringify(r));
+  check(
+    '중복 참여 409 + already_participated',
+    r.status === 409 && r.body?.code === 'already_participated',
+    JSON.stringify(r),
+  );
 
   r = await api('GET', '/surveys/today', { token });
   check('완료 후 participated true', r.body?.participated === true, JSON.stringify(r.body));

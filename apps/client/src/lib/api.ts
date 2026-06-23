@@ -10,15 +10,19 @@ const JSON_HEADERS = {
 
 type ApiErrorBody = {
   message?: unknown;
+  code?: unknown;
 };
 
 export class ApiError extends Error {
   status: number;
+  /** 서버가 내려준 머신리더블 사유 코드(있을 때만). 상태코드 대신 안정적인 분기 기준. */
+  code?: string;
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, code?: string) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
+    this.code = code;
   }
 }
 
@@ -96,6 +100,7 @@ export const apiFetch = async <T>(path: string, options: Options = {}): Promise<
     throw new ApiError(
       response.status,
       typeof errorBody.message === 'string' ? errorBody.message : `API ${response.status}`,
+      typeof errorBody.code === 'string' ? errorBody.code : undefined,
     );
   }
 

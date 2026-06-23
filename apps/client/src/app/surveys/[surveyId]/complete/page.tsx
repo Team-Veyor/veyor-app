@@ -1,5 +1,6 @@
 'use client';
 
+import type { SurveyCompleteFailureReason } from '@veyor/shared';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import SurveyCompleteBottomSheet from '@/app/surveys/[surveyId]/complete/_components/SurveyCompleteBottomSheet';
@@ -12,9 +13,13 @@ import { ApiError } from '@/lib/api';
 const CHAT_SUPPORT_URL = '#';
 const HOME_REDIRECT_DELAY_MS = 1800;
 
-const COMPLETE_ERROR_TOAST_MESSAGES: Record<number, string> = {
-  409: '이미 참여한 설문입니다.',
-  410: '참여 기간이 지난 설문입니다.',
+// 인증 실패 사유 코드별 사용자 안내.
+// tracking_param_lost('참여하기' 미클릭 후 직접 접속)는 구체 사유를 숨기고 일반 문구만 노출한다.
+const COMPLETE_ERROR_MESSAGES: Record<SurveyCompleteFailureReason, string> = {
+  survey_expired: '참여 기간이 지난 설문입니다.',
+  already_participated: '이미 참여한 설문입니다.',
+  target_response_count: '모집이 마감된 설문입니다.',
+  tracking_param_lost: '인증을 진행할 수 없습니다.',
 };
 
 const SurveyCompletePage = () => {
@@ -27,9 +32,10 @@ const SurveyCompletePage = () => {
   const { showToast } = useToast();
 
   const completeError = completeSurveyMutation.error;
+  // 상태코드가 아닌 서버 사유 코드(code)로 분기한다. 알 수 없는 코드/코드 없음은 fallback 모달로 흐른다.
   const completeErrorToastMessage =
-    completeError instanceof ApiError
-      ? COMPLETE_ERROR_TOAST_MESSAGES[completeError.status]
+    completeError instanceof ApiError && completeError.code
+      ? COMPLETE_ERROR_MESSAGES[completeError.code as SurveyCompleteFailureReason]
       : undefined;
 
   useEffect(() => {
