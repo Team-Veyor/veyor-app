@@ -67,6 +67,13 @@ const Info = () => {
   const handleAgreementSubmit = (agreedIds: AgreementId[]) => {
     if (!form.birthYear || !form.gender || !form.occupation) return;
 
+    // 필수 약관 재검증: 버튼 비활성(UI 상태)에만 의존하지 않고 제출 시점에 한 번 더 막는다.
+    const agreedSet = new Set(agreedIds);
+    const allRequiredAgreed = AGREEMENT_ITEMS.filter((item) => item.required).every((item) =>
+      agreedSet.has(item.id),
+    );
+    if (!allRequiredAgreed) return;
+
     onboardingMutation.mutate(
       {
         birthYear: form.birthYear,
