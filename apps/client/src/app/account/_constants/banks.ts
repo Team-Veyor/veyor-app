@@ -8,6 +8,8 @@ const FALLBACK_ICON = '/dummy_bank.png';
 
 const bankIcon = (file: string) => `/banks/${file}.svg`;
 
+const normalizeBankValue = (value: string) => value.toLowerCase().replace(/\s/g, '');
+
 const BANK_LIST: Record<string, { label: string; icon?: string }> = {
   NH농협은행: { label: 'NH농협', icon: 'NH농협' },
   KB국민은행: { label: 'KB국민', icon: 'KB국민' },
@@ -32,8 +34,20 @@ const BANK_LIST: Record<string, { label: string; icon?: string }> = {
   수협은행: { label: '수협', icon: '수협' },
   KDB산업은행: { label: 'KDB산업', icon: 'KDB산업' },
   SBI저축은행: { label: 'sbi저축', icon: 'sbi저축' },
-  저축은행: { label: '저축은행' },
-  산림조합: { label: '산림조합' },
+  저축은행: { label: '저축은행', icon: '저축' },
+  산림조합: { label: '산림조합', icon: '산림' },
+};
+
+const findBankPresentation = (value: string) => {
+  const direct = BANK_LIST[value];
+  if (direct) return direct;
+
+  const normalizedValue = normalizeBankValue(value);
+
+  return Object.entries(BANK_LIST).find(([bank, presentation]) => {
+    const candidates = [bank, presentation.label, bank.replace(/은행$/, '')];
+    return candidates.some((candidate) => normalizeBankValue(candidate) === normalizedValue);
+  })?.[1];
 };
 
 /**
@@ -41,7 +55,7 @@ const BANK_LIST: Record<string, { label: string; icon?: string }> = {
  * 매핑에 없는 은행명이 와도 은행명을 그대로 라벨로, fallback 아이콘을 써서 깨지지 않습니다.
  */
 export const getBankLogo = (value: string): BankLogo => {
-  const presentation = BANK_LIST[value];
+  const presentation = findBankPresentation(value);
 
   return {
     value,
