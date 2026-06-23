@@ -1,17 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { type ClipboardEvent, useState } from 'react';
 import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
 import { getBankLogo } from '@/app/account/_constants/banks';
 import useAccountForm from '@/app/account/_hooks/useAccountForm';
 import useBanks from '@/app/account/_hooks/useBanks';
 import useClipboardAccount from '@/app/account/_hooks/useClipboardAccount';
 import type { CreateAccountRequest } from '@/app/account/_types/types';
-import ChevronDownIcon from '@/assets/icons/ChevronDownIcon';
 import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
-import { cn } from '@/lib/utils';
+import Select from '@/components/Select/Select';
 
 interface AccountFormBaseProps {
   initialForm?: Partial<CreateAccountRequest>;
@@ -34,18 +33,25 @@ type AccountFormProps = CreateAccountFormProps | EditAccountFormProps;
 const AccountForm = (props: AccountFormProps) => {
   const { initialForm, accountNoPlaceholder = '계좌번호', isSubmitting = false } = props;
   const mode = props.mode ?? 'create';
-
-  const [isBankSheetOpen, setIsBankSheetOpen] = useState(false);
+  const [isAccountNoBlurred, setIsAccountNoBlurred] = useState(false);
 
   const { data: banks = [] } = useBanks();
-  const { parsed, clear } = useClipboardAccount(banks);
+  const { parsed, clear, parseText, readFromUserGesture } = useClipboardAccount(banks);
   const { form, setField, handleFieldChange, prefill, changes, canSave } = useAccountForm({
     mode,
     initialForm,
   });
 
-  const selectedBankLabel = form.bank ? getBankLogo(form.bank).label : null;
-  const isSaveDisabled = !canSave || isSubmitting;
+  const bankOptions = banks.map((bank) => ({
+    value: bank,
+    label: getBankLogo(bank).label,
+  }));
+  const hasAccountNoError = /\D/.test(form.accountNo);
+  const showAccountNoError = isAccountNoBlurred && hasAccountNoError;
+  const accountNoHelperText = showAccountNoError
+    ? '계좌번호는 숫자만 입력 가능합니다.'
+    : `'-' 없이 숫자만 입력`;
+  const isSaveDisabled = !canSave || hasAccountNoError || isSubmitting;
 
   const handleSave = () => {
     if (isSaveDisabled) return;
@@ -57,6 +63,14 @@ const AccountForm = (props: AccountFormProps) => {
     props.onSubmit(form);
   };
 
+  const handleClipboardGesture = () => {
+    void readFromUserGesture();
+  };
+
+  const handleClipboardPaste = (event: ClipboardEvent<HTMLInputElement>) => {
+    parseText(event.clipboardData.getData('text'));
+  };
+
   const handleApplyClipboard = () => {
     if (parsed) prefill(parsed);
     clear();
@@ -66,46 +80,44 @@ const AccountForm = (props: AccountFormProps) => {
     <>
       <div className='flex flex-col gap-16'>
         <Input
+          label='예금주명'
           placeholder='예금주명'
           value={form.holderName}
+          onPointerDown={handleClipboardGesture}
+          onPaste={handleClipboardPaste}
           onChange={handleFieldChange('holderName')}
         />
         <Input
+          label='계좌번호'
+          inputMode='numeric'
+          pattern='[0-9]*'
+          helperText={accountNoHelperText}
+          error={showAccountNoError}
           placeholder={accountNoPlaceholder}
           value={form.accountNo}
+          onPointerDown={handleClipboardGesture}
+          onPaste={handleClipboardPaste}
+          onBlur={() => setIsAccountNoBlurred(true)}
           onChange={handleFieldChange('accountNo')}
         />
-        <button
-          type='button'
-          onClick={() => setIsBankSheetOpen(true)}
-          className={cn(
-            'flex w-full items-center justify-between gap-12 rounded-16 border border-gray-200 bg-white p-16 transition-colors',
-            isBankSheetOpen && 'border-gray-900',
+        <Select
+          label='은행'
+          placeholder='은행'
+          options={bankOptions}
+          value={form.bank}
+          renderBottomSheet={(close) => (
+            <BankSelectBottomSheet
+              banks={banks}
+              selectedBank={form.bank}
+              onConfirm={(bank) => {
+                setField('bank', bank);
+                close();
+              }}
+              onClose={close}
+            />
           )}
-        >
-          <span
-            className={cn(
-              'body-large-strong text-left',
-              selectedBankLabel ? 'text-gray-900' : 'text-gray-500',
-            )}
-          >
-            {selectedBankLabel ?? '은행'}
-          </span>
-          <ChevronDownIcon className='size-24 shrink-0 text-gray-500' />
-        </button>
-      </div>
-
-      {isBankSheetOpen && (
-        <BankSelectBottomSheet
-          banks={banks}
-          selectedBank={form.bank}
-          onConfirm={(bank) => {
-            setField('bank', bank);
-            setIsBankSheetOpen(false);
-          }}
-          onClose={() => setIsBankSheetOpen(false)}
         />
-      )}
+      </div>
 
       <Button
         variant='secondary'

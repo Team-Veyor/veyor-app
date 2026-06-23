@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import ChevronDownIcon from '@/assets/icons/ChevronDownIcon';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import List from '@/components/List/List';
@@ -36,6 +36,8 @@ interface SelectProps {
   disabled?: boolean;
   /** 외곽 트리거 `<button>`에 적용할 Tailwind 클래스 */
   className?: string;
+  /** 기본 옵션 리스트 대신 표시할 커스텀 BottomSheet */
+  renderBottomSheet?: (close: () => void) => ReactNode;
 }
 
 /**
@@ -54,6 +56,7 @@ const Select = ({
   description,
   disabled,
   className,
+  renderBottomSheet,
 }: SelectProps) => {
   const [open, setOpen] = useState(false);
 
@@ -110,37 +113,40 @@ const Select = ({
         )}
       </div>
 
-      {open && (
-        <BottomSheet onClose={() => setOpen(false)}>
-          <div className='flex flex-col gap-12'>
-            {(title || description) && (
-              <div className='flex flex-col gap-8'>
-                {title && <h2 className='label-large text-gray-900'>{title}</h2>}
-                {description && <p className='label-medium text-text-tertiary'>{description}</p>}
-              </div>
-            )}
-            <List className='bg-transparent px-0 divide-y-0'>
-              {options.map((option) => (
-                <List.Item
-                  key={option.value + option.label}
-                  onClick={() => handleSelect(option.value)}
-                >
-                  <List.Item.Content>
-                    <span
-                      className={cn(
-                        'body-large-strong',
-                        option.value === value ? 'text-gray-900' : 'text-gray-600',
-                      )}
-                    >
-                      {option.label}
-                    </span>
-                  </List.Item.Content>
-                </List.Item>
-              ))}
-            </List>
-          </div>
-        </BottomSheet>
-      )}
+      {open &&
+        (renderBottomSheet ? (
+          renderBottomSheet(() => setOpen(false))
+        ) : (
+          <BottomSheet onClose={() => setOpen(false)}>
+            <div className='flex flex-col gap-12'>
+              {(title || description) && (
+                <div className='flex flex-col gap-8'>
+                  {title && <h2 className='label-large text-gray-900'>{title}</h2>}
+                  {description && <p className='label-medium text-text-tertiary'>{description}</p>}
+                </div>
+              )}
+              <List className='bg-transparent px-0 divide-y-0'>
+                {options.map((option) => (
+                  <List.Item
+                    key={option.value + option.label}
+                    onClick={() => handleSelect(option.value)}
+                  >
+                    <List.Item.Content>
+                      <span
+                        className={cn(
+                          'body-large-strong',
+                          option.value === value ? 'text-gray-900' : 'text-gray-600',
+                        )}
+                      >
+                        {option.label}
+                      </span>
+                    </List.Item.Content>
+                  </List.Item>
+                ))}
+              </List>
+            </div>
+          </BottomSheet>
+        ))}
     </>
   );
 };
