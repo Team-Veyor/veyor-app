@@ -347,11 +347,11 @@ async function main() {
   r = await api('POST', `/surveys/${draftSurveyId}/start`, { token });
   check('미게시 설문 시작 차단 404', r.status === 404, JSON.stringify(r));
 
-  // start 기록 없이 complete 직접 호출 → 차단(일반 메시지 + tracking_param_lost 코드)
+  // start 기록 없이 complete 직접 호출 → 차단(일반 메시지 + complete_unavailable 코드)
   r = await api('POST', `/surveys/${maleSurveyId}/complete`, { token });
   check(
-    'start 없이 완료 차단 400 + tracking_param_lost',
-    r.status === 400 && r.body?.code === 'tracking_param_lost',
+    'start 없이 완료 차단 400 + complete_unavailable',
+    r.status === 400 && r.body?.code === 'complete_unavailable',
     JSON.stringify(r),
   );
 

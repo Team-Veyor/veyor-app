@@ -64,7 +64,7 @@ export class ParticipationsRepository {
 
   /**
    * 완료 인증: start 기록(started)을 completed로 전이 + 리워드(pending) 생성.
-   * - start 기록 없음 → BadRequest(400) tracking_param_lost (직접 호출 차단, 일반 메시지)
+   * - start 기록 없음 → BadRequest(400) complete_unavailable (직접 호출 차단, 일반 메시지)
    * - 이미 completed → Conflict(409) already_participated
    * - 모집 정원(recruitLimit) 마감 → Conflict(409) target_response_count
    *   (정원 검사는 start 게이트·중복 게이트 통과 뒤에 두어, 비참여자/중복자에게 마감 정보를 노출하지 않는다)
@@ -77,9 +77,9 @@ export class ParticipationsRepository {
   ): Promise<{ participationId: string }> {
     const existing = await this.findOwn(userId, surveyId);
     if (!existing) {
-      // 구체 사유는 사용자에게 숨기되, 코드로는 식별 가능하게 한다.
+      // 사유(start 기록 없음)를 사용자에게 숨긴다. 코드명도 중립(complete_unavailable)이라 노출돼도 단서가 안 된다.
       throw new BadRequestException({
-        code: 'tracking_param_lost' satisfies SurveyCompleteFailureReason,
+        code: 'complete_unavailable' satisfies SurveyCompleteFailureReason,
         message: '설문을 완료할 수 없습니다.',
       });
     }

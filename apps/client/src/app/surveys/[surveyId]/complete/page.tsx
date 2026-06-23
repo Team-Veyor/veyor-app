@@ -14,12 +14,12 @@ const CHAT_SUPPORT_URL = '#';
 const HOME_REDIRECT_DELAY_MS = 1800;
 
 // 인증 실패 사유 코드별 사용자 안내.
-// tracking_param_lost('참여하기' 미클릭 후 직접 접속)는 구체 사유를 숨기고 일반 문구만 노출한다.
+// complete_unavailable('참여하기' 미클릭 후 직접 접속)는 구체 사유를 숨기고 일반 문구만 노출한다.
 const COMPLETE_ERROR_MESSAGES: Record<SurveyCompleteFailureReason, string> = {
   survey_expired: '참여 기간이 지난 설문입니다.',
   already_participated: '이미 참여한 설문입니다.',
   target_response_count: '모집이 마감된 설문입니다.',
-  tracking_param_lost: '인증을 진행할 수 없습니다.',
+  complete_unavailable: '인증을 진행할 수 없습니다.',
 };
 
 const SurveyCompletePage = () => {
