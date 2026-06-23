@@ -3,6 +3,7 @@
 import { type ClipboardEvent, useState } from 'react';
 import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
 import { getBankLogo } from '@/app/account/_constants/banks';
+import { ACCOUNT_NO_HELPER_TEXT, ERROR_MESSAGE } from '@/app/account/_constants/constants';
 import useAccountForm from '@/app/account/_hooks/useAccountForm';
 import useBanks from '@/app/account/_hooks/useBanks';
 import useClipboardAccount from '@/app/account/_hooks/useClipboardAccount';
@@ -30,10 +31,14 @@ interface EditAccountFormProps extends AccountFormBaseProps {
 
 type AccountFormProps = CreateAccountFormProps | EditAccountFormProps;
 
-const AccountForm = (props: AccountFormProps) => {
-  const { initialForm, accountNoPlaceholder = '계좌번호', isSubmitting = false } = props;
-  const mode = props.mode ?? 'create';
-  const [isAccountNoBlurred, setIsAccountNoBlurred] = useState(false);
+const AccountForm = ({
+  initialForm,
+  accountNoPlaceholder = '계좌번호',
+  isSubmitting = false,
+  mode = 'create',
+  onSubmit,
+}: AccountFormProps) => {
+  const [isAccountNoErrorVisible, setIsAccountNoErrorVisible] = useState(false);
 
   const { data: banks = [] } = useBanks();
   const { parsed, clear, parseText, readFromUserGesture } = useClipboardAccount(banks);
@@ -46,21 +51,21 @@ const AccountForm = (props: AccountFormProps) => {
     value: bank,
     label: getBankLogo(bank).label,
   }));
+
   const hasAccountNoError = /\D/.test(form.accountNo);
-  const showAccountNoError = isAccountNoBlurred && hasAccountNoError;
-  const accountNoHelperText = showAccountNoError
-    ? '계좌번호는 숫자만 입력 가능합니다.'
-    : `'-' 없이 숫자만 입력`;
+  const accountNoHelperText = isAccountNoErrorVisible
+    ? ERROR_MESSAGE.accountNo
+    : ACCOUNT_NO_HELPER_TEXT;
   const isSaveDisabled = !canSave || hasAccountNoError || isSubmitting;
 
   const handleSave = () => {
     if (isSaveDisabled) return;
 
-    if (props.mode === 'edit') {
-      props.onSubmit(changes);
+    if (mode === 'edit') {
+      (onSubmit as EditAccountFormProps['onSubmit'])(changes);
       return;
     }
-    props.onSubmit(form);
+    (onSubmit as CreateAccountFormProps['onSubmit'])(form);
   };
 
   const handleClipboardGesture = () => {
@@ -92,12 +97,12 @@ const AccountForm = (props: AccountFormProps) => {
           inputMode='numeric'
           pattern='[0-9]*'
           helperText={accountNoHelperText}
-          error={showAccountNoError}
+          error={isAccountNoErrorVisible}
           placeholder={accountNoPlaceholder}
           value={form.accountNo}
           onPointerDown={handleClipboardGesture}
           onPaste={handleClipboardPaste}
-          onBlur={() => setIsAccountNoBlurred(true)}
+          onBlur={(event) => setIsAccountNoErrorVisible(/\D/.test(event.currentTarget.value))}
           onChange={handleFieldChange('accountNo')}
         />
         <Select
