@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import AccountForm from '@/app/account/_components/AccountForm';
 import useUpdateAccountMutation from '@/app/account/_hooks/useUpdateAccountMutation';
-import type { Account, CreateAccountRequest } from '@/app/account/_types/types';
+import type { Account, UpdateAccountRequest } from '@/app/account/_types/types';
 import useAccounts from '@/app/user/_hooks/useAccounts';
 import { useToast } from '@/components/Toast/ToastProvider';
 
@@ -13,8 +13,8 @@ const EditAccountForm = ({ account }: { account: Account }) => {
 
   const { mutate, isPending } = useUpdateAccountMutation(account.id);
 
-  const handleSubmit = (form: CreateAccountRequest) => {
-    mutate(form, {
+  const handleSubmit = (changes: UpdateAccountRequest) => {
+    mutate(changes, {
       onSuccess: () => {
         showToast({
           type: 'success',
@@ -30,6 +30,7 @@ const EditAccountForm = ({ account }: { account: Account }) => {
 
   return (
     <AccountForm
+      mode='edit'
       initialForm={{ bank: account.bank, holderName: account.holderName }}
       accountNoPlaceholder={account.accountNoMasked}
       isSubmitting={isPending}

@@ -7,7 +7,7 @@ export type CreateAccountRequest = {
   holderName: string;
 };
 
-export type UpdateAccountRequest = CreateAccountRequest;
+export type UpdateAccountRequest = Partial<CreateAccountRequest>;
 
 export type Account = {
   id: string;

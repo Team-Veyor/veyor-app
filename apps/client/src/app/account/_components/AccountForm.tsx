@@ -13,32 +13,48 @@ import Input from '@/components/Input/Input';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { cn } from '@/lib/utils';
 
-interface AccountFormProps {
+interface AccountFormBaseProps {
   initialForm?: Partial<CreateAccountRequest>;
   accountNoPlaceholder?: string;
   isSubmitting?: boolean;
+}
+
+interface CreateAccountFormProps extends AccountFormBaseProps {
+  mode?: 'create';
   onSubmit: (form: CreateAccountRequest) => void;
 }
 
-const AccountForm = ({
-  initialForm,
-  accountNoPlaceholder = '계좌번호',
-  isSubmitting = false,
-  onSubmit,
-}: AccountFormProps) => {
+interface EditAccountFormProps extends AccountFormBaseProps {
+  mode: 'edit';
+  onSubmit: (changes: Partial<CreateAccountRequest>) => void;
+}
+
+type AccountFormProps = CreateAccountFormProps | EditAccountFormProps;
+
+const AccountForm = (props: AccountFormProps) => {
+  const { initialForm, accountNoPlaceholder = '계좌번호', isSubmitting = false } = props;
+  const mode = props.mode ?? 'create';
+
   const [isBankSheetOpen, setIsBankSheetOpen] = useState(false);
 
   const { data: banks = [] } = useBanks();
   const { parsed, clear } = useClipboardAccount(banks);
-  const { form, setBank, handleHolderNameChange, handleAccountNoChange, prefill, isFormFilled } =
-    useAccountForm(initialForm);
+  const { form, setField, handleFieldChange, prefill, changes, canSave } = useAccountForm({
+    mode,
+    initialForm,
+  });
 
   const selectedBankLabel = form.bank ? getBankLogo(form.bank).label : null;
+  const isSaveDisabled = !canSave || isSubmitting;
 
   const handleSave = () => {
-    if (!isFormFilled || isSubmitting) return;
+    if (isSaveDisabled) return;
 
-    onSubmit(form);
+    if (props.mode === 'edit') {
+      props.onSubmit(changes);
+      return;
+    }
+    props.onSubmit(form);
   };
 
   const handleApplyClipboard = () => {
@@ -49,11 +65,15 @@ const AccountForm = ({
   return (
     <>
       <div className='flex flex-col gap-16'>
-        <Input placeholder='예금주명' value={form.holderName} onChange={handleHolderNameChange} />
+        <Input
+          placeholder='예금주명'
+          value={form.holderName}
+          onChange={handleFieldChange('holderName')}
+        />
         <Input
           placeholder={accountNoPlaceholder}
           value={form.accountNo}
-          onChange={handleAccountNoChange}
+          onChange={handleFieldChange('accountNo')}
         />
         <button
           type='button'
@@ -80,19 +100,20 @@ const AccountForm = ({
           banks={banks}
           selectedBank={form.bank}
           onConfirm={(bank) => {
-            setBank(bank);
+            setField('bank', bank);
             setIsBankSheetOpen(false);
           }}
           onClose={() => setIsBankSheetOpen(false)}
         />
       )}
+
       <Button
         variant='secondary'
         theme='dark'
         size='large'
         className='mt-auto'
         onClick={handleSave}
-        disabled={!isFormFilled || isSubmitting}
+        disabled={isSaveDisabled}
       >
         저장
       </Button>
