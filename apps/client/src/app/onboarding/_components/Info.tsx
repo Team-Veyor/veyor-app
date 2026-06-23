@@ -39,13 +39,15 @@ const INITIAL_FORM: OnboardingForm = {
 const Info = () => {
   const [form, setForm] = useState<OnboardingForm>(INITIAL_FORM);
   const [birthYearInput, setBirthYearInput] = useState('');
+  const [isBirthYearFocused, setIsBirthYearFocused] = useState(false);
   const [isAgreeBottomSheetOpen, setIsAgreeBottomSheetOpen] = useState(false);
 
   const [step, setStep] = useState<OnboardingStep>('info');
 
   const onboardingMutation = useOnboardingMutation();
 
-  const birthYearError = birthYearInput.length > 0 ? getBirthYearError(birthYearInput) : null;
+  const shouldValidateBirthYear = birthYearInput.length > 0 && !isBirthYearFocused;
+  const birthYearError = shouldValidateBirthYear ? getBirthYearError(birthYearInput) : null;
   const birthYearHelperText = BIRTH_YEAR_HELPER_TEXT[birthYearError ?? 'default'];
   const isNextButtonDisabled =
     !form.gender || !form.birthYear || !form.occupation || onboardingMutation.isPending;
@@ -140,6 +142,8 @@ const Info = () => {
         helperText={birthYearHelperText}
         error={birthYearError !== null}
         value={birthYearInput}
+        onFocus={() => setIsBirthYearFocused(true)}
+        onBlur={() => setIsBirthYearFocused(false)}
         onChange={handleBirthYearChange}
       />
 
