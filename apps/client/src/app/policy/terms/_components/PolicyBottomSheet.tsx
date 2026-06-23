@@ -33,9 +33,9 @@ const PolicyBottomSheet = ({
     >
       <div className='flex flex-col gap-12'>
         {description && (
-          <p className='body-medium whitespace-pre-line text-gray-500'>{description}</p>
+          <p className='body-medium whitespace-pre-line text-text-tertiary'>{description}</p>
         )}
-        <div className='body-medium whitespace-pre-line text-gray-600'>{children}</div>
+        <div className='body-small whitespace-pre-line text-text-primary'>{children}</div>
       </div>
     </BottomSheet>
   );
