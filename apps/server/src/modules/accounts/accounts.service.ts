@@ -54,7 +54,8 @@ export class AccountsService {
     // 같은 은행 + 같은 계좌번호 중복 등록 방지 (account_no는 암호화 저장이라 복호화 후 비교)
     const incoming = normalizeAccountNo(dto.accountNo);
     const dup = existing.some(
-      (r) => r.bank === dto.bank && normalizeAccountNo(decrypt(r.account_no, this.encKey)) === incoming,
+      (r) =>
+        r.bank === dto.bank && normalizeAccountNo(decrypt(r.account_no, this.encKey)) === incoming,
     );
     if (dup) {
       throw new ConflictException('이미 등록된 계좌입니다.');

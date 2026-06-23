@@ -36,7 +36,8 @@ const meta = {
     },
     children: {
       control: false,
-      description: '`List.Item.Leading`, `List.Item.Content`, `List.Item.Trailing` 슬롯을 children으로 전달합니다.',
+      description:
+        '`List.Item.Leading`, `List.Item.Content`, `List.Item.Trailing` 슬롯을 children으로 전달합니다.',
     },
   },
   decorators: [
