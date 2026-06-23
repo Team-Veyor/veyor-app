@@ -26,14 +26,19 @@ export const OCCUPATION_BOTTOM_SHEET = {
   description: '현재 본인과 가장 가까운 상태를 선택해주세요.',
 } as const;
 
+// value=서버 저장값(영문 코드), label=화면 표기(한글). 서버 OCCUPATIONS·어드민 OCCUPATION_OPTIONS와 동일 집합.
 export const OCCUPATION_OPTIONS: readonly (SelectOption & { value: Occupation })[] = [
-  { label: '중학생', value: '중학생' },
-  { label: '고등학생', value: '고등학생' },
-  { label: '대학생', value: '대학생' },
-  { label: '직장인', value: '직장인' },
-  { label: '무직', value: '무직' },
-  { label: '주부', value: '주부' },
-  { label: '기타', value: '기타' },
+  { label: '중·고등학생', value: 'school_student' },
+  { label: '대학생', value: 'college_student' },
+  { label: '대학원생', value: 'graduate_student' },
+  { label: '취업 준비생', value: 'job_seeker' },
+  { label: '직장인', value: 'office_worker' },
+  { label: '프리랜서', value: 'freelancer' },
+  { label: '자영업자', value: 'self_employed' },
+  { label: '주부', value: 'homemaker' },
+  { label: '무직', value: 'unemployed' },
+  { label: '은퇴', value: 'retired' },
+  { label: '기타', value: 'other' },
 ];
 
 export const BIRTH_YEAR_HELPER_TEXT = {

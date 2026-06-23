@@ -1,6 +1,18 @@
 export type Gender = 'male' | 'female';
 
-export type Occupation = '중학생' | '고등학생' | '대학생' | '직장인' | '무직' | '주부' | '기타';
+// 서버(onboarding.dto OCCUPATIONS)·어드민과 동일한 영문 코드 집합. 서버 저장·전송 값.
+export type Occupation =
+  | 'school_student'
+  | 'college_student'
+  | 'graduate_student'
+  | 'job_seeker'
+  | 'office_worker'
+  | 'freelancer'
+  | 'self_employed'
+  | 'homemaker'
+  | 'unemployed'
+  | 'retired'
+  | 'other';
 
 export type AgreementId = 'age' | 'privacy' | 'terms' | 'marketing';
 
