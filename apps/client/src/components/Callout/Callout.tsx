@@ -61,7 +61,7 @@ const Callout = ({
       )}
     >
       <div className='flex items-center gap-[6px]'>
-        <span className='inline-flex size-6 items-center justify-center rounded-8 bg-white'>
+        <span className='inline-flex size-6 items-center justify-center rounded-8 bg-white-alpha-60'>
           {icon}
         </span>
         <span className={titleClass}>{title}</span>
