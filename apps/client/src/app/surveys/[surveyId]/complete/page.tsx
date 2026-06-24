@@ -69,9 +69,7 @@ const SurveyCompletePage = () => {
     <div className='min-h-dvh bg-gray-100'>
       {completeSurveyMutation.isPending && <SurveyCompleteSkeleton />}
 
-      {completeSurveyMutation.isSuccess && (
-        <SurveyCompleteBottomSheet onHomeClick={handleHomeClick} />
-      )}
+      {completeSurveyMutation.isSuccess && <SurveyCompleteBottomSheet />}
 
       {completeSurveyMutation.isError && (
         <ConfirmModal

@@ -1,25 +1,28 @@
+import { useRouter } from 'next/navigation';
 import CompleteIcon from '@/assets/icons/CompleteIcon';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Button from '@/components/Button/Button';
 
-interface SurveyCompleteBottomSheetProps {
-  onHomeClick: () => void;
-}
+const SurveyCompleteBottomSheet = () => {
+  const router = useRouter();
 
-const SurveyCompleteBottomSheet = ({ onHomeClick }: SurveyCompleteBottomSheetProps) => {
+  const handleHomeClick = () => {
+    router.replace('/home');
+  };
+
   return (
     <BottomSheet
-      className='overflow-hidden p-0'
+      className='overflow-hidden'
       footer={
-        <Button variant='secondary' size='large' onClick={onHomeClick}>
+        <Button variant='secondary' size='large' onClick={handleHomeClick}>
           홈으로 이동
         </Button>
       }
     >
       <div className='flex flex-col'>
-        <div className='flex flex-col gap-2 px-20 pt-20 pb-32'>
+        <div className='flex flex-col gap-2'>
           <h2 className='title-xsmall text-gray-950'>설문이 완료되었습니다</h2>
-          <p className='subtext-medium text-gray-500'>
+          <p className='label-medium text-gray-500'>
             리워드는 다음날 오전 10시 이전까지
             <br />
             입력된 계좌로 입금됩니다.

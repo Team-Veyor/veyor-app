@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import AgreementBottomSheet from '@/app/onboarding/_components/AgreementBottomSheet';
+import SurveyCompleteBottomSheet from '@/app/surveys/[surveyId]/complete/_components/SurveyCompleteBottomSheet';
 import Button from '@/components/Button/Button';
 
 const handleSubmit = (_ids: string[]) => undefined;
@@ -49,6 +50,20 @@ export const Agreement: Story = {
             }}
           />
         )}
+      </>
+    );
+  },
+};
+
+export const SurveyComplete: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button size='large' className='w-[160px]' onClick={() => setOpen(true)}>
+          설문 완료 시트 열기
+        </Button>
+        {open && <SurveyCompleteBottomSheet onHomeClick={() => setOpen(false)} />}
       </>
     );
   },
