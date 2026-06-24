@@ -103,21 +103,22 @@ const Info = () => {
         </label>
         <div className='flex w-full gap-8'>
           {GENDER_OPTIONS.map((option) => (
-            <RadioButton
-              key={option.value}
-              label={option.label}
-              name='gender'
-              value={option.value}
-              variant='outlined'
-              hasRightIcon
-              checked={form.gender === option.value}
-              onChange={() =>
-                setForm((prev) => ({
-                  ...prev,
-                  gender: option.value,
-                }))
-              }
-            />
+            <div key={option.value} className='flex-1 [&>label]:flex [&>label>span]:w-full'>
+              <RadioButton
+                label={option.label}
+                name='gender'
+                value={option.value}
+                variant='outlined'
+                hasRightIcon
+                checked={form.gender === option.value}
+                onChange={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    gender: option.value,
+                  }))
+                }
+              />
+            </div>
           ))}
         </div>
       </div>
