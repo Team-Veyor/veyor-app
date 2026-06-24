@@ -1,10 +1,11 @@
 'use client';
 
-import type { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, PointerEvent, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const ANIMATION_DURATION_MS = 300;
+const DRAG_CLOSE_THRESHOLD_PX = 80;
 
 export interface BottomSheetProps {
   /** 시트 본문에 렌더링할 노드 */
@@ -52,7 +53,10 @@ const BottomSheet = ({
   onClose,
 }: BottomSheetProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const dragStartYRef = useRef<number | null>(null);
+  const dragOffsetRef = useRef(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
 
   useEffect(() => {
     dialogRef.current?.showModal();
@@ -64,6 +68,32 @@ const BottomSheet = ({
     if (!onClose) return;
     setIsVisible(false);
     window.setTimeout(onClose, ANIMATION_DURATION_MS);
+  };
+
+  const handleDragStart = (event: PointerEvent<HTMLDivElement>) => {
+    if (!onClose) return;
+    dragStartYRef.current = event.clientY;
+    dragOffsetRef.current = 0;
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handleDragMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (dragStartYRef.current === null) return;
+
+    const nextDragOffset = Math.max(0, event.clientY - dragStartYRef.current);
+    dragOffsetRef.current = nextDragOffset;
+    setDragOffset(nextDragOffset);
+  };
+
+  const handleDragEnd = () => {
+    if (dragStartYRef.current === null) return;
+
+    const shouldClose = dragOffsetRef.current >= DRAG_CLOSE_THRESHOLD_PX;
+    dragStartYRef.current = null;
+    dragOffsetRef.current = 0;
+    setDragOffset(0);
+
+    if (shouldClose) handleClose();
   };
 
   /** dialog 본체가 target인 클릭만 backdrop 클릭으로 간주합니다. */
@@ -82,8 +112,10 @@ const BottomSheet = ({
         dialogClassName,
         scrollBody ? 'flex flex-col overflow-hidden' : 'overflow-y-auto',
         isVisible && 'translate-y-0 backdrop:opacity-100',
+        dragOffset > 0 && 'transition-none',
         className,
       )}
+      style={dragOffset > 0 ? { transform: `translateY(${dragOffset}px)` } : undefined}
       onCancel={(event) => {
         event.preventDefault();
         handleClose();
@@ -91,7 +123,13 @@ const BottomSheet = ({
       onClick={handleBackdropClick}
     >
       <div className={cn('flex flex-col', scrollBody && 'min-h-0 flex-1')}>
-        <div className='flex shrink-0 justify-center pb-20'>
+        <div
+          className='flex shrink-0 touch-none cursor-grab justify-center pb-20 active:cursor-grabbing'
+          onPointerDown={handleDragStart}
+          onPointerMove={handleDragMove}
+          onPointerUp={handleDragEnd}
+          onPointerCancel={handleDragEnd}
+        >
           <span aria-hidden='true' className='h-1 w-10 rounded-full bg-gray-200' />
         </div>
         {header && <div className='shrink-0 px-5'>{header}</div>}
