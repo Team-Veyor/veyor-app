@@ -1,21 +1,23 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import type { ComponentPropsWithoutRef } from 'react';
 import ChevronLeftIcon from '@/assets/icons/ChevronLeftIcon';
 import LogoIcon from '@/assets/icons/LogoIcon';
+import { cn } from '@/lib/utils';
 
-interface NavigationHeaderProps {
+interface NavigationHeaderProps extends ComponentPropsWithoutRef<'header'> {
   type: 'logo' | 'title';
   title?: string;
   Lable?: string;
   onBack?: () => void;
 }
 
-const Header = ({ type, title, Lable, onBack }: NavigationHeaderProps) => {
+const Header = ({ type, title, Lable, onBack, className, ...props }: NavigationHeaderProps) => {
   const router = useRouter();
 
   return (
-    <header className='flex items-center justify-between h-[44px] bg-gray-100'>
+    <header className={cn('flex items-center justify-between h-[44px] bg-gray-100', className)} {...props}>
       {type === 'logo' && (
         <LogoIcon className='w-[52px] h-[44px] mr-16 px-8 pl-24 box-content text-gray-500' />
       )}

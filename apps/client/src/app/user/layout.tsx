@@ -25,7 +25,15 @@ const layout = ({ children }: UserLayoutProps) => {
   return (
     <>
       <div className='flex h-dvh flex-col'>
-        {title ? <Header type='title' title={title} /> : <Header type='logo' />}
+        {title ? (
+          <Header
+            type='title'
+            title={title}
+            className={cn(isParticipations ? 'bg-white' : 'bg-gray-100')}
+          />
+        ) : (
+          <Header type='logo' />
+        )}
         <main
           className={cn(
             'min-h-0 flex-1',

@@ -24,7 +24,7 @@ const ParticipationsPage = () => {
   const { totalAmount, items } = data;
 
   return (
-    <div className='flex min-h-0 flex-1 flex-col'>
+    <div className='flex min-h-0 flex-1 flex-col bg-white'>
       <div className='flex shrink-0 items-center justify-between bg-white px-24 py-24'>
         <div className='flex items-center gap-4 '>
           <CashIcon />
