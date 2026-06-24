@@ -59,6 +59,14 @@ export const CustomIcon: Story = {
   },
 };
 
+/** 글자가 길어지는 경우 줄바꿈하여 표시됩니다. */
+export const LongMessage: Story = {
+  args: {
+    type: 'success',
+    message: '글자가 길 경우 이렇게 표시해주세요 글자가 길 경우 이렇게 표시해주세요',
+  },
+};
+
 /** Show Toast 버튼을 누르면 전역 ToastProvider가 토스트를 띄운 뒤 자동으로 닫습니다. */
 export const Animated: Story = {
   render: () => (
