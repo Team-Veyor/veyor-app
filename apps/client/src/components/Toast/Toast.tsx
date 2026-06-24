@@ -63,7 +63,7 @@ export const Toast = ({ type = 'warning', message, icon, className, role }: Toas
       exit={{ opacity: 0, y: -8, scale: 0.98 }}
       transition={TOAST_TRANSITION}
       className={cn(
-        'inline-flex max-w-[247px] w-full transform-gpu items-center gap-8 rounded-16 bg-black-alpha-30 px-16 py-12 text-white backdrop-blur-lg',
+        'inline-flex max-w-[247px] transform-gpu items-center gap-8 rounded-16 bg-black-alpha-30 px-16 py-12 text-white backdrop-blur-lg',
         className,
       )}
     >
