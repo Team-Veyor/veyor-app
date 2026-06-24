@@ -10,15 +10,27 @@ import useSetPrimaryAccountMutation from '@/app/account/_hooks/useSetPrimaryAcco
 import type { Account } from '@/app/account/_types/types';
 import useAccounts from '@/app/user/_hooks/useAccounts';
 import PlusIcon from '@/assets/icons/PlusIcon';
+import Button from '@/components/Button/Button';
 import List from '@/components/List/List';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
+import Modal from '@/components/Modal/Modal';
 import WarningModal from '@/components/Modal/WarningModal';
 import { useToast } from '@/components/Toast/ToastProvider';
+
+type PrimarySelectionView = 'bottomSheet' | 'requiredModal';
+
+interface PrimarySelectionState {
+  candidates: Account[];
+  view: PrimarySelectionView | null;
+}
 
 const AccountPage = () => {
   const [accountToDelete, setAccountToDelete] = useState<Account | null>(null);
   const [accountToSetPrimary, setAccountToSetPrimary] = useState<Account | null>(null);
-  const [primaryCandidates, setPrimaryCandidates] = useState<Account[] | null>(null);
+  const [primarySelection, setPrimarySelection] = useState<PrimarySelectionState>({
+    candidates: [],
+    view: null,
+  });
 
   const router = useRouter();
 
@@ -80,9 +92,17 @@ const AccountPage = () => {
           return;
         }
 
-        setPrimaryCandidates(remaining);
+        setPrimarySelection({ candidates: remaining, view: 'bottomSheet' });
       },
     });
+  };
+
+  const handlePrimaryBottomSheetClose = () => {
+    setPrimarySelection((prev) => ({ ...prev, view: 'requiredModal' }));
+  };
+
+  const handleOpenPrimaryBottomSheet = () => {
+    setPrimarySelection((prev) => ({ ...prev, view: 'bottomSheet' }));
   };
 
   const handleSelectPrimaryCandidate = (accountId: string) => {
@@ -90,7 +110,7 @@ const AccountPage = () => {
 
     setPrimary(accountId, {
       onSuccess: () => {
-        setPrimaryCandidates(null);
+        setPrimarySelection({ candidates: [], view: null });
         showToast({ type: 'success', message: '대표 계좌로 선택되었습니다.' });
       },
     });
@@ -141,11 +161,25 @@ const AccountPage = () => {
         />
       )}
 
-      {primaryCandidates && (
+      {primarySelection.view === 'requiredModal' && (
+        <Modal title='대표 계좌를 선택해주세요' description='리워드는 대표 계좌로 지급됩니다.'>
+          <Button
+            variant='secondary'
+            theme='dark'
+            size='medium'
+            hasGlow={false}
+            onClick={handleOpenPrimaryBottomSheet}
+          >
+            선택하기
+          </Button>
+        </Modal>
+      )}
+
+      {primarySelection.view === 'bottomSheet' && primarySelection.candidates.length > 0 && (
         <PrimaryAccountBottomSheet
-          accounts={primaryCandidates}
+          accounts={primarySelection.candidates}
           onConfirm={handleSelectPrimaryCandidate}
-          onClose={() => setPrimaryCandidates(null)}
+          onClose={handlePrimaryBottomSheetClose}
         />
       )}
     </>
