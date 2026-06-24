@@ -63,7 +63,7 @@ export const SurveyComplete: Story = {
         <Button size='large' className='w-[160px]' onClick={() => setOpen(true)}>
           설문 완료 시트 열기
         </Button>
-        {open && <SurveyCompleteBottomSheet onHomeClick={() => setOpen(false)} />}
+        {open && <SurveyCompleteBottomSheet />}
       </>
     );
   },
