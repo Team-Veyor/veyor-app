@@ -117,7 +117,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='16.437'
           height='16.4374'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -163,7 +163,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='16.437'
           height='16.4374'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -186,7 +186,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='50.2329'
           height='13.1337'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -209,7 +209,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='50.2329'
           height='13.1337'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -232,7 +232,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='50.2329'
           height='13.1337'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -255,7 +255,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='50.2329'
           height='13.1337'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -278,7 +278,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='120.101'
           height='150.568'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -301,7 +301,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='104.967'
           height='104.967'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -324,7 +324,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='49.0649'
           height='25.2889'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
@@ -347,7 +347,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='45.1284'
           height='21.9566'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />

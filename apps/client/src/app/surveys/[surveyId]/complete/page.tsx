@@ -48,7 +48,7 @@ const SurveyCompletePage = () => {
   useEffect(() => {
     if (!completeErrorToastMessage) return;
 
-    showToast({ type: 'warning', message: completeErrorToastMessage });
+    showToast({ type: 'danger', message: completeErrorToastMessage });
 
     const redirectTimer = window.setTimeout(() => {
       router.replace('/home');
@@ -73,7 +73,7 @@ const SurveyCompletePage = () => {
         <SurveyCompleteBottomSheet onHomeClick={handleHomeClick} />
       )}
 
-      {completeSurveyMutation.isError && !completeErrorToastMessage && (
+      {completeSurveyMutation.isError && (
         <ConfirmModal
           title='인증할 수 없습니다.'
           description={'운영진에게 문의 상황을 알려주시면\n빠르게 조치 도와드리겠습니다.'}
