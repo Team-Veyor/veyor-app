@@ -24,7 +24,7 @@ const Navigation = () => {
     <nav
       aria-label='하단 네비게이션'
       className={cn(
-        'fixed bottom-0 left-0 right-0 mx-auto w-full',
+        'fixed bottom-0 left-1/2 w-full max-w-[640px] -translate-x-1/2',
         'flex items-center justify-around',
         'rounded-t-24 bg-white px-[18px] pt-8 pb-32',
         'shadow-[0_0_80px_0_var(--color-black-alpha-5)]',
