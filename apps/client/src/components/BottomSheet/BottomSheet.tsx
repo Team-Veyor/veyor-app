@@ -31,7 +31,7 @@ const HIDE_SCROLLBAR =
   '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
 
 const dialogClassName = cn(
-  'fixed bottom-[calc(env(safe-area-inset-bottom)+10px)] top-auto left-[max(10px,calc((100vw-640px)/2+10px))] right-[max(10px,calc((100vw-640px)/2+10px))]',
+  'fixed bottom-[10px] top-auto left-[max(10px,calc((100vw-640px)/2+10px))] right-[max(10px,calc((100vw-640px)/2+10px))]',
   'm-0 w-auto max-w-none rounded-[28px] border-none outline-none',
   'bg-white pt-[16px] pb-[22px]',
   HIDE_SCROLLBAR,

@@ -23,7 +23,9 @@ const BankSelectBottomSheet = ({
 
   return (
     <BottomSheet
+      scrollBody
       onClose={onClose}
+      header={<h2 className='title-small pb-20 text-gray-950'>은행을 선택해주세요</h2>}
       footer={
         <Button
           variant='secondary'
@@ -35,10 +37,8 @@ const BankSelectBottomSheet = ({
         </Button>
       }
     >
-      <div className='flex flex-col gap-5'>
-        <h2 className='title-small text-gray-950'>은행을 선택해주세요</h2>
-
-        <ul className='scrollbar-custom grid h-[443px] w-full grid-cols-3 gap-2 overflow-y-auto py-0.5 pr-1.5 pl-0.5'>
+      <div className='h-[443px] overflow-y-auto'>
+        <ul className='scrollbar-custom grid w-full grid-cols-3 gap-2 py-0.5 pr-1.5 pl-0.5'>
           {banks.map((bank) => {
             const logo = getBankLogo(bank);
             const checked = selected === bank;
