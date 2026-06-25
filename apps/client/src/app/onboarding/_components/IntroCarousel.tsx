@@ -10,11 +10,17 @@ import Button from '@/components/Button/Button';
 import { cn } from '@/lib/utils';
 
 type SlideDirection = 'next' | 'prev';
+type SlideInteraction = 'click' | 'drag';
 
-const SLIDE_TRANSITION = {
+const SMART_ANIMATE_TRANSITION = {
   type: 'tween',
   duration: 0.3,
-  ease: [0.25, 0.1, 0.25, 1],
+  ease: 'easeOut',
+} as const;
+
+const SLIDE_TRANSITIONS = {
+  click: SMART_ANIMATE_TRANSITION,
+  drag: SMART_ANIMATE_TRANSITION,
 } as const;
 
 const SLIDE_VARIANTS = {
@@ -36,17 +42,19 @@ const DRAG_VELOCITY_THRESHOLD = 500;
 const IntroCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<SlideDirection>('next');
+  const [interaction, setInteraction] = useState<SlideInteraction>('click');
   const hasDraggedRef = useRef(false);
 
   const router = useRouter();
   const currentSlide = INTRO_SLIDES[currentIndex];
 
-  const changeSlide = (nextIndex: number) => {
+  const changeSlide = (nextIndex: number, nextInteraction: SlideInteraction) => {
     if (nextIndex === currentIndex || nextIndex < 0 || nextIndex >= SLIDE_COUNT) {
       return;
     }
 
     setDirection(nextIndex > currentIndex ? 'next' : 'prev');
+    setInteraction(nextInteraction);
     setCurrentIndex(nextIndex);
   };
 
@@ -62,7 +70,7 @@ const IntroCarousel = () => {
     const { left, width } = event.currentTarget.getBoundingClientRect();
     const isPrevClick = event.clientX - left < width / 2;
 
-    changeSlide(currentIndex + (isPrevClick ? -1 : 1));
+    changeSlide(currentIndex + (isPrevClick ? -1 : 1), 'click');
   };
 
   return (
@@ -77,7 +85,7 @@ const IntroCarousel = () => {
             initial='enter'
             animate='center'
             exit='exit'
-            transition={SLIDE_TRANSITION}
+            transition={SLIDE_TRANSITIONS[interaction]}
             drag='x'
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.18}
@@ -92,9 +100,9 @@ const IntroCarousel = () => {
                 info.offset.x > DRAG_OFFSET_THRESHOLD || info.velocity.x > DRAG_VELOCITY_THRESHOLD;
 
               if (isSwipeNext) {
-                changeSlide(currentIndex + 1);
+                changeSlide(currentIndex + 1, 'drag');
               } else if (isSwipePrev) {
-                changeSlide(currentIndex - 1);
+                changeSlide(currentIndex - 1, 'drag');
               }
             }}
             className='absolute inset-0 flex cursor-pointer touch-pan-y flex-col text-left'
@@ -133,7 +141,7 @@ const IntroCarousel = () => {
               index === currentIndex ? 'bg-gray-500' : 'bg-gray-300 hover:bg-gray-400',
             )}
             onClick={() => {
-              changeSlide(index);
+              changeSlide(index, 'click');
             }}
           />
         ))}
