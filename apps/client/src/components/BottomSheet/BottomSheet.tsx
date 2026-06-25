@@ -127,15 +127,17 @@ const BottomSheet = ({
     >
       <div className={cn('flex flex-col', scrollBody && 'min-h-0 flex-1')}>
         <div
-          className='flex shrink-0 touch-none cursor-grab justify-center pb-20 active:cursor-grabbing'
+          className='shrink-0 touch-none cursor-grab active:cursor-grabbing'
           onPointerDown={handleDragStart}
           onPointerMove={handleDragMove}
           onPointerUp={handleDragEnd}
           onPointerCancel={handleDragEnd}
         >
-          <span aria-hidden='true' className='h-1 w-10 rounded-full bg-gray-200' />
+          <div className='flex justify-center pb-20'>
+            <span aria-hidden='true' className='h-1 w-10 rounded-full bg-gray-200' />
+          </div>
+          {header && <div className='px-5'>{header}</div>}
         </div>
-        {header && <div className='shrink-0 px-5'>{header}</div>}
         <div
           className={cn('px-5', scrollBody && cn('min-h-0 flex-1 overflow-y-auto', HIDE_SCROLLBAR))}
         >
