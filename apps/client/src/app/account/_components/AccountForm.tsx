@@ -1,6 +1,6 @@
 'use client';
 
-import { type ClipboardEvent, useState } from 'react';
+import { useState } from 'react';
 import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
 import { getBankLogo } from '@/app/account/_constants/banks';
 import { ACCOUNT_NO_HELPER_TEXT, ERROR_MESSAGE } from '@/app/account/_constants/constants';
@@ -41,7 +41,7 @@ const AccountForm = ({
   const [isAccountNoErrorVisible, setIsAccountNoErrorVisible] = useState(false);
 
   const { data: banks = [] } = useBanks();
-  const { parsed, clear, parseText, readFromUserGesture } = useClipboardAccount(banks);
+  const { parsed, clear } = useClipboardAccount(banks);
   const { form, setField, handleFieldChange, prefill, changes, canSave } = useAccountForm({
     mode,
     initialForm,
@@ -68,14 +68,6 @@ const AccountForm = ({
     (onSubmit as CreateAccountFormProps['onSubmit'])(form);
   };
 
-  const handleClipboardGesture = () => {
-    void readFromUserGesture();
-  };
-
-  const handleClipboardPaste = (event: ClipboardEvent<HTMLInputElement>) => {
-    parseText(event.clipboardData.getData('text'));
-  };
-
   const handleApplyClipboard = () => {
     if (parsed) prefill(parsed);
     clear();
@@ -88,8 +80,6 @@ const AccountForm = ({
           label='예금주명'
           placeholder='예금주명'
           value={form.holderName}
-          onPointerDown={handleClipboardGesture}
-          onPaste={handleClipboardPaste}
           onChange={handleFieldChange('holderName')}
         />
         <Input
@@ -100,8 +90,6 @@ const AccountForm = ({
           error={isAccountNoErrorVisible}
           placeholder={accountNoPlaceholder}
           value={form.accountNo}
-          onPointerDown={handleClipboardGesture}
-          onPaste={handleClipboardPaste}
           onBlur={(event) => setIsAccountNoErrorVisible(/\D/.test(event.currentTarget.value))}
           onChange={handleFieldChange('accountNo')}
         />
