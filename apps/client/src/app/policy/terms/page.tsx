@@ -27,7 +27,7 @@ const TermsPage = () => {
 
       {openPolicy && (
         <PolicyBottomSheet
-          className='max-h-[80dvh]'
+          className='h-[80dvh]'
           title={openPolicy.title}
           description={openPolicy.description}
           onClose={() => setOpenPolicyId(null)}
