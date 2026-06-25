@@ -2,7 +2,7 @@ import Skeleton from '@/components/Skeleton/Skeleton';
 
 const SurveyCompleteSkeleton = () => {
   return (
-    <div className='flex min-h-dvh items-center px-20'>
+    <div className='min-h-dvh bg-gray-100 px-20 pt-8'>
       <section className='flex w-full flex-col gap-30 rounded-32 bg-white px-20 py-16 shadow-[0_24px_64px_0_rgba(255,255,255,0.72)]'>
         <div className='flex flex-col gap-8'>
           <Skeleton width={101} height={18} className='rounded-max' />
