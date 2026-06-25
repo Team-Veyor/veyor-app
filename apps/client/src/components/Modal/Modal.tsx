@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { useEffect, useId, useRef } from 'react';
+import { useBodyScrollLock } from '@/lib/useBodyScrollLock';
 import { cn } from '@/lib/utils';
 
 export interface ModalProps {
@@ -25,6 +26,8 @@ const Modal = ({ title, description, children, className }: ModalProps) => {
 
   const titleId = useId();
   const descriptionId = useId();
+
+  useBodyScrollLock();
 
   useEffect(() => {
     if (!dialogRef.current?.open) {

@@ -2,6 +2,7 @@
 
 import type { MouseEvent, PointerEvent, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { useBodyScrollLock } from '@/lib/useBodyScrollLock';
 import { cn } from '@/lib/utils';
 
 const ANIMATION_DURATION_MS = 300;
@@ -57,6 +58,8 @@ const BottomSheet = ({
   const dragOffsetRef = useRef(0);
   const [isVisible, setIsVisible] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
+
+  useBodyScrollLock();
 
   useEffect(() => {
     dialogRef.current?.showModal();
