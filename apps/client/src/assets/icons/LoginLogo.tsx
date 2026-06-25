@@ -140,7 +140,7 @@ const LoginLogo = ({ className }: LoginLogoProps) => {
           width='16.437'
           height='16.4374'
           filterUnits='userSpaceOnUse'
-          color-interpolation-filters='sRGB'
+          colorInterpolationFilters='sRGB'
         >
           <feFlood floodOpacity='0' result='BackgroundImageFix' />
           <feBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape' />
