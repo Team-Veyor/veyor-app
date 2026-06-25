@@ -1,4 +1,4 @@
-const KakaoIcon = () => {
+const KakaoIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -7,6 +7,7 @@ const KakaoIcon = () => {
       viewBox='0 0 20 20'
       fill='none'
       aria-hidden='true'
+      className={className}
     >
       <path
         fillRule='evenodd'
