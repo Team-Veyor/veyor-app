@@ -50,7 +50,7 @@ const BankSelectBottomSheet = ({
                   onClick={() => setSelected(bank)}
                   aria-pressed={checked}
                   className={cn(
-                    'flex w-full cursor-pointer flex-col items-center gap-2 rounded-20 bg-white py-12 transition-colors',
+                    'flex w-full cursor-pointer flex-col items-center gap-2 rounded-20 bg-white py-12 transition-colors focus:outline-none',
                     checked
                       ? 'ring-1 ring-border-select bg-fill-tertiary'
                       : 'ring-1 ring-transparent bg-fill-quaternary',

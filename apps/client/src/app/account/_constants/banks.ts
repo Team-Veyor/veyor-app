@@ -23,7 +23,7 @@ const BANK_LIST: Record<string, { label: string; icon?: string }> = {
   SC제일은행: { label: 'SC제일', icon: 'SC제일' },
   씨티은행: { label: '씨티', icon: '씨티' },
   부산은행: { label: '부산', icon: '부산' },
-  'iM뱅크(대구)': { label: 'iM뱅크(대구)', icon: 'IM뱅크' },
+  IM뱅크: { label: 'IM뱅크', icon: 'IM뱅크' },
   경남은행: { label: '경남', icon: '경남' },
   광주은행: { label: '광주', icon: '광주' },
   전북은행: { label: '전북', icon: '전북' },
