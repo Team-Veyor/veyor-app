@@ -1,6 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
+import { getBankLogo } from '@/app/account/_constants/banks';
 import type { Account } from '@/app/account/_types/types';
 import CheckCircleIcon from '@/assets/icons/CheckCircleIcon';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
@@ -9,18 +11,11 @@ import List from '@/components/List/List';
 import { cn } from '@/lib/utils';
 
 interface PrimaryAccountBottomSheetProps {
-  /** 대표 계좌 후보 목록 */
   accounts: Account[];
-  /** 확인 버튼 클릭 시 선택된 계좌 id를 전달합니다. */
   onConfirm: (accountId: string) => void;
-  /** 바깥(backdrop) 클릭 또는 ESC로 시트가 닫힐 때 실행되는 콜백 */
   onClose?: () => void;
 }
 
-/**
- * 대표 계좌를 다시 지정하기 위한 BottomSheet.
- * 대표 계좌를 삭제했고 남은 계좌가 2개 이상일 때 표시됩니다.
- */
 const PrimaryAccountBottomSheet = ({
   accounts,
   onConfirm,
@@ -50,12 +45,13 @@ const PrimaryAccountBottomSheet = ({
 
         <List role='radiogroup' className='bg-transparent px-0'>
           {accounts.map((account) => {
+            const logo = getBankLogo(account.bank);
             const checked = selectedId === account.id;
 
             return (
               <List.Item key={account.id} onClick={() => setSelectedId(account.id)}>
                 <List.Item.Leading>
-                  <span aria-hidden='true' className='size-6 rounded-full bg-gray-200' />
+                  <Image src={logo.icon} alt='' width={24} height={24} className='size-6' />
                 </List.Item.Leading>
                 <List.Item.Content>
                   <span className='flex flex-col items-start gap-[2px]'>
