@@ -17,9 +17,19 @@ const Header = ({ type, title, Lable, onBack, className, ...props }: NavigationH
   const router = useRouter();
 
   return (
-    <header className={cn('flex items-center justify-between h-[44px] bg-gray-100', className)} {...props}>
+    <header
+      className={cn('flex items-center justify-between h-[44px] bg-gray-100', className)}
+      {...props}
+    >
       {type === 'logo' && (
-        <LogoIcon className='w-[52px] h-[44px] mr-16 px-8 pl-24 box-content text-gray-500' />
+        <button
+          type='button'
+          aria-label='홈으로 이동'
+          onClick={() => router.push('/home')}
+          className='cursor-pointer'
+        >
+          <LogoIcon className='w-[52px] h-[44px] mr-16 px-8 pl-24 box-content text-gray-500' />
+        </button>
       )}
 
       {type === 'title' && (
