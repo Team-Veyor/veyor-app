@@ -23,8 +23,6 @@ const BankSelectBottomSheet = ({
 
   return (
     <BottomSheet
-      scrollBody
-      className='max-h-[calc(100dvh-20px)]'
       onClose={onClose}
       footer={
         <Button
