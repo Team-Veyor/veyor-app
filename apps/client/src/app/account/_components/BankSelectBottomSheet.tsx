@@ -24,8 +24,8 @@ const BankSelectBottomSheet = ({
   return (
     <BottomSheet
       scrollBody
+      className='max-h-[calc(100dvh-20px)]'
       onClose={onClose}
-      header={<h2 className='title-small pb-20 text-gray-950'>은행을 선택해주세요</h2>}
       footer={
         <Button
           variant='secondary'
@@ -37,39 +37,43 @@ const BankSelectBottomSheet = ({
         </Button>
       }
     >
-      <div className='h-[443px] overflow-y-auto'>
-        <ul className='scrollbar-custom grid w-full grid-cols-3 gap-2 py-0.5 pr-1.5 pl-0.5'>
-          {banks.map((bank) => {
-            const logo = getBankLogo(bank);
-            const checked = selected === bank;
+      <div className='flex flex-col gap-5'>
+        <h2 className='title-small text-gray-950'>은행을 선택해주세요</h2>
 
-            return (
-              <li key={bank}>
-                <button
-                  type='button'
-                  onClick={() => setSelected(bank)}
-                  aria-pressed={checked}
-                  className={cn(
-                    'flex w-full cursor-pointer flex-col items-center gap-2 rounded-20 bg-white py-12 transition-colors focus:outline-none',
-                    checked
-                      ? 'ring-1 ring-border-select bg-fill-tertiary'
-                      : 'ring-1 ring-transparent bg-fill-quaternary',
-                  )}
-                >
-                  {/** biome-ignore lint/performance/noImgElement: 정적 SVG 아이콘 */}
-                  <img
-                    src={logo.icon}
-                    alt=''
-                    width={28}
-                    height={28}
-                    className='size-7 object-contain'
-                  />
-                  <span className='label-medium text-gray-950'>{logo.label}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <div className='scrollbar-custom h-[443px] overflow-y-auto py-0.5 pr-1.5 pl-0.5'>
+          <ul className='grid w-full grid-cols-3 gap-2'>
+            {banks.map((bank) => {
+              const logo = getBankLogo(bank);
+              const checked = selected === bank;
+
+              return (
+                <li key={bank}>
+                  <button
+                    type='button'
+                    onClick={() => setSelected(bank)}
+                    aria-pressed={checked}
+                    className={cn(
+                      'flex w-full cursor-pointer flex-col items-center gap-2 rounded-20 py-5 transition-colors',
+                      checked
+                        ? 'ring-1 ring-border-select bg-fill-tertiary'
+                        : 'ring-1 ring-transparent bg-fill-quaternary',
+                    )}
+                  >
+                    {/** biome-ignore lint/performance/noImgElement: 정적 SVG 아이콘 */}
+                    <img
+                      src={logo.icon}
+                      alt=''
+                      width={28}
+                      height={28}
+                      className='size-7 object-contain'
+                    />
+                    <span className='label-medium text-gray-950'>{logo.label}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </BottomSheet>
   );

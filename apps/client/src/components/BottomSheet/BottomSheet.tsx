@@ -113,7 +113,9 @@ const BottomSheet = ({
       aria-modal='true'
       className={cn(
         dialogClassName,
-        scrollBody ? 'flex flex-col overflow-hidden' : 'overflow-y-auto',
+        scrollBody
+          ? 'flex h-[calc(100dvh-20px)] max-h-[calc(100dvh-20px)] flex-col overflow-hidden'
+          : 'max-h-[calc(100dvh-20px)] overflow-y-auto',
         isVisible && 'translate-y-0 backdrop:opacity-100',
         dragOffset > 0 && 'transition-none',
         className,
