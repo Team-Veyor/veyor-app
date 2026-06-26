@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { type ClipboardEvent, useState } from 'react';
 import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
 import { getBankLogo } from '@/app/account/_constants/banks';
 import { ACCOUNT_NO_HELPER_TEXT, ERROR_MESSAGE } from '@/app/account/_constants/constants';
@@ -41,7 +41,7 @@ const AccountForm = ({
   const [isAccountNoErrorVisible, setIsAccountNoErrorVisible] = useState(false);
 
   const { data: banks = [] } = useBanks();
-  const { parsed, clear } = useClipboardAccount(banks);
+  const { parsed, clear, parseText } = useClipboardAccount(banks);
   const { form, setField, handleFieldChange, prefill, changes, canSave } = useAccountForm({
     mode,
     initialForm,
@@ -73,6 +73,10 @@ const AccountForm = ({
     clear();
   };
 
+  const handleAccountNoPaste = (event: ClipboardEvent<HTMLInputElement>) => {
+    parseText(event.clipboardData.getData('text'));
+  };
+
   return (
     <>
       <div className='flex flex-col gap-16'>
@@ -90,6 +94,7 @@ const AccountForm = ({
           error={isAccountNoErrorVisible}
           placeholder={accountNoPlaceholder}
           value={form.accountNo}
+          onPaste={handleAccountNoPaste}
           onBlur={(event) => setIsAccountNoErrorVisible(/\D/.test(event.currentTarget.value))}
           onChange={handleFieldChange('accountNo')}
         />
