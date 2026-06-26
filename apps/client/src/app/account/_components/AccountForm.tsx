@@ -1,6 +1,6 @@
 'use client';
 
-import { type ClipboardEvent, useState } from 'react';
+import { type ClipboardEvent, useEffect, useState } from 'react';
 import BankSelectBottomSheet from '@/app/account/_components/BankSelectBottomSheet';
 import { getBankLogo } from '@/app/account/_constants/banks';
 import { ACCOUNT_NO_HELPER_TEXT, ERROR_MESSAGE } from '@/app/account/_constants/constants';
@@ -12,6 +12,7 @@ import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import Select from '@/components/Select/Select';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 
 interface AccountFormBaseProps {
   initialForm?: Partial<CreateAccountRequest>;
@@ -69,6 +70,7 @@ const AccountForm = ({
   };
 
   const handleApplyClipboard = () => {
+    trackAmplitudeEvent('account_paste_clicked');
     if (parsed) prefill(parsed);
     clear();
   };
@@ -76,6 +78,12 @@ const AccountForm = ({
   const handleAccountNoPaste = (event: ClipboardEvent<HTMLInputElement>) => {
     parseText(event.clipboardData.getData('text'));
   };
+
+  useEffect(() => {
+    if (!parsed) return;
+
+    trackAmplitudeEvent('clipboard_account_detected');
+  }, [parsed]);
 
   return (
     <>

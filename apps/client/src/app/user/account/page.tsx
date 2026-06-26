@@ -16,6 +16,7 @@ import ConfirmModal from '@/components/Modal/ConfirmModal';
 import Modal from '@/components/Modal/Modal';
 import WarningModal from '@/components/Modal/WarningModal';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 
 type PrimarySelectionView = 'bottomSheet' | 'requiredModal';
 
@@ -55,8 +56,15 @@ const AccountPage = () => {
   const handleConfirmSetPrimary = () => {
     if (!accountToSetPrimary || isSettingPrimary) return;
 
+    const previousPrimaryAccount = accounts?.find((account) => account.isPrimary);
+
     setPrimary(accountToSetPrimary.id, {
       onSuccess: () => {
+        trackAmplitudeEvent('default_account_changed', {
+          previous_bank_name: previousPrimaryAccount?.bank,
+          new_bank_name: accountToSetPrimary.bank,
+          account_count: accounts?.length ?? 0,
+        });
         setAccountToSetPrimary(null);
         showToast({ type: 'success', message: '대표 계좌로 선택되었습니다.' });
       },
@@ -77,6 +85,10 @@ const AccountPage = () => {
 
     deleteAccount(deletedAccount.id, {
       onSuccess: () => {
+        trackAmplitudeEvent('account_deleted', {
+          account_count: remaining.length,
+          account_default: deletedAccount.isPrimary,
+        });
         setAccountToDelete(null);
         showToast({ type: 'success', message: '계좌가 삭제되었습니다.' });
 
@@ -88,7 +100,15 @@ const AccountPage = () => {
         }
 
         if (remaining.length === 1) {
-          setPrimary(remaining[0].id);
+          setPrimary(remaining[0].id, {
+            onSuccess: () => {
+              trackAmplitudeEvent('default_account_changed', {
+                previous_bank_name: deletedAccount.bank,
+                new_bank_name: remaining[0].bank,
+                account_count: remaining.length,
+              });
+            },
+          });
           return;
         }
 
@@ -108,8 +128,16 @@ const AccountPage = () => {
   const handleSelectPrimaryCandidate = (accountId: string) => {
     if (isSettingPrimary) return;
 
+    const selectedAccount = primarySelection.candidates.find((account) => account.id === accountId);
+    const previousPrimaryAccount = accounts?.find((account) => account.isPrimary);
+
     setPrimary(accountId, {
       onSuccess: () => {
+        trackAmplitudeEvent('default_account_changed', {
+          previous_bank_name: previousPrimaryAccount?.bank,
+          new_bank_name: selectedAccount?.bank,
+          account_count: accounts?.length ?? primarySelection.candidates.length,
+        });
         setPrimarySelection({ candidates: [], view: null });
         showToast({ type: 'success', message: '대표 계좌로 선택되었습니다.' });
       },
@@ -131,7 +159,12 @@ const AccountPage = () => {
       ))}
 
       <List>
-        <List.Item onClick={() => router.push('/account/new')}>
+        <List.Item
+          onClick={() => {
+            trackAmplitudeEvent('account_added_clicked');
+            router.push('/account/new');
+          }}
+        >
           <List.Item.Content title='내 계좌 추가하기' />
           <List.Item.Trailing>
             <PlusIcon />

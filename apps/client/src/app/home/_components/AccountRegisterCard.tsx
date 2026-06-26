@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/Button/Button';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 
 const AccountRegisterCard = () => {
   const router = useRouter();
@@ -22,7 +23,13 @@ const AccountRegisterCard = () => {
         <Image src='/bank.png' alt='계좌 등록' width={262} height={178} priority />
       </div>
 
-      <Button size='medium' onClick={() => router.push('/account/new')}>
+      <Button
+        size='medium'
+        onClick={() => {
+          trackAmplitudeEvent('account_management_clicked', { entry_point: 'home' });
+          router.push('/account/new');
+        }}
+      >
         입력하기
       </Button>
     </section>

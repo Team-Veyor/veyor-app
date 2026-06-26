@@ -7,6 +7,7 @@ import type { RewardStatus } from '@/app/home/types/types';
 import CashIcon from '@/assets/icons/CashIcon';
 import Button from '@/components/Button/Button';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 import { ApiError } from '@/lib/api';
 
 interface TodaySurveyProps {
@@ -36,6 +37,8 @@ const TodaySurvey = ({
 
   const handleButtonClick = () => {
     if (participated || isPending) return;
+
+    trackAmplitudeEvent('survey_started', { survey_id: id });
 
     // 대표계좌가 없으면 리워드를 받을 수 없으므로, 설문을 열기 전에 계좌 등록으로 유도한다.
     if (!accountRegistered) {

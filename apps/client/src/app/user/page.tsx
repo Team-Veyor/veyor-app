@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import WarningModal from '@/components/Modal/WarningModal';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 import UserMenuList from './_components/UserMenuList';
 import useLogoutMutation from './_hooks/useLogoutMutation';
 import useMe from './_hooks/useMe';
@@ -28,6 +29,7 @@ const UserPage = () => {
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
+        trackAmplitudeEvent('logout_completed');
         setLogoutOpen(false);
         router.replace('/login');
       },
@@ -37,6 +39,7 @@ const UserPage = () => {
   const handleWithdraw = () => {
     withdrawMutation.mutate(undefined, {
       onSuccess: () => {
+        trackAmplitudeEvent('leave_service_completed', { leave_service_reason: null });
         setWithdrawOpen(false);
         router.replace('/login');
       },

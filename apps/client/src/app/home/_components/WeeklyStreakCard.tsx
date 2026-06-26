@@ -5,6 +5,7 @@ import { WEEKDAYS } from '@/app/home/_constants/constants';
 import CashIcon from '@/assets/icons/CashIcon';
 import CheckIcon from '@/assets/icons/CheckIcon';
 import Button from '@/components/Button/Button';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 import { cn } from '@/lib/utils';
 
 interface WeeklyStreakCardProps {
@@ -34,7 +35,10 @@ const WeeklyStreakCard = ({ streak, weeklyStatus, totalRewardAmount }: WeeklyStr
         variant='secondary'
         theme='light'
         size='small'
-        onClick={() => router.push('/user/participations')}
+        onClick={() => {
+          trackAmplitudeEvent('participation_history_clicked', { entry_point: 'home' });
+          router.push('/user/participations');
+        }}
       >
         참여 내역 보기
       </Button>

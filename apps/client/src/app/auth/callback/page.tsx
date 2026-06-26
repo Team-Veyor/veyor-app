@@ -6,6 +6,7 @@ import { getUser } from '@/app/login/_apis/users';
 import { LOGIN_ERROR_MESSAGE } from '@/app/login/_constants/constants';
 import Spinner from '@/components/Spinner/Spinner';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { identifyAmplitudeUser, trackAmplitudeEventOnce } from '@/lib/amplitude';
 import { supabase } from '@/lib/supabase';
 
 export default function AuthCallbackPage() {
@@ -31,6 +32,19 @@ export default function AuthCallbackPage() {
       }
 
       const me = await getUser();
+      identifyAmplitudeUser(me.id);
+
+      if (!me.onboarded) {
+        const acquisitionChannel =
+          new URLSearchParams(window.location.search).get('utm_source') || 'direct';
+
+        trackAmplitudeEventOnce(`signup_completed:${me.id}`, 'signup_completed', {
+          signup_method: 'kakao',
+          acquisition_channel: acquisitionChannel,
+          user_type: 'new',
+        });
+      }
+
       router.replace(me.onboarded ? '/home' : '/onboarding');
     };
 

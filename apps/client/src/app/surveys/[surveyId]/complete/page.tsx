@@ -8,6 +8,7 @@ import SurveyCompleteSkeleton from '@/app/surveys/[surveyId]/complete/_component
 import useCompleteSurveyMutation from '@/app/surveys/[surveyId]/complete/_hooks/useCompleteSurveyMutation';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 import { ApiError } from '@/lib/api';
 
 const CHAT_SUPPORT_URL = '#';
@@ -27,6 +28,7 @@ const SurveyCompletePage = () => {
 
   const { surveyId } = useParams<{ surveyId: string }>();
   const hasRequestedRef = useRef(false);
+  const completionStartedAtRef = useRef<number | null>(null);
 
   const completeSurveyMutation = useCompleteSurveyMutation();
   const { showToast } = useToast();
@@ -42,7 +44,22 @@ const SurveyCompletePage = () => {
     if (!surveyId || hasRequestedRef.current) return;
 
     hasRequestedRef.current = true;
-    completeSurveyMutation.mutate(surveyId);
+    completionStartedAtRef.current = Date.now();
+    completeSurveyMutation.mutate(surveyId, {
+      onSuccess: () => {
+        trackAmplitudeEvent('survey_completed', {
+          survey_id: surveyId,
+          completion_time: getCompletionTime(completionStartedAtRef.current),
+        });
+      },
+      onError: (error) => {
+        trackAmplitudeEvent('survey_complete_failed', {
+          survey_id: surveyId,
+          completion_time: getCompletionTime(completionStartedAtRef.current),
+          error_reason: getCompletionErrorReason(error),
+        });
+      },
+    });
   }, [completeSurveyMutation, surveyId]);
 
   useEffect(() => {
@@ -58,10 +75,12 @@ const SurveyCompletePage = () => {
   }, [completeErrorToastMessage, router, showToast]);
 
   const handleHomeClick = () => {
+    trackAmplitudeEvent('cancel_clicked', { survey_id: surveyId });
     router.replace('/home');
   };
 
   const handleContactClick = () => {
+    trackAmplitudeEvent('chat_support_clicked', { survey_id: surveyId });
     window.open(CHAT_SUPPORT_URL, '_blank', 'noopener,noreferrer');
   };
 
@@ -83,6 +102,20 @@ const SurveyCompletePage = () => {
       )}
     </div>
   );
+};
+
+const getCompletionTime = (startedAt: number | null) => {
+  if (!startedAt) return 0;
+
+  return Number(((Date.now() - startedAt) / 1000).toFixed(2));
+};
+
+const getCompletionErrorReason = (error: Error) => {
+  if (error instanceof ApiError) {
+    return error.code ?? String(error.status);
+  }
+
+  return error.message;
 };
 
 export default SurveyCompletePage;

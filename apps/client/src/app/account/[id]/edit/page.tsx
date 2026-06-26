@@ -7,9 +7,10 @@ import useUpdateAccountMutation from '@/app/account/_hooks/useUpdateAccountMutat
 import type { Account, UpdateAccountRequest } from '@/app/account/_types/types';
 import useAccounts from '@/app/user/_hooks/useAccounts';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 import { ApiError } from '@/lib/api';
 
-const EditAccountForm = ({ account }: { account: Account }) => {
+const EditAccountForm = ({ account, accountCount }: { account: Account; accountCount: number }) => {
   const router = useRouter();
   const { showToast } = useToast();
 
@@ -18,6 +19,10 @@ const EditAccountForm = ({ account }: { account: Account }) => {
   const handleSubmit = (changes: UpdateAccountRequest) => {
     mutate(changes, {
       onSuccess: () => {
+        trackAmplitudeEvent('account_edited', {
+          account_count: accountCount,
+          account_default: account.isPrimary,
+        });
         showToast({
           type: 'success',
           message: '리워드를 지급받으실 계좌 정보가 저장되었습니다.',
@@ -56,7 +61,7 @@ const EditAccountPage = () => {
     return null;
   }
 
-  return <EditAccountForm account={account} />;
+  return <EditAccountForm account={account} accountCount={accounts?.length ?? 0} />;
 };
 
 export default EditAccountPage;

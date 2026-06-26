@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import HomeIcon from '@/assets/icons/HomeIcon';
 import UserIcon from '@/assets/icons/UserIcon';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 import { cn } from '@/lib/utils';
 
 const ITEMS = [
@@ -19,6 +20,9 @@ const ITEMS = [
  */
 const Navigation = () => {
   const pathname = usePathname();
+  const currentItem = ITEMS.find(({ match }) =>
+    match.some((path) => pathname === path || pathname.startsWith(`${path}/`)),
+  );
 
   return (
     <nav
@@ -38,6 +42,14 @@ const Navigation = () => {
             key={href}
             href={href}
             aria-current={active ? 'page' : undefined}
+            onClick={() => {
+              if (currentItem?.href === href) return;
+
+              trackAmplitudeEvent('navigation_changed', {
+                from_tab: currentItem?.href,
+                to_tab: href,
+              });
+            }}
             className={cn(
               'flex flex-1 flex-col items-center gap-4 py-4',
               'subtext-small transition-colors',

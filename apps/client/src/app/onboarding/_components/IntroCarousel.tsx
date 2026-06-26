@@ -7,6 +7,7 @@ import type { MouseEvent } from 'react';
 import { useRef, useState } from 'react';
 import { INTRO_SLIDES } from '@/app/onboarding/_constants/constants';
 import Button from '@/components/Button/Button';
+import { trackAmplitudeEvent } from '@/lib/amplitude';
 import { cn } from '@/lib/utils';
 
 type SlideDirection = 'next' | 'prev';
@@ -147,7 +148,15 @@ const IntroCarousel = () => {
         ))}
       </div>
 
-      <Button variant='secondary' theme='dark' size='large' onClick={() => router.replace('/home')}>
+      <Button
+        variant='secondary'
+        theme='dark'
+        size='large'
+        onClick={() => {
+          trackAmplitudeEvent('start_clicked');
+          router.replace('/home');
+        }}
+      >
         시작하기
       </Button>
     </section>
