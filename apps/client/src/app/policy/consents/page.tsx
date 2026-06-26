@@ -4,7 +4,7 @@ import useConsents from '@/app/policy/_hooks/useConsents';
 import useMarketing from '@/app/policy/_hooks/useMarketing';
 import List from '@/components/List/List';
 import Toggle from '@/components/Toggle/Toggle';
-import { trackAmplitudeEvent } from '@/lib/amplitude';
+import { setAmplitudeUserProperties, trackAmplitudeEvent } from '@/lib/amplitude';
 
 const ConsentsPage = () => {
   const { data: consents } = useConsents();
@@ -13,6 +13,7 @@ const ConsentsPage = () => {
   const marketing = consents?.find((consent) => consent.type === 'marketing')?.agreed ?? false;
 
   const handleMarketingChange = (agreed: boolean) => {
+    setAmplitudeUserProperties({ marketing_received: agreed });
     trackAmplitudeEvent('consent_toggle_changed', {
       consent_type: 'marketing',
       agreement_status: agreed,

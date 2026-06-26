@@ -7,7 +7,7 @@ import useUpdateAccountMutation from '@/app/account/_hooks/useUpdateAccountMutat
 import type { Account, UpdateAccountRequest } from '@/app/account/_types/types';
 import useAccounts from '@/app/user/_hooks/useAccounts';
 import { useToast } from '@/components/Toast/ToastProvider';
-import { trackAmplitudeEvent } from '@/lib/amplitude';
+import { setAmplitudeUserProperties, trackAmplitudeEvent } from '@/lib/amplitude';
 import { ApiError } from '@/lib/api';
 
 const EditAccountForm = ({ account, accountCount }: { account: Account; accountCount: number }) => {
@@ -19,6 +19,7 @@ const EditAccountForm = ({ account, accountCount }: { account: Account; accountC
   const handleSubmit = (changes: UpdateAccountRequest) => {
     mutate(changes, {
       onSuccess: () => {
+        setAmplitudeUserProperties({ bank_name: changes.bank ?? account.bank });
         trackAmplitudeEvent('account_edited', {
           account_count: accountCount,
           account_default: account.isPrimary,

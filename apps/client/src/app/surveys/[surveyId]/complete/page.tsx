@@ -8,7 +8,7 @@ import SurveyCompleteSkeleton from '@/app/surveys/[surveyId]/complete/_component
 import useCompleteSurveyMutation from '@/app/surveys/[surveyId]/complete/_hooks/useCompleteSurveyMutation';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { useToast } from '@/components/Toast/ToastProvider';
-import { trackAmplitudeEvent } from '@/lib/amplitude';
+import { trackAmplitudeEvent, updateAmplitudeUserProperties } from '@/lib/amplitude';
 import { ApiError } from '@/lib/api';
 
 const CHAT_SUPPORT_URL = '#';
@@ -47,6 +47,15 @@ const SurveyCompletePage = () => {
     completionStartedAtRef.current = Date.now();
     completeSurveyMutation.mutate(surveyId, {
       onSuccess: () => {
+        const completedAt = new Date().toISOString();
+
+        updateAmplitudeUserProperties((identify) => {
+          identify.set('user_type', 'respondent');
+          identify.setOnce('first_survey_completed_at', completedAt);
+          identify.add('total_survey_completed_count', 1);
+          identify.set('last_survey_completed_at', completedAt);
+        });
+
         trackAmplitudeEvent('survey_completed', {
           survey_id: surveyId,
           completion_time: getCompletionTime(completionStartedAtRef.current),

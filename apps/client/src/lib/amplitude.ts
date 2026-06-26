@@ -3,6 +3,9 @@
 import * as amplitude from '@amplitude/unified';
 
 type AmplitudeEventProperties = Record<string, string | number | boolean | null | undefined>;
+type AmplitudeUserPropertyValue = string | number | boolean;
+type AmplitudeUserProperties = Record<string, AmplitudeUserPropertyValue | null | undefined>;
+type AmplitudeIdentify = InstanceType<typeof amplitude.Identify>;
 
 let hasInitializedAmplitude = false;
 
@@ -25,6 +28,24 @@ export const identifyAmplitudeUser = (userId: string) => {
   if (!initializeAmplitude()) return;
 
   amplitude.setUserId(userId);
+};
+
+export const setAmplitudeUserProperties = (properties: AmplitudeUserProperties) => {
+  updateAmplitudeUserProperties((identify) => {
+    Object.entries(properties).forEach(([property, value]) => {
+      if (value === null || value === undefined) return;
+
+      identify.set(property, value);
+    });
+  });
+};
+
+export const updateAmplitudeUserProperties = (configure: (identify: AmplitudeIdentify) => void) => {
+  if (!initializeAmplitude()) return;
+
+  const identify = new amplitude.Identify();
+  configure(identify);
+  amplitude.identify(identify);
 };
 
 export const trackAmplitudeEvent = (

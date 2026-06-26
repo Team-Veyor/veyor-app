@@ -6,7 +6,7 @@ import { ACCOUNT_SUCCESS_MESSAGE, ERROR_MESSAGE } from '@/app/account/_constants
 import useCreateAccountMutation from '@/app/account/_hooks/useCreateAccountMutation';
 import type { CreateAccountRequest } from '@/app/account/_types/types';
 import { useToast } from '@/components/Toast/ToastProvider';
-import { trackAmplitudeEvent } from '@/lib/amplitude';
+import { setAmplitudeUserProperties, trackAmplitudeEvent } from '@/lib/amplitude';
 import { ApiError } from '@/lib/api';
 
 const AddAccountPage = () => {
@@ -18,6 +18,7 @@ const AddAccountPage = () => {
   const handleSubmit = (form: CreateAccountRequest) => {
     mutate(form, {
       onSuccess: () => {
+        setAmplitudeUserProperties({ bank_name: form.bank });
         trackAmplitudeEvent('bank_info_completed', { bank_name: form.bank });
         showToast({
           type: 'success',

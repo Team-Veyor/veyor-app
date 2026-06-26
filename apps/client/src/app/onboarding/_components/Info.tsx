@@ -21,7 +21,7 @@ import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import RadioButton from '@/components/Radio/RadioButton';
 import Select from '@/components/Select/Select';
-import { trackAmplitudeEvent } from '@/lib/amplitude';
+import { setAmplitudeUserProperties, trackAmplitudeEvent } from '@/lib/amplitude';
 import { supabase } from '@/lib/supabase';
 
 type OnboardingStep = 'info' | 'intro';
@@ -96,6 +96,14 @@ const Info = () => {
           const {
             data: { user },
           } = await supabase.auth.getUser();
+
+          setAmplitudeUserProperties({
+            user_id: user?.id,
+            gender: form.gender,
+            birth_year: Number(form.birthYear),
+            job_category: form.occupation,
+            marketing_received: marketingReceived,
+          });
 
           trackAmplitudeEvent('personal_info_completed', {
             user_id: user?.id,

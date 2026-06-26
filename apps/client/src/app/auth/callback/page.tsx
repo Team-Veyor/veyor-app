@@ -6,7 +6,12 @@ import { getUser } from '@/app/login/_apis/users';
 import { LOGIN_ERROR_MESSAGE } from '@/app/login/_constants/constants';
 import Spinner from '@/components/Spinner/Spinner';
 import { useToast } from '@/components/Toast/ToastProvider';
-import { identifyAmplitudeUser, trackAmplitudeEventOnce } from '@/lib/amplitude';
+import {
+  identifyAmplitudeUser,
+  setAmplitudeUserProperties,
+  trackAmplitudeEventOnce,
+  updateAmplitudeUserProperties,
+} from '@/lib/amplitude';
 import { supabase } from '@/lib/supabase';
 
 export default function AuthCallbackPage() {
@@ -33,10 +38,18 @@ export default function AuthCallbackPage() {
 
       const me = await getUser();
       identifyAmplitudeUser(me.id);
+      setAmplitudeUserProperties({ user_id: me.id });
 
       if (!me.onboarded) {
         const acquisitionChannel =
           new URLSearchParams(window.location.search).get('utm_source') || 'direct';
+        const signupDate = data.session.user.created_at;
+
+        updateAmplitudeUserProperties((identify) => {
+          identify.setOnce('signup_method', 'kakao_talk');
+          identify.setOnce('signup_date', signupDate);
+          identify.setOnce('acquisition_channel', acquisitionChannel);
+        });
 
         trackAmplitudeEventOnce(`signup_completed:${me.id}`, 'signup_completed', {
           signup_method: 'kakao',
