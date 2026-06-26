@@ -1,12 +1,15 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { ToastProvider } from '@/components/Toast/ToastProvider';
+import { initializeAmplitude, trackAmplitudeEvent } from '@/lib/amplitude';
 import { supabase } from '@/lib/supabase';
 
 export default function Providers({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -20,6 +23,19 @@ export default function Providers({ children }: { children: ReactNode }) {
         },
       }),
   );
+
+  useEffect(() => {
+    initializeAmplitude();
+  }, []);
+
+  useEffect(() => {
+    const trackServiceExit = () => {
+      trackAmplitudeEvent('service_exit', { exit_point: pathname });
+    };
+
+    window.addEventListener('pagehide', trackServiceExit);
+    return () => window.removeEventListener('pagehide', trackServiceExit);
+  }, [pathname]);
 
   useEffect(() => {
     const {
