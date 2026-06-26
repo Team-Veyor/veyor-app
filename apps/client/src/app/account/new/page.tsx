@@ -2,9 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import AccountForm from '@/app/account/_components/AccountForm';
+import { ACCOUNT_SUCCESS_MESSAGE, ERROR_MESSAGE } from '@/app/account/_constants/constants';
 import useCreateAccountMutation from '@/app/account/_hooks/useCreateAccountMutation';
 import type { CreateAccountRequest } from '@/app/account/_types/types';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { ApiError } from '@/lib/api';
 
 const AddAccountPage = () => {
   const router = useRouter();
@@ -17,12 +19,17 @@ const AddAccountPage = () => {
       onSuccess: () => {
         showToast({
           type: 'success',
-          message: '리워드를 지급받으실 계좌 정보가 저장되었습니다.',
+          message: ACCOUNT_SUCCESS_MESSAGE.save,
         });
         router.replace('/user/account');
       },
-      onError: () => {
-        showToast({ type: 'warning', message: '저장에 실패했습니다. 다시 시도해주세요.' });
+      onError: (error: Error) => {
+        if (error instanceof ApiError && error.status === 409) {
+          showToast({ type: 'warning', message: ERROR_MESSAGE.duplicateAccount });
+          return;
+        }
+
+        showToast({ type: 'warning', message: ERROR_MESSAGE.saveError });
       },
     });
   };

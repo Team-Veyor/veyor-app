@@ -2,10 +2,12 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import AccountForm from '@/app/account/_components/AccountForm';
+import { ERROR_MESSAGE } from '@/app/account/_constants/constants';
 import useUpdateAccountMutation from '@/app/account/_hooks/useUpdateAccountMutation';
 import type { Account, UpdateAccountRequest } from '@/app/account/_types/types';
 import useAccounts from '@/app/user/_hooks/useAccounts';
 import { useToast } from '@/components/Toast/ToastProvider';
+import { ApiError } from '@/lib/api';
 
 const EditAccountForm = ({ account }: { account: Account }) => {
   const router = useRouter();
@@ -22,8 +24,13 @@ const EditAccountForm = ({ account }: { account: Account }) => {
         });
         router.replace('/user/account');
       },
-      onError: () => {
-        showToast({ type: 'warning', message: '저장에 실패했습니다. 다시 시도해주세요.' });
+      onError: (error: Error) => {
+        if (error instanceof ApiError && error.status === 409) {
+          showToast({ type: 'warning', message: ERROR_MESSAGE.duplicateAccount });
+          return;
+        }
+
+        showToast({ type: 'warning', message: ERROR_MESSAGE.saveError });
       },
     });
   };
