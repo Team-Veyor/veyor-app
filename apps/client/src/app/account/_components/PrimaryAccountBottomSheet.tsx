@@ -49,7 +49,11 @@ const PrimaryAccountBottomSheet = ({
             const checked = selectedId === account.id;
 
             return (
-              <List.Item key={account.id} onClick={() => setSelectedId(account.id)}>
+              <List.Item
+                key={account.id}
+                className='focus:outline-none'
+                onClick={() => setSelectedId(account.id)}
+              >
                 <List.Item.Leading>
                   <Image src={logo.icon} alt='' width={24} height={24} className='size-6' />
                 </List.Item.Leading>
