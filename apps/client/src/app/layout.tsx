@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
 import Providers from '@/app/providers';
+import { Amplitude } from '@/lib/amplitude';
 
 const suit = localFont({
   src: [
@@ -48,6 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko' className={`${suit.variable} h-full antialiased`}>
+      <Amplitude />
       <body className='min-h-full flex flex-col font-sans'>
         <Providers>{children}</Providers>
       </body>
