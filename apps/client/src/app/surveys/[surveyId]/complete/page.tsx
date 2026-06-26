@@ -63,14 +63,14 @@ const SurveyCompletePage = () => {
         });
 
         trackAmplitudeEvent('survey_completed', {
-          entry_point: 'complete_survey',
+          entry_point: '/surveys/complete',
           survey_id: surveyId,
           completion_time: normalizeAmplitudeCompletionTime(completionStartedAtRef.current),
         });
       },
       onError: (error) => {
         trackAmplitudeEvent('survey_complete_failed', {
-          entry_point: 'complete_survey',
+          entry_point: '/surveys/complete',
           survey_id: surveyId,
           completion_time: normalizeAmplitudeCompletionTime(completionStartedAtRef.current),
           error_reason: getAmplitudeCompletionErrorReason(error),
@@ -92,13 +92,13 @@ const SurveyCompletePage = () => {
   }, [completeErrorToastMessage, router, showToast]);
 
   const handleHomeClick = () => {
-    trackAmplitudeEvent('cancel_clicked', { entry_point: 'complete_survey', survey_id: surveyId });
+    trackAmplitudeEvent('cancel_clicked', { entry_point: '/surveys/complete', survey_id: surveyId });
     router.replace('/home');
   };
 
   const handleContactClick = () => {
     trackAmplitudeEvent('chat_support_clicked', {
-      entry_point: 'complete_survey',
+      entry_point: '/surveys/complete',
       survey_id: surveyId,
       share_channel: AMPLITUDE_SHARE_CHANNELS.kakao_open_chat,
     });

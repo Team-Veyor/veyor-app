@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { ToastProvider } from '@/components/Toast/ToastProvider';
-import { getAmplitudeExitPoint, initializeAmplitude, trackAmplitudeEvent } from '@/lib/amplitude';
+import { initializeAmplitude, toAmplitudePathConvention, trackAmplitudeEvent } from '@/lib/amplitude';
 import { supabase } from '@/lib/supabase';
 
 export default function Providers({ children }: { children: ReactNode }) {
@@ -30,7 +30,9 @@ export default function Providers({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const trackServiceExit = () => {
-      trackAmplitudeEvent('service_exit', { exit_point: getAmplitudeExitPoint(pathname) });
+      trackAmplitudeEvent('service_exit', {
+        exit_point: toAmplitudePathConvention(pathname),
+      });
     };
 
     window.addEventListener('pagehide', trackServiceExit);

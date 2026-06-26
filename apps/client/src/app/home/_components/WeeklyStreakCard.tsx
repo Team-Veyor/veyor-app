@@ -36,7 +36,7 @@ const WeeklyStreakCard = ({ streak, weeklyStatus, totalRewardAmount }: WeeklyStr
         theme='light'
         size='small'
         onClick={() => {
-          trackAmplitudeEvent('participation_history_clicked', { entry_point: 'home' });
+          trackAmplitudeEvent('participation_history_clicked', { entry_point: '/home' });
           router.push('/user/participations');
         }}
       >

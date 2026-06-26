@@ -20,7 +20,7 @@ const AddAccountPage = () => {
       onSuccess: () => {
         setAmplitudeUserProperties({ bank_name: form.bank });
         trackAmplitudeEvent('bank_info_completed', {
-          entry_point: 'signup',
+          entry_point: '/user/account',
           bank_name: form.bank,
         });
         showToast({

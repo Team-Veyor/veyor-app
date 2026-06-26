@@ -29,7 +29,7 @@ const UserPage = () => {
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        trackAmplitudeEvent('logout_completed', { entry_point: 'mypage' });
+        trackAmplitudeEvent('logout_completed', { entry_point: '/user' });
         setLogoutOpen(false);
         router.replace('/login');
       },
@@ -41,7 +41,7 @@ const UserPage = () => {
       onSuccess: () => {
         trackAmplitudeEvent('leave_service_completed', {
           leave_service_reason: null,
-          entry_point: 'mypage',
+          entry_point: '/user',
         });
         setWithdrawOpen(false);
         router.replace('/login');

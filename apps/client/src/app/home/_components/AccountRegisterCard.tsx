@@ -26,7 +26,7 @@ const AccountRegisterCard = () => {
       <Button
         size='medium'
         onClick={() => {
-          trackAmplitudeEvent('account_management_clicked', { entry_point: 'home' });
+          trackAmplitudeEvent('account_management_clicked', { entry_point: '/home' });
           router.push('/account/new');
         }}
       >

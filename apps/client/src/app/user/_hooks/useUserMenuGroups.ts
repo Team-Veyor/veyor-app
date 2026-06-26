@@ -23,7 +23,7 @@ export const useUserMenuGroups = ({
       onSelect: () => {
         trackAmplitudeEvent('menu_clicked', {
           mypage_menu_name: getAmplitudeMypageMenuName('채팅 상담 바로가기'),
-          entry_point: 'mypage',
+          entry_point: '/user',
           share_channel: AMPLITUDE_SHARE_CHANNELS.kakao_open_chat,
         });
         window.open(CHAT_SUPPORT_URL, '_blank', 'noopener,noreferrer');
@@ -35,14 +35,14 @@ export const useUserMenuGroups = ({
     {
       label: '계좌 정보 관리',
       onSelect: () => {
-        trackAmplitudeEvent('account_management_clicked', { entry_point: 'mypage' });
+        trackAmplitudeEvent('account_management_clicked', { entry_point: '/user' });
         router.push('/user/account');
       },
     },
     {
       label: '참여 내역',
       onSelect: () => {
-        trackAmplitudeEvent('participation_history_clicked', { entry_point: 'mypage' });
+        trackAmplitudeEvent('participation_history_clicked', { entry_point: '/user' });
         router.push('/user/participations');
       },
     },
@@ -54,7 +54,7 @@ export const useUserMenuGroups = ({
       onSelect: () => {
         trackAmplitudeEvent('menu_clicked', {
           mypage_menu_name: getAmplitudeMypageMenuName('서비스 이용 동의'),
-          entry_point: 'mypage',
+          entry_point: '/user',
         });
         router.push('/policy/consents');
       },
@@ -64,7 +64,7 @@ export const useUserMenuGroups = ({
       onSelect: () => {
         trackAmplitudeEvent('menu_clicked', {
           mypage_menu_name: getAmplitudeMypageMenuName('이용 약관'),
-          entry_point: 'mypage',
+          entry_point: '/user',
         });
         router.push('/policy/terms');
       },
@@ -74,7 +74,7 @@ export const useUserMenuGroups = ({
       onSelect: () => {
         trackAmplitudeEvent('menu_clicked', {
           mypage_menu_name: getAmplitudeMypageMenuName('오픈소스 라이선스'),
-          entry_point: 'mypage',
+          entry_point: '/user',
         });
         router.push('/policy/open-source');
       },
@@ -85,14 +85,14 @@ export const useUserMenuGroups = ({
     {
       label: '로그아웃',
       onSelect: () => {
-        trackAmplitudeEvent('logout_clicked', { entry_point: 'mypage' });
+        trackAmplitudeEvent('logout_clicked', { entry_point: '/user' });
         onLogout();
       },
     },
     {
       label: '탈퇴하기',
       onSelect: () => {
-        trackAmplitudeEvent('leave_service_clicked', { entry_point: 'mypage' });
+        trackAmplitudeEvent('leave_service_clicked', { entry_point: '/user' });
         onWithdraw();
       },
     },

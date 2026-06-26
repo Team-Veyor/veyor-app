@@ -52,7 +52,7 @@ export default function AuthCallbackPage() {
         });
 
         trackAmplitudeEventOnce(`signup_completed:${me.id}`, 'signup_completed', {
-          entry_point: 'signup',
+          entry_point: '/login',
           signup_method: 'kakao_talk',
           acquisition_channel: acquisitionChannel,
           user_type: 'new',

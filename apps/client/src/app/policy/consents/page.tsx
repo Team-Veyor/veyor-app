@@ -15,7 +15,7 @@ const ConsentsPage = () => {
   const handleMarketingChange = (agreed: boolean) => {
     setAmplitudeUserProperties({ marketing_received: agreed });
     trackAmplitudeEvent('consent_toggle_changed', {
-      entry_point: 'my_page/service_consent',
+      entry_point: '/policy/consents',
       consent_type: 'marketing',
       agreement_status: agreed,
     });

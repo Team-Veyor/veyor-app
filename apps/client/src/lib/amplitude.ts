@@ -7,20 +7,19 @@ type AmplitudeUserPropertyValue = string | number | boolean;
 type AmplitudeUserProperties = Record<string, AmplitudeUserPropertyValue | null | undefined>;
 type AmplitudeIdentify = InstanceType<typeof amplitude.Identify>;
 type AmplitudeTab = 'home' | 'mypage';
-type AmplitudeEntryPoint =
-  | 'signup'
-  | 'signup_personal_info'
-  | 'signup_service_consent'
-  | 'signup_onboarding'
-  | 'home'
-  | 'mypage'
-  | 'my_page/account_management'
-  | 'my_page/participation_history'
-  | 'my_page/service_consent'
-  | 'mypage_terms_of_service'
-  | 'mypage_open_source_license'
-  | 'complete_survey';
-type AmplitudeExitPoint = AmplitudeEntryPoint;
+type AmplitudePathConvention =
+  | '/login'
+  | '/onboarding-personal-info'
+  | '/onboarding-service-consent'
+  | '/onboarding'
+  | '/home'
+  | '/user'
+  | '/user/account'
+  | '/user/participations'
+  | '/policy/consents'
+  | '/policy/terms'
+  | '/policy/open-source'
+  | '/surveys/complete';
 type AmplitudeMypageMenuName =
   | 'chat_support'
   | 'service_consent'
@@ -81,21 +80,21 @@ export const getAmplitudeTab = (pathname: string): AmplitudeTab => {
   return 'mypage';
 };
 
-export const getAmplitudeExitPoint = (pathname: string): AmplitudeExitPoint => {
-  if (pathname.startsWith('/home')) return 'home';
-  if (pathname.startsWith('/user/account')) return 'my_page/account_management';
-  if (pathname.startsWith('/user/participations')) return 'my_page/participation_history';
-  if (pathname.startsWith('/policy/consents')) return 'my_page/service_consent';
-  if (pathname.startsWith('/policy/terms')) return 'mypage_terms_of_service';
-  if (pathname.startsWith('/policy/open-source')) return 'mypage_open_source_license';
-  if (pathname.startsWith('/surveys/') && pathname.endsWith('/complete')) return 'complete_survey';
-  if (pathname.startsWith('/onboarding')) return 'signup_onboarding';
-  if (pathname.startsWith('/account/') && !pathname.endsWith('/new')) {
-    return 'my_page/account_management';
-  }
-  if (pathname.startsWith('/user')) return 'mypage';
+export const toAmplitudePathConvention = (pathname: string): AmplitudePathConvention => {
+  if (pathname === '/login') return '/login';
+  if (pathname === '/onboarding') return '/onboarding';
+  if (pathname === '/home') return '/home';
+  if (pathname === '/user') return '/user';
+  if (pathname.startsWith('/user/account')) return '/user/account';
+  if (pathname.startsWith('/user/participations')) return '/user/participations';
+  if (pathname.startsWith('/policy/consents')) return '/policy/consents';
+  if (pathname.startsWith('/policy/terms')) return '/policy/terms';
+  if (pathname.startsWith('/policy/open-source')) return '/policy/open-source';
+  if (pathname.startsWith('/surveys/') && pathname.endsWith('/complete')) return '/surveys/complete';
+  if (pathname.startsWith('/onboarding')) return '/onboarding';
+  if (pathname.startsWith('/account/')) return '/user/account';
 
-  return 'signup';
+  return '/user';
 };
 
 export const getAmplitudeMypageMenuName = (label: string): AmplitudeMypageMenuName | null => {
