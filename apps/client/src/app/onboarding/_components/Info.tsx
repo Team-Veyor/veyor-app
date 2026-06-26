@@ -81,6 +81,7 @@ const Info = () => {
     const marketingReceived = agreedSet.has('marketing');
 
     trackAmplitudeEvent('service_consent_agreed', {
+      entry_point: 'signup_service_consent',
       marketing_received: marketingReceived,
     });
 
@@ -106,6 +107,7 @@ const Info = () => {
           });
 
           trackAmplitudeEvent('personal_info_completed', {
+            entry_point: 'signup_personal_info',
             user_id: user?.id,
             signup_date: user?.created_at ? user.created_at.slice(0, 10) : undefined,
             gender: form.gender,

@@ -61,6 +61,7 @@ const AccountPage = () => {
     setPrimary(accountToSetPrimary.id, {
       onSuccess: () => {
         trackAmplitudeEvent('default_account_changed', {
+          entry_point: 'my_page/account_management',
           previous_bank_name: previousPrimaryAccount?.bank,
           new_bank_name: accountToSetPrimary.bank,
           account_count: accounts?.length ?? 0,
@@ -86,6 +87,7 @@ const AccountPage = () => {
     deleteAccount(deletedAccount.id, {
       onSuccess: () => {
         trackAmplitudeEvent('account_deleted', {
+          entry_point: 'my_page/account_management',
           account_count: remaining.length,
           account_default: deletedAccount.isPrimary,
         });
@@ -103,6 +105,7 @@ const AccountPage = () => {
           setPrimary(remaining[0].id, {
             onSuccess: () => {
               trackAmplitudeEvent('default_account_changed', {
+                entry_point: 'my_page/account_management',
                 previous_bank_name: deletedAccount.bank,
                 new_bank_name: remaining[0].bank,
                 account_count: remaining.length,
@@ -134,6 +137,7 @@ const AccountPage = () => {
     setPrimary(accountId, {
       onSuccess: () => {
         trackAmplitudeEvent('default_account_changed', {
+          entry_point: 'my_page/account_management',
           previous_bank_name: previousPrimaryAccount?.bank,
           new_bank_name: selectedAccount?.bank,
           account_count: accounts?.length ?? primarySelection.candidates.length,
@@ -161,7 +165,9 @@ const AccountPage = () => {
       <List>
         <List.Item
           onClick={() => {
-            trackAmplitudeEvent('account_added_clicked');
+            trackAmplitudeEvent('account_added_clicked', {
+              entry_point: 'my_page/account_management',
+            });
             router.push('/account/new');
           }}
         >

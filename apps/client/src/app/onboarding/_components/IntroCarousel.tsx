@@ -153,7 +153,7 @@ const IntroCarousel = () => {
         theme='dark'
         size='large'
         onClick={() => {
-          trackAmplitudeEvent('start_clicked');
+          trackAmplitudeEvent('start_clicked', { entry_point: 'signup_onboarding' });
           router.replace('/home');
         }}
       >

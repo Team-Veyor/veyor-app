@@ -8,7 +8,13 @@ import SurveyCompleteSkeleton from '@/app/surveys/[surveyId]/complete/_component
 import useCompleteSurveyMutation from '@/app/surveys/[surveyId]/complete/_hooks/useCompleteSurveyMutation';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { useToast } from '@/components/Toast/ToastProvider';
-import { trackAmplitudeEvent, updateAmplitudeUserProperties } from '@/lib/amplitude';
+import {
+  AMPLITUDE_SHARE_CHANNELS,
+  getAmplitudeCompletionErrorReason,
+  normalizeAmplitudeCompletionTime,
+  trackAmplitudeEvent,
+  updateAmplitudeUserProperties,
+} from '@/lib/amplitude';
 import { ApiError } from '@/lib/api';
 
 const CHAT_SUPPORT_URL = '#';
@@ -57,15 +63,17 @@ const SurveyCompletePage = () => {
         });
 
         trackAmplitudeEvent('survey_completed', {
+          entry_point: 'complete_survey',
           survey_id: surveyId,
-          completion_time: getCompletionTime(completionStartedAtRef.current),
+          completion_time: normalizeAmplitudeCompletionTime(completionStartedAtRef.current),
         });
       },
       onError: (error) => {
         trackAmplitudeEvent('survey_complete_failed', {
+          entry_point: 'complete_survey',
           survey_id: surveyId,
-          completion_time: getCompletionTime(completionStartedAtRef.current),
-          error_reason: getCompletionErrorReason(error),
+          completion_time: normalizeAmplitudeCompletionTime(completionStartedAtRef.current),
+          error_reason: getAmplitudeCompletionErrorReason(error),
         });
       },
     });
@@ -84,12 +92,16 @@ const SurveyCompletePage = () => {
   }, [completeErrorToastMessage, router, showToast]);
 
   const handleHomeClick = () => {
-    trackAmplitudeEvent('cancel_clicked', { survey_id: surveyId });
+    trackAmplitudeEvent('cancel_clicked', { entry_point: 'complete_survey', survey_id: surveyId });
     router.replace('/home');
   };
 
   const handleContactClick = () => {
-    trackAmplitudeEvent('chat_support_clicked', { survey_id: surveyId });
+    trackAmplitudeEvent('chat_support_clicked', {
+      entry_point: 'complete_survey',
+      survey_id: surveyId,
+      share_channel: AMPLITUDE_SHARE_CHANNELS.kakao_open_chat,
+    });
     window.open(CHAT_SUPPORT_URL, '_blank', 'noopener,noreferrer');
   };
 
@@ -111,20 +123,6 @@ const SurveyCompletePage = () => {
       )}
     </div>
   );
-};
-
-const getCompletionTime = (startedAt: number | null) => {
-  if (!startedAt) return 0;
-
-  return Number(((Date.now() - startedAt) / 1000).toFixed(2));
-};
-
-const getCompletionErrorReason = (error: Error) => {
-  if (error instanceof ApiError) {
-    return error.code ?? String(error.status);
-  }
-
-  return error.message;
 };
 
 export default SurveyCompletePage;

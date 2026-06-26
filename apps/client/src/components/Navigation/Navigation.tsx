@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import HomeIcon from '@/assets/icons/HomeIcon';
 import UserIcon from '@/assets/icons/UserIcon';
-import { trackAmplitudeEvent } from '@/lib/amplitude';
+import { getAmplitudeTab, trackAmplitudeEvent } from '@/lib/amplitude';
 import { cn } from '@/lib/utils';
 
 const ITEMS = [
@@ -20,6 +20,7 @@ const ITEMS = [
  */
 const Navigation = () => {
   const pathname = usePathname();
+  const currentTab = getAmplitudeTab(pathname);
   const currentItem = ITEMS.find(({ match }) =>
     match.some((path) => pathname === path || pathname.startsWith(`${path}/`)),
   );
@@ -46,8 +47,8 @@ const Navigation = () => {
               if (currentItem?.href === href) return;
 
               trackAmplitudeEvent('navigation_changed', {
-                from_tab: currentItem?.href,
-                to_tab: href,
+                from_tab: currentTab,
+                to_tab: href === '/home' ? 'home' : 'mypage',
               });
             }}
             className={cn(

@@ -29,7 +29,7 @@ const UserPage = () => {
   const handleLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        trackAmplitudeEvent('logout_completed');
+        trackAmplitudeEvent('logout_completed', { entry_point: 'mypage' });
         setLogoutOpen(false);
         router.replace('/login');
       },
@@ -39,7 +39,10 @@ const UserPage = () => {
   const handleWithdraw = () => {
     withdrawMutation.mutate(undefined, {
       onSuccess: () => {
-        trackAmplitudeEvent('leave_service_completed', { leave_service_reason: null });
+        trackAmplitudeEvent('leave_service_completed', {
+          leave_service_reason: null,
+          entry_point: 'mypage',
+        });
         setWithdrawOpen(false);
         router.replace('/login');
       },
