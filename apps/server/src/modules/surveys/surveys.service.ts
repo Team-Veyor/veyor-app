@@ -17,6 +17,29 @@ export interface TodaySurvey {
   rewardStatus: RewardStatus;
 }
 
+function one<T>(value: T | T[] | null | undefined): T | null {
+  return (Array.isArray(value) ? value[0] : value) ?? null;
+}
+
+function intake(survey: SurveyRow) {
+  return one(survey.survey_intakes);
+}
+
+function suggestedAmount(survey: SurveyRow): number | null {
+  return intake(survey)?.suggested_amount ?? null;
+}
+
+function estimatedDurationFromAmount(amount: number | null): string | null {
+  if (amount == null || amount <= 0) {
+    return null;
+  }
+  const bucket = Math.max(1, Math.ceil(amount / 100));
+  if (bucket === 1) {
+    return '30초~1분';
+  }
+  return `${bucket - 1}~${bucket}분`;
+}
+
 @Injectable()
 export class SurveysService {
   constructor(
@@ -68,11 +91,12 @@ export class SurveysService {
       userId,
       survey.id,
     );
+    const rewardAmount = suggestedAmount(survey) ?? survey.reward_amount;
     return {
       id: survey.id,
-      title: survey.title,
-      estMinutes: survey.est_minutes,
-      rewardAmount: survey.reward_amount,
+      title: intake(survey)?.topic || survey.title,
+      estMinutes: estimatedDurationFromAmount(rewardAmount) ?? survey.est_minutes,
+      rewardAmount,
       externalUrl: survey.external_url,
       expiresAt: survey.expires_at,
       participated,
@@ -124,6 +148,11 @@ export class SurveysService {
     // start 기록·중복 참여 게이트를 통과한 뒤 수행한다(비참여자에게 마감 정보 미노출).
     const recruitLimit = await this.repo.getRecruitLimit(surveyId);
     // start 기록 게이트·중복 참여·정원 마감은 participations 레이어에서 처리
-    return this.participations.complete(userId, surveyId, survey.reward_amount, recruitLimit);
+    return this.participations.complete(
+      userId,
+      surveyId,
+      suggestedAmount(survey) ?? survey.reward_amount,
+      recruitLimit,
+    );
   }
 }

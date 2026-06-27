@@ -1,7 +1,7 @@
 export type TodaySurveySummary = {
   id: string;
   title: string;
-  estMinutes: string;
+  estMinutes: string | null;
   rewardAmount: number;
   externalUrl: string;
   participated: boolean;

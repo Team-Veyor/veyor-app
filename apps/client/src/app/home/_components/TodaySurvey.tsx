@@ -14,7 +14,7 @@ interface TodaySurveyProps {
   id: string;
   title: string;
   rewardAmount: number;
-  estMinutes: string;
+  estMinutes: string | null;
   url: string;
   participated: boolean;
   accountRegistered: boolean;
@@ -34,6 +34,12 @@ const TodaySurvey = ({
   const router = useRouter();
   const { mutate: startSurvey, isPending } = useStartSurveyMutation();
   const { showToast } = useToast();
+
+  const durationText = estMinutes
+    ? /[분초]/.test(estMinutes)
+      ? estMinutes
+      : `${estMinutes}분`
+    : '소요시간 미정';
 
   const handleButtonClick = () => {
     if (participated || isPending) return;
@@ -81,7 +87,7 @@ const TodaySurvey = ({
             {participated ? (
               <RewardBadge rewardStatus={rewardStatus} />
             ) : (
-              <p className='text-tertiary'>{estMinutes}</p>
+              <p className='text-tertiary'>{durationText}</p>
             )}
           </div>
         </div>
