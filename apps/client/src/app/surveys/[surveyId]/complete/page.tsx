@@ -92,7 +92,7 @@ const SurveyCompletePage = () => {
   }, [completeErrorToastMessage, router, showToast]);
 
   const handleHomeClick = () => {
-    trackAmplitudeEvent('cancel_clicked', { entry_point: '/complete-survey', survey_id: surveyId });
+    trackAmplitudeEvent('cancel_clicked', { survey_id: surveyId });
     router.replace('/home');
   };
 
