@@ -8,6 +8,7 @@ import Spinner from '@/components/Spinner/Spinner';
 import { useToast } from '@/components/Toast/ToastProvider';
 import {
   identifyAmplitudeUser,
+  normalizeAmplitudeAcquisitionChannel,
   setAmplitudeUserProperties,
   trackAmplitudeEventOnce,
   updateAmplitudeUserProperties,
@@ -41,8 +42,9 @@ export default function AuthCallbackPage() {
       setAmplitudeUserProperties({ user_id: me.id });
 
       if (!me.onboarded) {
-        const acquisitionChannel =
-          new URLSearchParams(window.location.search).get('utm_source') || 'direct';
+        const acquisitionChannel = normalizeAmplitudeAcquisitionChannel(
+          new URLSearchParams(window.location.search).get('utm_source'),
+        );
         const signupDate = data.session.user.created_at;
 
         updateAmplitudeUserProperties((identify) => {

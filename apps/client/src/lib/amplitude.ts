@@ -26,6 +26,7 @@ type AmplitudeMypageMenuName =
   | 'terms_of_service'
   | 'open_source_license';
 type AmplitudeShareChannel = 'kakao_open_chat' | 'kakao_talk' | 'instagram' | 'referral' | 'community' | 'other';
+type AmplitudeAcquisitionChannel = AmplitudeShareChannel;
 type AmplitudeCompletionErrorReason =
   | 'survey_expired'
   | 'tracking_param_lost'
@@ -152,6 +153,28 @@ export const AMPLITUDE_SHARE_CHANNELS = {
   community: 'community',
   other: 'other',
 } as const satisfies Record<AmplitudeShareChannel, AmplitudeShareChannel>;
+
+export const normalizeAmplitudeAcquisitionChannel = (
+  value: string | null,
+): AmplitudeAcquisitionChannel => {
+  switch (value) {
+    case 'kakao_open_chat':
+    case 'open_chat':
+    case 'openchat':
+    case 'kakao-open-chat':
+      return 'kakao_open_chat';
+    case 'kakao_talk':
+      return 'kakao_talk';
+    case 'instagram':
+      return 'instagram';
+    case 'referral':
+      return 'referral';
+    case 'community':
+      return 'community';
+    default:
+      return 'other';
+  }
+};
 
 export const trackAmplitudeEvent = (
   eventName: string,
