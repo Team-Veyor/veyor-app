@@ -81,7 +81,7 @@ const TodaySurvey = ({
             {participated ? (
               <RewardBadge rewardStatus={rewardStatus} />
             ) : (
-              <p className='text-tertiary'>{estMinutes}분</p>
+              <p className='text-tertiary'>{estMinutes}</p>
             )}
           </div>
         </div>
