@@ -19,7 +19,7 @@ type AmplitudePathConvention =
   | '/policy/consents'
   | '/policy/terms'
   | '/policy/open-source'
-  | '/complete-survey';
+  | '/surveys/complete';
 type AmplitudeMypageMenuName =
   | 'chat_support'
   | 'service_consent'
@@ -91,7 +91,7 @@ export const toAmplitudePathConvention = (pathname: string): AmplitudePathConven
   if (pathname.startsWith('/policy/consents')) return '/policy/consents';
   if (pathname.startsWith('/policy/terms')) return '/policy/terms';
   if (pathname.startsWith('/policy/open-source')) return '/policy/open-source';
-  if (pathname.startsWith('/surveys/') && pathname.endsWith('/complete')) return '/complete-survey';
+  if (pathname.startsWith('/surveys/') && pathname.endsWith('/complete')) return '/surveys/complete';
   if (pathname.startsWith('/onboarding')) return '/onboarding';
   if (pathname.startsWith('/account/')) return '/user/account';
 
