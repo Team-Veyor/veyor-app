@@ -21,7 +21,6 @@ const EditAccountForm = ({ account, accountCount }: { account: Account; accountC
       onSuccess: () => {
         setAmplitudeUserProperties({ bank_name: changes.bank ?? account.bank });
         trackAmplitudeEvent('account_edited', {
-          entry_point: '/user/account',
           account_count: accountCount,
           account_default: account.isPrimary,
         });

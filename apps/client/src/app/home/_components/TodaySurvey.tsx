@@ -38,7 +38,7 @@ const TodaySurvey = ({
   const handleButtonClick = () => {
     if (participated || isPending) return;
 
-    trackAmplitudeEvent('survey_started', { survey_id: id, entry_point: '/home' });
+    trackAmplitudeEvent('survey_started', { survey_id: id });
 
     // 대표계좌가 없으면 리워드를 받을 수 없으므로, 설문을 열기 전에 계좌 등록으로 유도한다.
     if (!accountRegistered) {

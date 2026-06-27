@@ -9,7 +9,6 @@ import useCompleteSurveyMutation from '@/app/surveys/[surveyId]/complete/_hooks/
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { useToast } from '@/components/Toast/ToastProvider';
 import {
-  AMPLITUDE_SHARE_CHANNELS,
   getAmplitudeCompletionErrorReason,
   normalizeAmplitudeCompletionTime,
   trackAmplitudeEvent,
@@ -63,14 +62,12 @@ const SurveyCompletePage = () => {
         });
 
         trackAmplitudeEvent('survey_completed', {
-          entry_point: '/complete-survey',
           survey_id: surveyId,
           completion_time: normalizeAmplitudeCompletionTime(completionStartedAtRef.current),
         });
       },
       onError: (error) => {
         trackAmplitudeEvent('survey_complete_failed', {
-          entry_point: '/complete-survey',
           survey_id: surveyId,
           completion_time: normalizeAmplitudeCompletionTime(completionStartedAtRef.current),
           error_reason: getAmplitudeCompletionErrorReason(error),
@@ -97,11 +94,7 @@ const SurveyCompletePage = () => {
   };
 
   const handleContactClick = () => {
-    trackAmplitudeEvent('chat_support_clicked', {
-      entry_point: '/complete-survey',
-      survey_id: surveyId,
-      share_channel: AMPLITUDE_SHARE_CHANNELS.kakao_open_chat,
-    });
+    trackAmplitudeEvent('chat_support_clicked', { survey_id: surveyId });
     window.open(CHAT_SUPPORT_URL, '_blank', 'noopener,noreferrer');
   };
 
