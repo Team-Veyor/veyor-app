@@ -15,10 +15,16 @@ export interface SurveyRow {
   expires_at: string | null;
   is_published: boolean;
   approval_status: string;
+  survey_intakes?: SurveyIntakeEmbed | SurveyIntakeEmbed[] | null;
+}
+
+export interface SurveyIntakeEmbed {
+  topic: string | null;
+  suggested_amount: number | null;
 }
 
 const SURVEY_COLS =
-  'id, title, external_url, reward_amount, est_minutes, target_gender, target_birth_year_min, target_birth_year_max, target_occupation, opens_at, expires_at, is_published, approval_status';
+  'id, title, external_url, reward_amount, est_minutes, target_gender, target_birth_year_min, target_birth_year_max, target_occupation, opens_at, expires_at, is_published, approval_status, survey_intakes(topic, suggested_amount)';
 
 @Injectable()
 export class SurveysRepository {
