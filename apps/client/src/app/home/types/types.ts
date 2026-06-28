@@ -4,6 +4,7 @@ export type TodaySurveySummary = {
   estMinutes: string | null;
   rewardAmount: number;
   externalUrl: string;
+  expiresAt: string | null;
   participated: boolean;
   rewardStatus: RewardStatus;
 };

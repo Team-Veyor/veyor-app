@@ -16,6 +16,7 @@ interface TodaySurveyProps {
   rewardAmount: number;
   estMinutes: string | null;
   url: string;
+  expiresAt: string | null;
   participated: boolean;
   accountRegistered: boolean;
   rewardStatus: RewardStatus;
@@ -27,6 +28,7 @@ const TodaySurvey = ({
   rewardAmount,
   estMinutes,
   url,
+  expiresAt,
   participated,
   accountRegistered,
   rewardStatus,
@@ -85,7 +87,7 @@ const TodaySurvey = ({
             <p className='label-medium-strong'>{rewardAmount}원</p>
             <p>/</p>
             {participated ? (
-              <RewardBadge rewardStatus={rewardStatus} />
+              <RewardBadge rewardStatus={rewardStatus} expiresAt={expiresAt} />
             ) : (
               <p className='text-tertiary'>{durationText}</p>
             )}

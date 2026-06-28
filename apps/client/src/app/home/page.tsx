@@ -78,6 +78,7 @@ const HomePage = () => {
           rewardAmount={data.todaySurvey.rewardAmount}
           estMinutes={data.todaySurvey.estMinutes}
           url={data.todaySurvey.externalUrl}
+          expiresAt={data.todaySurvey.expiresAt}
           participated={data.todaySurvey.participated}
           accountRegistered={data.accountRegistered}
           rewardStatus={data.todaySurvey.rewardStatus}
