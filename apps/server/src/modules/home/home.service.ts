@@ -29,6 +29,7 @@ export class HomeService {
             estMinutes: today.estMinutes,
             rewardAmount: today.rewardAmount,
             externalUrl: today.externalUrl,
+            expiresAt: today.expiresAt,
             participated: today.participated,
             rewardStatus: today.rewardStatus,
           }
