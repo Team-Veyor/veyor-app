@@ -29,6 +29,15 @@ function suggestedAmount(survey: SurveyRow): number | null {
   return intake(survey)?.suggested_amount ?? null;
 }
 
+function hasTarget(survey: SurveyRow): boolean {
+  return (
+    !!survey.target_gender ||
+    survey.target_birth_year_min != null ||
+    survey.target_birth_year_max != null ||
+    !!survey.target_occupation
+  );
+}
+
 function estimatedDurationFromAmount(amount: number | null): string | null {
   if (amount == null || amount <= 0) {
     return null;
@@ -65,28 +74,13 @@ export class SurveysService {
         return false;
       }
     }
-    // 직업 타깃: 프로필에 직업이 있을 때만 필터링한다.
-    // 아직 직업 미수집(null)인 사용자는 노출을 유지하고, 온보딩에서 직업을
-    // 수집하기 시작하면 자연히 정밀 매칭으로 전환된다.
-    if (survey.target_occupation && profile.occupation) {
-      if (survey.target_occupation !== profile.occupation) {
-        return false;
-      }
+    if (survey.target_occupation && survey.target_occupation !== profile.occupation) {
+      return false;
     }
     return true;
   }
 
-  /** 오늘 노출할 설문 1건(타깃 매칭). 없으면 null. */
-  async getToday(userId: string, now: Date = new Date()): Promise<TodaySurvey | null> {
-    const nowIso = now.toISOString();
-    const [candidates, profile] = await Promise.all([
-      this.repo.findOpenCandidates(nowIso),
-      this.repo.getProfileTarget(userId),
-    ]);
-    const survey = candidates.find((s) => this.matchesTarget(s, profile));
-    if (!survey) {
-      return null;
-    }
+  private async toTodaySurvey(userId: string, survey: SurveyRow): Promise<TodaySurvey> {
     const { participated, rewardStatus } = await this.participations.getParticipationStatus(
       userId,
       survey.id,
@@ -102,6 +96,31 @@ export class SurveysService {
       participated,
       rewardStatus: rewardStatus === 'paid' ? 'paid' : 'pending',
     };
+  }
+
+  /** 오늘 노출할 설문 전체(무타깃 우선, 이후 타깃 매칭). */
+  async getTodaySurveys(userId: string, now: Date = new Date()): Promise<TodaySurvey[]> {
+    const nowIso = now.toISOString();
+    const [candidates, profile] = await Promise.all([
+      this.repo.findOpenCandidates(nowIso),
+      this.repo.getProfileTarget(userId),
+    ]);
+    const surveys = candidates
+      .filter((s) => this.matchesTarget(s, profile))
+      .sort((a, b) => {
+        const targetOrder = Number(hasTarget(a)) - Number(hasTarget(b));
+        if (targetOrder !== 0) {
+          return targetOrder;
+        }
+        return new Date(b.opens_at).getTime() - new Date(a.opens_at).getTime();
+      });
+    return Promise.all(surveys.map((survey) => this.toTodaySurvey(userId, survey)));
+  }
+
+  /** @deprecated Use getTodaySurveys. Kept for callers that still need a single card. */
+  async getToday(userId: string, now: Date = new Date()): Promise<TodaySurvey | null> {
+    const [survey] = await this.getTodaySurveys(userId, now);
+    return survey ?? null;
   }
 
   /**

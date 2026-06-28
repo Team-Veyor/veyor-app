@@ -7,10 +7,10 @@ import { SurveysService } from './surveys.service';
 export class SurveysController {
   constructor(private readonly service: SurveysService) {}
 
-  /** GET /surveys/today — 오늘 노출 설문 1건(없으면 null) */
+  /** GET /surveys/today — 오늘 노출 설문 전체(무타깃 우선, 이후 타깃 매칭) */
   @Get('today')
   getToday(@CurrentUser() user: AuthUser) {
-    return this.service.getToday(user.id);
+    return this.service.getTodaySurveys(user.id);
   }
 
   /** POST /surveys/:surveyId/start — 설문 참여 시작(외부 설문 이동 직전, started 선기록) */

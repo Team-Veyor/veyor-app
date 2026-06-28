@@ -26,6 +26,7 @@ const OpenChatFloatingButton = () => {
 
 const HomeClient = () => {
   const { data, isPending, isLoading, isError } = useHomeQuery();
+  const todaySurveys = data?.todaySurveys ?? (data?.todaySurvey ? [data.todaySurvey] : []);
 
   if (isPending || isLoading) {
     return (
@@ -54,7 +55,7 @@ const HomeClient = () => {
     );
   }
 
-  if (!data?.todaySurvey) {
+  if (todaySurveys.length === 0) {
     return (
       <>
         <p className='label-medium text-gray-500'>오늘 설문이 없어요.</p>
@@ -72,17 +73,20 @@ const HomeClient = () => {
           title='설문 게시 시간: 매일 오전 10시'
         />
 
-        <TodaySurvey
-          id={data.todaySurvey.id}
-          title={data.todaySurvey.title}
-          rewardAmount={data.todaySurvey.rewardAmount}
-          estMinutes={data.todaySurvey.estMinutes}
-          url={data.todaySurvey.externalUrl}
-          expiresAt={data.todaySurvey.expiresAt}
-          participated={data.todaySurvey.participated}
-          accountRegistered={data.accountRegistered}
-          rewardStatus={data.todaySurvey.rewardStatus}
-        />
+        {todaySurveys.map((survey) => (
+          <TodaySurvey
+            key={survey.id}
+            id={survey.id}
+            title={survey.title}
+            rewardAmount={survey.rewardAmount}
+            estMinutes={survey.estMinutes}
+            url={survey.externalUrl}
+            expiresAt={survey.expiresAt}
+            participated={survey.participated}
+            accountRegistered={data.accountRegistered}
+            rewardStatus={survey.rewardStatus}
+          />
+        ))}
 
         <WeeklyStreakCard
           streak={data.streak.count}

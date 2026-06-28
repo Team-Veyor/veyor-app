@@ -133,14 +133,19 @@
 200
 {
   "accountRegistered": false,         // 계좌 등록 여부 → 상태 A/B 분기
-  "todaySurvey": {                     // 없으면 null
-    "id": "uuid",
-    "title": "데일리 보부상 가방 디자인 설문조사",
-    "estMinutes": "2-3",
-    "rewardAmount": 300,
-    "externalUrl": "https://...",
-    "participated": false             // 진행 전/완료 → 상태 B/C
-  },
+  "todaySurveys": [                    // 오늘 노출 설문 목록. 없으면 []
+    {
+      "id": "uuid",
+      "title": "데일리 보부상 가방 디자인 설문조사",
+      "estMinutes": "2-3",
+      "rewardAmount": 300,
+      "externalUrl": "https://...",
+      "expiresAt": "...",
+      "participated": false,           // 진행 전/완료 → 상태 B/C
+      "rewardStatus": "pending"
+    }
+  ],
+  "todaySurvey": { "...": "..." },      // 하위 호환용 첫 번째 설문. 없으면 null
   "streak": {
     "count": 3,                        // 연속 일수 (participations에서 계산)
     "weeklyStatus": ["mon","tue","wed"] // 주간 현황 그래픽용
@@ -155,19 +160,23 @@
 ## 4. 설문 / 참여 (Survey & Participation)
 
 ### `GET /surveys/today`
-오늘 노출 설문 1건(개인화: 연령/성별 타깃 반영). 없으면 `null`.
+오늘 노출 설문 전체(개인화: 연령/성별/직업 타깃 반영). 없으면 `[]`.
+타깃이 없는 설문을 먼저 내려주고, 그 다음 타깃이 일치하는 설문을 내려준다.
 > 노출 조건: `is_published=true` AND `approval_status='approved'` AND 기간 내(`opens_at ≤ now ≤ expires_at`). 운영자가 어드민에서 **게시**한 설문만 노출된다.
 ```json
 200
-{
-  "id": "uuid",
-  "title": "데일리 보부상 가방 디자인 설문조사",
-  "estMinutes": "2-3",
-  "rewardAmount": 300,
-  "externalUrl": "https://...",
-  "expiresAt": "...",
-  "participated": false
-}
+[
+  {
+    "id": "uuid",
+    "title": "데일리 보부상 가방 디자인 설문조사",
+    "estMinutes": "2-3",
+    "rewardAmount": 300,
+    "externalUrl": "https://...",
+    "expiresAt": "...",
+    "participated": false,
+    "rewardStatus": "pending"
+  }
+]
 ```
 
 ### `POST /surveys/:surveyId/start`

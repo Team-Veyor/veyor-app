@@ -16,7 +16,8 @@ export type WeeklyStreak = {
 
 export type HomeResponse = {
   accountRegistered: boolean;
-  todaySurvey: TodaySurveySummary | null;
+  todaySurveys?: TodaySurveySummary[];
+  todaySurvey?: TodaySurveySummary | null;
   streak: WeeklyStreak;
   totalRewardCount: number;
   totalRewardAmount: number;

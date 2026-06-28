@@ -141,6 +141,19 @@ async function main() {
         approval_status: 'approved',
       },
       {
+        title: '주부 타깃 설문 (e2e)',
+        external_url: 'https://example.com/survey/homemaker',
+        reward_amount: 400,
+        target_gender: 'female',
+        target_birth_year_min: 1990,
+        target_birth_year_max: 2000,
+        target_occupation: 'homemaker',
+        opens_at: new Date(now - 30_000).toISOString(), // 더 최신이지만 무타깃 설문 아래에 노출돼야 함
+        expires_at: new Date(now + 86400_000).toISOString(),
+        is_published: true,
+        approval_status: 'approved',
+      },
+      {
         title: '만료 설문 (e2e)',
         external_url: 'https://example.com/survey/expired',
         reward_amount: 100,
@@ -164,6 +177,7 @@ async function main() {
   for (const s of seed.data) seededSurveyIds.push(s.id);
   const todaySurveyId = seed.data.find((s) => s.title.includes('오늘')).id;
   const maleSurveyId = seed.data.find((s) => s.title.includes('남성')).id;
+  const homemakerSurveyId = seed.data.find((s) => s.title.includes('주부')).id;
   const expiredSurveyId = seed.data.find((s) => s.title.includes('만료')).id;
   const draftSurveyId = seed.data.find((s) => s.title.includes('미게시')).id;
 
@@ -186,7 +200,12 @@ async function main() {
 
   r = await api('POST', '/users/onboarding', {
     token,
-    body: { birthYear: 1998, gender: 'female', consents: { privacy: false, terms: true } },
+    body: {
+      birthYear: 1998,
+      gender: 'female',
+      occupation: 'homemaker',
+      consents: { privacy: false, terms: true },
+    },
   });
   check('온보딩 필수약관 미동의 400', r.status === 400, JSON.stringify(r));
 
@@ -195,6 +214,7 @@ async function main() {
     body: {
       birthYear: 1998,
       gender: 'female',
+      occupation: 'homemaker',
       consents: { privacy: true, terms: true, marketing: false },
     },
   });
@@ -233,16 +253,29 @@ async function main() {
     r.status === 200 && r.body?.accountRegistered === false,
     JSON.stringify(r.body),
   );
+  const homeSurveyIds = Array.isArray(r.body?.todaySurveys)
+    ? r.body.todaySurveys.map((s) => s.id)
+    : [];
   check(
-    '홈 오늘 설문 노출(타깃 매칭)',
-    r.body?.todaySurvey?.id === todaySurveyId,
-    `expected ${todaySurveyId}, got ${r.body?.todaySurvey?.id}`,
+    '홈 오늘 설문 다중 노출(무타깃 + 타깃 매칭)',
+    homeSurveyIds.includes(todaySurveyId) && homeSurveyIds.includes(homemakerSurveyId),
+    JSON.stringify(r.body?.todaySurveys),
   );
-  check('홈 남성타깃 설문 제외', r.body?.todaySurvey?.id !== maleSurveyId);
+  check(
+    '홈 무타깃 설문 최상단',
+    homeSurveyIds[0] === todaySurveyId && r.body?.todaySurvey?.id === todaySurveyId,
+    JSON.stringify(r.body?.todaySurveys),
+  );
+  check(
+    '홈 남성타깃 설문 제외',
+    !homeSurveyIds.includes(maleSurveyId),
+    JSON.stringify(r.body?.todaySurveys),
+  );
   check(
     '홈 미참여 시 rewardStatus pending',
-    r.body?.todaySurvey?.participated === false && r.body?.todaySurvey?.rewardStatus === 'pending',
-    JSON.stringify(r.body?.todaySurvey),
+    r.body?.todaySurveys?.[0]?.participated === false &&
+      r.body?.todaySurveys?.[0]?.rewardStatus === 'pending',
+    JSON.stringify(r.body?.todaySurveys?.[0]),
   );
 
   // ---------- 4. 계좌 ----------
@@ -337,9 +370,14 @@ async function main() {
   // ---------- 5. 설문 참여 (start → 외부 설문 → complete) ----------
   console.log('[5] 설문 참여/완료');
   r = await api('GET', '/surveys/today', { token });
+  let todayList = Array.isArray(r.body) ? r.body : [];
   check(
-    'GET /surveys/today (게시·승인된 설문만, 미게시 제외)',
-    r.status === 200 && r.body?.id === todaySurveyId && r.body?.participated === false,
+    'GET /surveys/today (무타깃 우선 + 매칭 타깃만)',
+    r.status === 200 &&
+      todayList[0]?.id === todaySurveyId &&
+      todayList.some((s) => s.id === homemakerSurveyId) &&
+      !todayList.some((s) => s.id === maleSurveyId) &&
+      todayList.find((s) => s.id === todaySurveyId)?.participated === false,
     JSON.stringify(r.body),
   );
 
@@ -382,7 +420,12 @@ async function main() {
 
   // 시작만 한 상태는 아직 완료 아님
   r = await api('GET', '/surveys/today', { token });
-  check('시작 후에도 participated false', r.body?.participated === false, JSON.stringify(r.body));
+  todayList = Array.isArray(r.body) ? r.body : [];
+  check(
+    '시작 후에도 participated false',
+    todayList.find((s) => s.id === todaySurveyId)?.participated === false,
+    JSON.stringify(r.body),
+  );
 
   // 완료 인증 (start 기록 있어야 통과)
   r = await api('POST', `/surveys/${todaySurveyId}/complete`, { token });
@@ -400,7 +443,12 @@ async function main() {
   );
 
   r = await api('GET', '/surveys/today', { token });
-  check('완료 후 participated true', r.body?.participated === true, JSON.stringify(r.body));
+  todayList = Array.isArray(r.body) ? r.body : [];
+  check(
+    '완료 후 participated true',
+    todayList.find((s) => s.id === todaySurveyId)?.participated === true,
+    JSON.stringify(r.body),
+  );
 
   // ---------- 6. 참여 내역 / 누적 ----------
   console.log('[6] 참여 내역');
