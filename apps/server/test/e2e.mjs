@@ -62,6 +62,17 @@ async function api(method, path, { token, body } = {}) {
 const seededSurveyIds = [];
 let testUserId = null;
 const NONEXISTENT_UUID = '00000000-0000-0000-0000-000000000000';
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+
+function toKstDate(iso) {
+  return new Date(new Date(iso).getTime() + KST_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+function addOneDay(dateStr) {
+  const d = new Date(`${dateStr}T00:00:00.000Z`);
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
 
 async function main() {
   console.log(`\n=== Veyor API e2e (${BASE}) ===\n`);
@@ -172,10 +183,11 @@ async function main() {
         approval_status: 'pending',
       },
     ])
-    .select('id, title, expires_at, target_gender');
+    .select('id, title, opens_at, expires_at, target_gender');
   if (seed.error) throw new Error(`설문 시드 실패: ${seed.error.message}`);
   for (const s of seed.data) seededSurveyIds.push(s.id);
   const todaySurveyId = seed.data.find((s) => s.title.includes('오늘')).id;
+  const todaySurveyOpensAt = seed.data.find((s) => s.title.includes('오늘')).opens_at;
   const maleSurveyId = seed.data.find((s) => s.title.includes('남성')).id;
   const homemakerSurveyId = seed.data.find((s) => s.title.includes('주부')).id;
   const expiredSurveyId = seed.data.find((s) => s.title.includes('만료')).id;
@@ -429,6 +441,7 @@ async function main() {
 
   // 완료 인증 (start 기록 있어야 통과)
   r = await api('POST', `/surveys/${todaySurveyId}/complete`, { token });
+  const completedParticipationId = r.body?.participationId;
   check(
     '설문 완료 201 + 리워드 pending',
     r.status === 201 && r.body?.reward?.amount === 300 && r.body?.reward?.status === 'pending',
@@ -476,9 +489,21 @@ async function main() {
     JSON.stringify(r.body),
   );
 
+  const postedDay = toKstDate(todaySurveyOpensAt);
+  const completedNextMorning = new Date(`${addOneDay(postedDay)}T08:00:00+09:00`).toISOString();
+  const { error: completedAtShiftError } = await admin
+    .from('participations')
+    .update({ completed_at: completedNextMorning })
+    .eq('id', completedParticipationId);
+  check(
+    '설문 다음날 오전 완료 시각 테스트 데이터 보정',
+    !completedAtShiftError,
+    completedAtShiftError?.message,
+  );
+
   r = await api('GET', '/home', { token });
   check(
-    '홈 streak 1 + 계좌 등록됨',
+    '홈 streak 설문 게시일 기준 1 + 계좌 등록됨',
     r.body?.streak?.count === 1 && r.body?.accountRegistered === true,
     JSON.stringify(r.body),
   );

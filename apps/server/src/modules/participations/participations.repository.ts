@@ -258,17 +258,20 @@ export class ParticipationsRepository {
     return { count: rows.length, amount };
   }
 
-  /** 완료 날짜(완료 시각) 전체. streak 계산용. 완료된 참여만. */
+  /** 완료 설문의 게시일 전체. streak 계산용. 완료된 참여만. */
   async getCompletedDates(userId: string): Promise<string[]> {
     const { data, error } = await this.db
       .from('participations')
-      .select('completed_at')
+      .select('completed_at, survey:surveys(opens_at)')
       .eq('user_id', userId)
       .eq('status', 'completed')
       .order('completed_at', { ascending: false });
     if (error) {
       throw new InternalServerErrorException('집계를 불러오지 못했습니다.');
     }
-    return (data ?? []).map((r) => r.completed_at as string);
+    return (data ?? []).map((r) => {
+      const survey = Array.isArray(r.survey) ? r.survey[0] : r.survey;
+      return (survey?.opens_at as string | null) ?? (r.completed_at as string);
+    });
   }
 }
