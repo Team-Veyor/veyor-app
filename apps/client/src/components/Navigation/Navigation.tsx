@@ -12,13 +12,18 @@ const ITEMS = [
   { href: '/user', label: '내 정보', Icon: UserIcon, match: ['/user', '/policy'] },
 ];
 
+interface NavigationProps {
+  /** false면 하단 flex 흐름에 배치 (고정 해제). 기본값 true. */
+  fixed?: boolean;
+}
+
 /**
  * 화면 하단에 고정되는 바텀 네비게이션.
  *
  * 현재 경로(`usePathname`)와 각 아이템의 `match` 경로들을 prefix 매칭해
  * 활성 아이템을 강조합니다. (예: '내 정보'는 `/user`, `/policy` 하위 모두 포함)
  */
-const Navigation = () => {
+const Navigation = ({ fixed = true }: NavigationProps) => {
   const pathname = usePathname();
   const currentTab = getAmplitudeTab(pathname);
   const currentItem = ITEMS.find(({ match }) =>
@@ -29,7 +34,8 @@ const Navigation = () => {
     <nav
       aria-label='하단 네비게이션'
       className={cn(
-        'fixed bottom-0 left-1/2 w-full max-w-[640px] -translate-x-1/2',
+        fixed && 'fixed bottom-0 left-1/2 w-full max-w-[640px] -translate-x-1/2',
+        !fixed && 'w-full shrink-0',
         'flex items-center justify-around',
         'rounded-t-24 bg-white px-[18px] pt-8 pb-32',
         'shadow-[0_0_80px_0_var(--color-black-alpha-5)]',

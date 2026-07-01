@@ -10,12 +10,14 @@ import KakaoIcon from '@/assets/icons/KakaoIcon';
 import Button from '@/components/Button/Button';
 import Callout from '@/components/Callout/Callout';
 
-const _CHAT_SUPPORT_URL = 'https://open.kakao.com/o/gpHKdMsi';
+const CHAT_SUPPORT_URL = 'https://open.kakao.com/o/gpHKdMsi';
+const HOME_SCROLL_CLASS =
+  'min-h-0 flex-1 overflow-y-auto scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch]';
 
 const OpenChatFloatingButton = () => {
   return (
     <Button
-      onClick={() => window.open(_CHAT_SUPPORT_URL, '_blank')}
+      onClick={() => window.open(CHAT_SUPPORT_URL, '_blank')}
       className='fixed right-[max(16px,calc((100vw-640px)/2+16px))] bottom-[112px] z-10 flex w-fit flex-col items-center justify-center gap-[6px] rounded-24 bg-[#FEE500] px-12 py-12 text-center text-black shadow-[0_4px_10px_0_rgba(0,0,0,0.20),inset_0_0_12px_0_rgba(255,255,255,0.80)] after:hidden'
     >
       <KakaoIcon className='size-24' />
@@ -31,7 +33,9 @@ const HomeClient = () => {
   if (isPending || isLoading) {
     return (
       <>
-        <HomeSkeleton />
+        <div className={HOME_SCROLL_CLASS}>
+          <HomeSkeleton />
+        </div>
         <OpenChatFloatingButton />
       </>
     );
@@ -40,7 +44,9 @@ const HomeClient = () => {
   if (isError || !data) {
     return (
       <>
-        <p className='label-medium text-gray-500'>홈 정보를 불러오지 못했어요.</p>
+        <div className={HOME_SCROLL_CLASS}>
+          <p className='label-medium text-gray-500'>홈 정보를 불러오지 못했어요.</p>
+        </div>
         <OpenChatFloatingButton />
       </>
     );
@@ -49,7 +55,9 @@ const HomeClient = () => {
   if (!data?.accountRegistered) {
     return (
       <>
-        <AccountRegisterCard />
+        <div className={HOME_SCROLL_CLASS}>
+          <AccountRegisterCard />
+        </div>
         <OpenChatFloatingButton />
       </>
     );
@@ -58,7 +66,9 @@ const HomeClient = () => {
   if (todaySurveys.length === 0) {
     return (
       <>
-        <p className='label-medium text-gray-500'>오늘 설문이 없어요.</p>
+        <div className={HOME_SCROLL_CLASS}>
+          <p className='label-medium text-gray-500'>오늘 설문이 없어요.</p>
+        </div>
         <OpenChatFloatingButton />
       </>
     );
@@ -66,33 +76,36 @@ const HomeClient = () => {
 
   return (
     <>
-      <div className='flex flex-col gap-12'>
+      <div className='flex min-h-0 flex-1 flex-col gap-12'>
         <Callout
+          className='shrink-0'
           type='success'
           icon={<CalendarIcon className='size-16' />}
           title='설문 게시 시간: 매일 오전 10시'
         />
 
-        {todaySurveys.map((survey) => (
-          <TodaySurvey
-            key={survey.id}
-            id={survey.id}
-            title={survey.title}
-            rewardAmount={survey.rewardAmount}
-            estMinutes={survey.estMinutes}
-            url={survey.externalUrl}
-            expiresAt={survey.expiresAt}
-            participated={survey.participated}
-            accountRegistered={data.accountRegistered}
-            rewardStatus={survey.rewardStatus}
-          />
-        ))}
+        <div className={`${HOME_SCROLL_CLASS} flex flex-col gap-12`}>
+          {todaySurveys.map((survey) => (
+            <TodaySurvey
+              key={survey.id}
+              id={survey.id}
+              title={survey.title}
+              rewardAmount={survey.rewardAmount}
+              estMinutes={survey.estMinutes}
+              url={survey.externalUrl}
+              expiresAt={survey.expiresAt}
+              participated={survey.participated}
+              accountRegistered={data.accountRegistered}
+              rewardStatus={survey.rewardStatus}
+            />
+          ))}
 
-        <WeeklyStreakCard
-          streak={data.streak.count}
-          weeklyStatus={data.streak.weeklyStatus}
-          totalRewardAmount={data.totalRewardAmount}
-        />
+          <WeeklyStreakCard
+            streak={data.streak.count}
+            weeklyStatus={data.streak.weeklyStatus}
+            totalRewardAmount={data.totalRewardAmount}
+          />
+        </div>
       </div>
       <OpenChatFloatingButton />
     </>
