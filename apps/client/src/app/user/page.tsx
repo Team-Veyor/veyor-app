@@ -31,7 +31,7 @@ const UserPage = () => {
       onSuccess: () => {
         trackAmplitudeEvent('logout_completed', { entry_point: '/user' });
         setLogoutOpen(false);
-        router.replace('/login');
+        router.replace('/');
       },
     });
   };
@@ -44,7 +44,7 @@ const UserPage = () => {
           entry_point: '/user',
         });
         setWithdrawOpen(false);
-        router.replace('/login');
+        router.replace('/');
       },
     });
   };

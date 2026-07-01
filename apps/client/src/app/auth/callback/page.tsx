@@ -54,7 +54,7 @@ export default function AuthCallbackPage() {
         });
 
         trackAmplitudeEventOnce(`signup_completed:${me.id}`, 'signup_completed', {
-          entry_point: '/login',
+          entry_point: '/',
           signup_method: 'kakao_talk',
           acquisition_channel: acquisitionChannel,
           user_type: 'new',
@@ -67,7 +67,7 @@ export default function AuthCallbackPage() {
     handleCallback().catch(async () => {
       await supabase.auth.signOut();
       showToast({ type: 'warning', message: LOGIN_ERROR_MESSAGE.default });
-      router.replace('/login');
+      router.replace('/');
     });
   }, [router, showToast]);
 

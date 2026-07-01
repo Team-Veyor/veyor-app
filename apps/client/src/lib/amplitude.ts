@@ -82,7 +82,7 @@ export const getAmplitudeTab = (pathname: string): AmplitudeTab => {
 };
 
 export const toAmplitudePathConvention = (pathname: string): AmplitudePathConvention => {
-  if (pathname === '/login') return '/login';
+  if (pathname === '/' || pathname === '/login') return '/login';
   if (pathname === '/onboarding') return '/onboarding';
   if (pathname === '/home') return '/home';
   if (pathname === '/user') return '/user';

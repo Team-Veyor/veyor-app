@@ -13,7 +13,7 @@ const OnboardingLayout = ({ children }: OnboardingLayoutProps) => {
 
   return (
     <div className='flex flex-col h-dvh pb-32'>
-      <Header type='title' onBack={() => router.push('/login')} />
+      <Header type='title' onBack={() => router.push('/')} />
       {children}
     </div>
   );

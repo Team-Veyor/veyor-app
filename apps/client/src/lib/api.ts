@@ -72,7 +72,7 @@ const redirectToLogin = async () => {
   await supabase.auth.signOut();
 
   if (typeof window !== 'undefined') {
-    window.location.href = '/login';
+    window.location.href = '/';
   }
 };
 
