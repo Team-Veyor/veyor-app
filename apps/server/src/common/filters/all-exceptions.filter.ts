@@ -70,8 +70,22 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
     if (res && typeof res === 'object') {
       const obj = res as Record<string, unknown>;
-      const code = typeof obj.code === 'string' ? obj.code : undefined;
-      const message = 'message' in obj ? obj.message : res;
+      const nestedMessage =
+        obj.message && typeof obj.message === 'object'
+          ? (obj.message as Record<string, unknown>)
+          : null;
+      const code =
+        typeof obj.code === 'string'
+          ? obj.code
+          : typeof nestedMessage?.code === 'string'
+            ? nestedMessage.code
+            : undefined;
+      const message =
+        typeof nestedMessage?.message === 'string'
+          ? nestedMessage.message
+          : 'message' in obj
+            ? obj.message
+            : res;
       return { message, code };
     }
     return { message: '요청을 처리할 수 없습니다.' };

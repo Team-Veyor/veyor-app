@@ -97,11 +97,23 @@ export const apiFetch = async <T>(path: string, options: Options = {}): Promise<
 
   if (!response.ok) {
     const errorBody: ApiErrorBody = await response.json<ApiErrorBody>().catch(() => ({}));
-    throw new ApiError(
-      response.status,
-      typeof errorBody.message === 'string' ? errorBody.message : `API ${response.status}`,
-      typeof errorBody.code === 'string' ? errorBody.code : undefined,
-    );
+    const nestedMessage =
+      errorBody.message && typeof errorBody.message === 'object'
+        ? (errorBody.message as ApiErrorBody)
+        : null;
+    const message =
+      typeof nestedMessage?.message === 'string'
+        ? nestedMessage.message
+        : typeof errorBody.message === 'string'
+          ? errorBody.message
+          : `API ${response.status}`;
+    const code =
+      typeof errorBody.code === 'string'
+        ? errorBody.code
+        : typeof nestedMessage?.code === 'string'
+          ? nestedMessage.code
+          : undefined;
+    throw new ApiError(response.status, message, code);
   }
 
   if (response.status === 204) {

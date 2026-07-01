@@ -104,7 +104,7 @@ const SurveyCompletePage = () => {
 
       {completeSurveyMutation.isSuccess && <SurveyCompleteBottomSheet />}
 
-      {completeSurveyMutation.isError && (
+      {completeSurveyMutation.isError && !completeErrorToastMessage && (
         <ConfirmModal
           title='인증할 수 없습니다.'
           description={'운영진에게 문의 상황을 알려주시면\n빠르게 조치 도와드리겠습니다.'}
