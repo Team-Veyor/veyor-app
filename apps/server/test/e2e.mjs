@@ -86,6 +86,17 @@ async function main() {
   check('GET /terms/terms 200', r.status === 200 && !!r.body?.title, JSON.stringify(r));
   r = await api('GET', '/terms/nope');
   check('GET /terms/nope 404', r.status === 404, JSON.stringify(r));
+  r = await api('POST', '/auth/client-error', {
+    body: {
+      stage: 'exchange_code',
+      provider: 'kakao',
+      message: 'OAuth code exchange failed',
+      errorCode: 'bad_oauth_state',
+      path: '/auth/callback',
+      userAgent: 'e2e',
+    },
+  });
+  check('POST /auth/client-error 공개 로깅 204', r.status === 204, JSON.stringify(r));
 
   // ---------- 인증 가드 ----------
   console.log('[auth] 미인증 차단');

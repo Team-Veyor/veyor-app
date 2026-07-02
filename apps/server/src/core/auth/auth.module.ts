@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AuthClientLogController } from './auth-client-log.controller';
 import { SupabaseJwtGuard } from './supabase-jwt.guard';
 
 /**
@@ -6,6 +7,7 @@ import { SupabaseJwtGuard } from './supabase-jwt.guard';
  * (`SupabaseService`는 전역 `SupabaseModule`에서 주입됨)
  */
 @Module({
+  controllers: [AuthClientLogController],
   providers: [SupabaseJwtGuard],
   exports: [SupabaseJwtGuard],
 })
