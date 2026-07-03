@@ -24,21 +24,11 @@ export default function AuthCallbackPage() {
     const handleCallback = async () => {
       let stage: AuthErrorStage = 'oauth_redirect';
       const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
 
       try {
         const redirectError = urlParams.get('error') ?? urlParams.get('error_description');
         if (redirectError) {
           throw new Error('OAuth provider returned an error.');
-        }
-
-        if (code) {
-          stage = 'exchange_code';
-          const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-          if (error) {
-            throw error;
-          }
         }
 
         stage = 'missing_session';
