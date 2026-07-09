@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { type ChangeEvent, useState } from 'react';
 import AgreementBottomSheet from '@/app/onboarding/_components/AgreementBottomSheet';
 import IntroCarousel from '@/app/onboarding/_components/IntroCarousel';
@@ -21,7 +22,9 @@ import Button from '@/components/Button/Button';
 import Input from '@/components/Input/Input';
 import RadioButton from '@/components/Radio/RadioButton';
 import Select from '@/components/Select/Select';
+import { useToast } from '@/components/Toast/ToastProvider';
 import { setAmplitudeUserProperties, trackAmplitudeEvent } from '@/lib/amplitude';
+import { ApiError } from '@/lib/api';
 import { supabase } from '@/lib/supabase';
 
 type OnboardingStep = 'info' | 'intro';
@@ -39,6 +42,8 @@ const INITIAL_FORM: OnboardingForm = {
 };
 
 const Info = () => {
+  const router = useRouter();
+  const { showToast } = useToast();
   const [form, setForm] = useState<OnboardingForm>(INITIAL_FORM);
   const [birthYearInput, setBirthYearInput] = useState('');
   const [isBirthYearFocused, setIsBirthYearFocused] = useState(false);
@@ -116,6 +121,12 @@ const Info = () => {
           });
 
           showIntro();
+        },
+        onError: (error: Error) => {
+          if (error instanceof ApiError && error.status === 409) {
+            showToast({ type: 'warning', message: error.message });
+            router.replace('/home');
+          }
         },
       },
     );
