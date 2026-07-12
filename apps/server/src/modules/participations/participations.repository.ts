@@ -66,14 +66,11 @@ export class ParticipationsRepository {
    * 완료 인증: start 기록(started)을 completed로 전이 + 리워드(pending) 생성.
    * - start 기록 없음 → BadRequest(400) complete_unavailable (직접 호출 차단, 일반 메시지)
    * - 이미 completed → Conflict(409) already_participated
-   * - 모집 정원(recruitLimit) 마감 → Conflict(409) target_response_count
-   *   (정원 검사는 start 게이트·중복 게이트 통과 뒤에 두어, 비참여자/중복자에게 마감 정보를 노출하지 않는다)
    */
   async completeFromStarted(
     userId: string,
     surveyId: string,
     rewardAmount: number,
-    recruitLimit: number | null = null,
   ): Promise<{ participationId: string }> {
     const existing = await this.findOwn(userId, surveyId);
     if (!existing) {
@@ -88,20 +85,6 @@ export class ParticipationsRepository {
         code: 'already_participated' satisfies SurveyCompleteFailureReason,
         message: '이미 참여한 설문입니다.',
       });
-    }
-
-    // 모집 정원 마감 검사(정원 설정 시에만). 본인은 아직 started(미완료)라 카운트에 포함되지 않는다.
-    // 주의(TOCTOU): count→전이가 원자적이지 않아, 정원 경계에서 동시 완료가 겹치면 소폭 초과될 수 있다
-    // (저동시성에선 사실상 미발생). 하드 보장이 필요하면 count+전이를 단일 트랜잭션/RPC로 묶어야 하며,
-    // 현재는 초과분을 정산 단계(어드민)에서 캡(cap)하는 것을 백스톱으로 둔다.
-    if (recruitLimit != null) {
-      const completedCount = await this.countCompletedBySurvey(surveyId);
-      if (completedCount >= recruitLimit) {
-        throw new ConflictException({
-          code: 'target_response_count' satisfies SurveyCompleteFailureReason,
-          message: '모집이 마감된 설문입니다.',
-        });
-      }
     }
 
     // started → completed (조건부 갱신으로 동시성 보호)
@@ -160,19 +143,6 @@ export class ParticipationsRepository {
       .eq('survey_id', surveyId)
       .maybeSingle();
     return (data as { id: string; status: string }) ?? null;
-  }
-
-  /** 특정 설문의 완료 참여 수(전역 집계). 모집 정원 마감 판정용. user_id 조건 없이 전체를 센다. */
-  async countCompletedBySurvey(surveyId: string): Promise<number> {
-    const { count, error } = await this.db
-      .from('participations')
-      .select('id', { count: 'exact', head: true })
-      .eq('survey_id', surveyId)
-      .eq('status', 'completed');
-    if (error) {
-      throw new InternalServerErrorException('집계를 불러오지 못했습니다.');
-    }
-    return count ?? 0;
   }
 
   /** 완료 여부(홈 '참여함' 표시용). started만 한 상태는 false. */

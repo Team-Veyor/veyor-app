@@ -163,15 +163,10 @@ export class SurveysService {
         message: '참여 기간이 지난 설문입니다.',
       });
     }
-    // 모집 정원(유료 모집 인원). null이면 무제한. 마감 판정은 participations 레이어에서
-    // start 기록·중복 참여 게이트를 통과한 뒤 수행한다(비참여자에게 마감 정보 미노출).
-    const recruitLimit = await this.repo.getRecruitLimit(surveyId);
-    // start 기록 게이트·중복 참여·정원 마감은 participations 레이어에서 처리
     return this.participations.complete(
       userId,
       surveyId,
       suggestedAmount(survey) ?? survey.reward_amount,
-      recruitLimit,
     );
   }
 }

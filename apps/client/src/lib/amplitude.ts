@@ -31,7 +31,6 @@ type AmplitudeCompletionErrorReason =
   | 'survey_expired'
   | 'tracking_param_lost'
   | 'already_participated'
-  | 'target_response_count'
   | 'complete_unavailable';
 
 let hasInitializedAmplitude = false;
@@ -131,7 +130,6 @@ export const getAmplitudeCompletionErrorReason = (
       code === 'survey_expired' ||
       code === 'tracking_param_lost' ||
       code === 'already_participated' ||
-      code === 'target_response_count' ||
       code === 'complete_unavailable'
     ) {
       return code;

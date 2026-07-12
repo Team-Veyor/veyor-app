@@ -69,25 +69,6 @@ export class SurveysRepository {
     return (data as SurveyRow[]) ?? [];
   }
 
-  /**
-   * 설문의 유료 모집 정원(survey_intakes.paid_recruit_count). 모집 마감 판정의 상한으로 쓴다.
-   * 0·음수·미설정(null)은 모두 null(=정원 무제한, 게이트 미적용)로 정규화한다.
-   * (게시·승인된 설문인데 정원이 0인 상태는 대개 미입력이므로, 전원 차단보다 게이트 미적용이 안전한 기본값.)
-   * survey_intakes는 RLS deny(서비스 키 전용)이지만 서버는 admin 클라이언트로 우회 조회한다.
-   */
-  async getRecruitLimit(surveyId: string): Promise<number | null> {
-    const { data, error } = await this.db
-      .from('survey_intakes')
-      .select('paid_recruit_count')
-      .eq('survey_id', surveyId)
-      .maybeSingle();
-    if (error) {
-      throw new InternalServerErrorException('설문을 불러오지 못했습니다.');
-    }
-    const limit = (data?.paid_recruit_count as number | null) ?? null;
-    return limit != null && limit > 0 ? limit : null;
-  }
-
   async getProfileTarget(
     userId: string,
   ): Promise<{ birth_year: number | null; gender: string | null; occupation: string | null }> {

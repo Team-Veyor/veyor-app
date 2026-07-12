@@ -10,10 +10,8 @@ export type HealthResponse = {
  * - complete_unavailable: '참여하기'(start) 기록 없이 인증 직접 시도. 사용자에게 사유를 숨기므로(일반 문구만)
  *   코드명도 중립적으로 둬, 노출되더라도 우회 단서가 되지 않게 한다.
  * - already_participated: 이미 참여(완료)한 설문 재인증 (중복)
- * - target_response_count: 모집 인원(정원) 마감
  */
 export type SurveyCompleteFailureReason =
   | 'survey_expired'
   | 'complete_unavailable'
-  | 'already_participated'
-  | 'target_response_count';
+  | 'already_participated';

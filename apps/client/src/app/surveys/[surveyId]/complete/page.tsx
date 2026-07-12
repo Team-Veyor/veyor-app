@@ -24,7 +24,6 @@ const HOME_REDIRECT_DELAY_MS = 1800;
 const COMPLETE_ERROR_MESSAGES: Record<SurveyCompleteFailureReason, string> = {
   survey_expired: '참여 기간이 지난 설문입니다.',
   already_participated: '이미 참여한 설문입니다.',
-  target_response_count: '모집이 마감된 설문입니다.',
   complete_unavailable: '인증을 진행할 수 없습니다.',
 };
 

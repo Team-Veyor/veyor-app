@@ -61,7 +61,6 @@ async function api(method, path, { token, body } = {}) {
 
 const seededSurveyIds = [];
 let testUserId = null;
-let limitFillerUserId = null;
 const NONEXISTENT_UUID = '00000000-0000-0000-0000-000000000000';
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
@@ -194,16 +193,6 @@ async function main() {
         is_published: false,
         approval_status: 'pending',
       },
-      {
-        title: '정원 마감 설문 (e2e)',
-        external_url: 'https://example.com/survey/limit',
-        reward_amount: 300,
-        target_gender: 'male',
-        opens_at: new Date(now - 60_000).toISOString(),
-        expires_at: new Date(now + 86400_000).toISOString(),
-        is_published: true,
-        approval_status: 'approved',
-      },
     ])
     .select('id, title, opens_at, expires_at, target_gender');
   if (seed.error) throw new Error(`설문 시드 실패: ${seed.error.message}`);
@@ -214,45 +203,6 @@ async function main() {
   const homemakerSurveyId = seed.data.find((s) => s.title.includes('주부')).id;
   const expiredSurveyId = seed.data.find((s) => s.title.includes('만료')).id;
   const draftSurveyId = seed.data.find((s) => s.title.includes('미게시')).id;
-  const cappedSurveyId = seed.data.find((s) => s.title.includes('정원 마감')).id;
-
-  const limitFillerEmail = `e2e_limit_${Date.now()}@veyor-test.dev`;
-  const limitFiller = await admin.auth.admin.createUser({
-    email: limitFillerEmail,
-    password,
-    email_confirm: true,
-    user_metadata: { name: 'E2E 정원 채움' },
-  });
-  if (limitFiller.error) {
-    throw new Error(`정원 테스트 유저 생성 실패: ${limitFiller.error.message}`);
-  }
-  limitFillerUserId = limitFiller.data.user.id;
-
-  const intakeSeed = await admin.from('survey_intakes').insert({
-    survey_id: cappedSurveyId,
-    topic: '정원 마감 설문 (e2e)',
-    target_description: '전체',
-    requested_publish_date: toKstDate(new Date().toISOString()),
-    deadline: addOneDay(toKstDate(new Date().toISOString())),
-    suggested_amount: 300,
-    contact: '01000000000',
-    target_respondents: 10,
-    reward_budget: '300',
-    paid_recruit_count: 1,
-  });
-  if (intakeSeed.error) throw new Error(`정원 시드 실패: ${intakeSeed.error.message}`);
-
-  const filledParticipation = await admin.from('participations').insert({
-    survey_id: cappedSurveyId,
-    user_id: limitFillerUserId,
-    status: 'completed',
-    started_at: new Date(now - 30_000).toISOString(),
-    completed_at: new Date(now - 20_000).toISOString(),
-  });
-  if (filledParticipation.error) {
-    throw new Error(`정원 참여 시드 실패: ${filledParticipation.error.message}`);
-  }
-
   // ---------- 1. 온보딩 ----------
   console.log('[1] 온보딩/사용자');
   r = await api('GET', '/users/me', { token });
@@ -515,18 +465,6 @@ async function main() {
     JSON.stringify(r),
   );
 
-  r = await api('POST', `/surveys/${cappedSurveyId}/start`, { token });
-  check('정원 마감 설문 시작은 가능', r.status === 201, JSON.stringify(r));
-
-  r = await api('POST', `/surveys/${cappedSurveyId}/complete`, { token });
-  check(
-    '정원 마감 완료 409 + target_response_count',
-    r.status === 409 &&
-      r.body?.code === 'target_response_count' &&
-      r.body?.message === '모집이 마감된 설문입니다.',
-    JSON.stringify(r),
-  );
-
   r = await api('GET', '/surveys/today', { token });
   todayList = Array.isArray(r.body) ? r.body : [];
   check(
@@ -543,11 +481,8 @@ async function main() {
     r.status === 200 && r.body?.totalCount === 1 && r.body?.totalAmount === 300,
     JSON.stringify(r.body),
   );
-  check(
-    '참여 항목 필드',
-    r.body?.items?.[0]?.surveyTitle?.includes('오늘') && r.body?.items?.[0]?.rewardAmount === 300,
-    JSON.stringify(r.body?.items),
-  );
+  const todayParticipation = r.body?.items?.find((item) => item.surveyTitle?.includes('오늘'));
+  check('참여 항목 필드', todayParticipation?.rewardAmount === 300, JSON.stringify(r.body?.items));
 
   r = await api('GET', '/participations?from=2020-01-01&to=2020-12-31', { token });
   check('기간 필터(과거) 0건', r.body?.totalCount === 0, JSON.stringify(r.body));
@@ -612,9 +547,6 @@ async function cleanup() {
   try {
     if (seededSurveyIds.length) {
       await admin.from('surveys').delete().in('id', seededSurveyIds);
-    }
-    if (limitFillerUserId) {
-      await admin.auth.admin.deleteUser(limitFillerUserId);
     }
     if (testUserId) {
       await admin.auth.admin.deleteUser(testUserId);

@@ -39,18 +39,8 @@ export class ParticipationsService {
   }
 
   /** 완료 인증: start 기록을 'completed'로 전이 + 리워드(pending) 생성. */
-  async complete(
-    userId: string,
-    surveyId: string,
-    rewardAmount: number,
-    recruitLimit: number | null = null,
-  ) {
-    const { participationId } = await this.repo.completeFromStarted(
-      userId,
-      surveyId,
-      rewardAmount,
-      recruitLimit,
-    );
+  async complete(userId: string, surveyId: string, rewardAmount: number) {
+    const { participationId } = await this.repo.completeFromStarted(userId, surveyId, rewardAmount);
     return {
       participationId,
       surveyId,
