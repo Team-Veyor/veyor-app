@@ -51,13 +51,14 @@ const Info = () => {
 
   const [step, setStep] = useState<OnboardingStep>('info');
 
-  const onboardingMutation = useOnboardingMutation();
+  const { mutateAsync: onboardingMutation, isPending: isOnboardingSubmitting } =
+    useOnboardingMutation();
 
   const shouldValidateBirthYear = birthYearInput.length > 0 && !isBirthYearFocused;
   const birthYearError = shouldValidateBirthYear ? getBirthYearError(birthYearInput) : null;
   const birthYearHelperText = BIRTH_YEAR_HELPER_TEXT[birthYearError ?? 'default'];
   const isNextButtonDisabled =
-    !form.gender || !form.birthYear || !form.occupation || onboardingMutation.isPending;
+    !form.gender || !form.birthYear || !form.occupation || isOnboardingSubmitting;
 
   const handleBirthYearChange = (event: ChangeEvent<HTMLInputElement>) => {
     const digitsOnly = event.target.value.replace(/\D/g, '').slice(0, 4);
@@ -73,8 +74,10 @@ const Info = () => {
     setStep('intro');
   };
 
-  const handleAgreementSubmit = (agreedIds: AgreementId[]) => {
-    if (!form.birthYear || !form.gender || !form.occupation) return;
+  const handleAgreementSubmit = async (agreedIds: AgreementId[]) => {
+    if (isOnboardingSubmitting || !form.birthYear || !form.gender || !form.occupation) {
+      return;
+    }
 
     // 필수 약관 재검증: 버튼 비활성(UI 상태)에만 의존하지 않고 제출 시점에 한 번 더 막는다.
     const agreedSet = new Set(agreedIds);
@@ -90,46 +93,44 @@ const Info = () => {
       marketing_received: marketingReceived,
     });
 
-    onboardingMutation.mutate(
-      {
+    try {
+      await onboardingMutation({
         birthYear: form.birthYear,
         gender: form.gender,
         occupation: form.occupation,
         consents: createConsents(agreedIds),
-      },
-      {
-        onSuccess: async () => {
-          const {
-            data: { user },
-          } = await supabase.auth.getUser();
+      });
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 409) {
+        showToast({ type: 'warning', message: error.message });
+        router.replace('/home');
+      }
 
-          setAmplitudeUserProperties({
-            user_id: user?.id,
-            gender: form.gender,
-            birth_year: Number(form.birthYear),
-            job_category: form.occupation,
-            marketing_received: marketingReceived,
-          });
+      return;
+    }
 
-          trackAmplitudeEvent('personal_info_completed', {
-            entry_point: '/onboarding-personal-info',
-            user_id: user?.id,
-            signup_date: user?.created_at ? user.created_at.slice(0, 10) : undefined,
-            gender: form.gender,
-            birth_year: form.birthYear,
-            job_category: form.occupation,
-          });
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-          showIntro();
-        },
-        onError: (error: Error) => {
-          if (error instanceof ApiError && error.status === 409) {
-            showToast({ type: 'warning', message: error.message });
-            router.replace('/home');
-          }
-        },
-      },
-    );
+    setAmplitudeUserProperties({
+      user_id: user?.id,
+      gender: form.gender,
+      birth_year: Number(form.birthYear),
+      job_category: form.occupation,
+      marketing_received: marketingReceived,
+    });
+
+    trackAmplitudeEvent('personal_info_completed', {
+      entry_point: '/onboarding-personal-info',
+      user_id: user?.id,
+      signup_date: user?.created_at ? user.created_at.slice(0, 10) : undefined,
+      gender: form.gender,
+      birth_year: form.birthYear,
+      job_category: form.occupation,
+    });
+
+    showIntro();
   };
 
   if (step === 'intro') {
@@ -205,8 +206,9 @@ const Info = () => {
       {isAgreeBottomSheetOpen && (
         <AgreementBottomSheet
           items={AGREEMENT_ITEMS}
+          isButtonLoading={isOnboardingSubmitting}
           onSubmit={handleAgreementSubmit}
-          onClose={() => setIsAgreeBottomSheetOpen(false)}
+          onClose={isOnboardingSubmitting ? undefined : () => setIsAgreeBottomSheetOpen(false)}
         />
       )}
     </div>

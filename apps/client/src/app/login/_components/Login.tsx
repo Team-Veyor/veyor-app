@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import useKakaoMutation from '@/app/login/_hooks/useKakaoMutation';
 import KakaoIcon from '@/assets/icons/KakaoIcon';
 import LoginLogo from '@/assets/icons/LoginLogo';
@@ -7,7 +8,21 @@ import LogoIcon from '@/assets/icons/LogoIcon';
 import Button from '@/components/Button/Button';
 
 const Login = () => {
+  // 버튼 클릭 시 로딩 상태를 위해 별도의 상태 추가
+  const [isKakaoStarting, setIsKakaoStarting] = useState(false);
+
   const { mutate: loginWithKakao, isPending: isLoadingKakao } = useKakaoMutation();
+  const isKakaoButtonLoading = isLoadingKakao || isKakaoStarting;
+
+  const handleKakaoClick = () => {
+    if (isKakaoButtonLoading) return;
+
+    setIsKakaoStarting(true);
+
+    loginWithKakao(undefined, {
+      onError: () => setIsKakaoStarting(false),
+    });
+  };
 
   return (
     <main className='flex h-dvh items-center justify-center bg-gray-50'>
@@ -22,10 +37,10 @@ const Login = () => {
             variant='secondary'
             theme='light'
             className='gap-2 bg-[#FEE500] text-[rgba(0, 0, 0, 0.85)'
-            disabled={isLoadingKakao}
+            disabled={isKakaoButtonLoading}
             size='large'
-            isLoading={isLoadingKakao}
-            onClick={() => loginWithKakao()}
+            isLoading={isKakaoButtonLoading}
+            onClick={handleKakaoClick}
           >
             <KakaoIcon />
             카카오로 시작하기

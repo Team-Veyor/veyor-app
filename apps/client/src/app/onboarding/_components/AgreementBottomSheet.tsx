@@ -17,7 +17,9 @@ interface AgreementBottomSheetProps {
   /** 약관 항목 리스트 */
   items: readonly AgreementItem[];
   /** 하단 버튼 클릭 시 실행되는 콜백. 동의된 약관 id 배열을 전달합니다. */
-  onSubmit: (agreedIds: AgreementId[]) => void;
+  onSubmit: (agreedIds: AgreementId[]) => void | Promise<void>;
+  /** 하단 버튼 로딩 여부 */
+  isButtonLoading?: boolean;
   /** 약관 항목의 펼침 화살표를 눌렀을 때 실행되는 콜백 */
   onItemExpand?: (id: AgreementId) => void;
   /** 바깥(backdrop) 클릭으로 시트가 닫힐 때 실행되는 콜백 */
@@ -31,16 +33,19 @@ interface AgreementBottomSheetProps {
 const AgreementBottomSheet = ({
   items,
   onSubmit,
+  isButtonLoading,
   onItemExpand,
   onClose,
 }: AgreementBottomSheetProps) => {
   const [agreedIds, setAgreedIds] = useState<Set<AgreementId>>(new Set());
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   const allChecked = items.length > 0 && items.every((item) => agreedIds.has(item.id));
   const canSubmit = useMemo(
     () => items.filter((item) => item.required).every((item) => agreedIds.has(item.id)),
     [items, agreedIds],
   );
+  const isSubmitting = Boolean(isButtonLoading || isSubmitClicked);
 
   const toggleAll = () => {
     setAgreedIds(allChecked ? new Set() : new Set(items.map((item) => item.id)));
@@ -58,6 +63,18 @@ const AgreementBottomSheet = ({
     });
   };
 
+  const handleSubmit = async () => {
+    if (!canSubmit || isSubmitting) return;
+
+    setIsSubmitClicked(true);
+
+    try {
+      await onSubmit(Array.from(agreedIds));
+    } finally {
+      setIsSubmitClicked(false);
+    }
+  };
+
   return (
     <BottomSheet
       onClose={onClose}
@@ -66,8 +83,9 @@ const AgreementBottomSheet = ({
           size='large'
           theme='dark'
           variant='secondary'
-          disabled={!canSubmit}
-          onClick={() => onSubmit(Array.from(agreedIds))}
+          disabled={!canSubmit || isSubmitting}
+          isLoading={isSubmitting}
+          onClick={handleSubmit}
         >
           확인
         </Button>

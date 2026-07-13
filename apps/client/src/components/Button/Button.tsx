@@ -93,7 +93,9 @@ const Button = ({
     >
       {isLoading ? (
         <>
-          <span className='invisible'>{children}</span>
+          <span className='invisible inline-flex items-center justify-center gap-[inherit]'>
+            {children}
+          </span>
           <DotLottieReact
             src={getLoadingLottieSrc(variant, theme)}
             autoplay

@@ -132,6 +132,7 @@ const AccountForm = ({
         className='mt-auto'
         onClick={handleSave}
         disabled={isSaveDisabled}
+        isLoading={isSubmitting}
       >
         저장
       </Button>
